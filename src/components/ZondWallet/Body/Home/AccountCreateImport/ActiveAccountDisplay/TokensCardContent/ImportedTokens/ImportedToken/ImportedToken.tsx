@@ -31,6 +31,7 @@ const ImportedToken = observer(({ contractAddress }: ImportedTokenProps) => {
       <TokenListItem
         isErc20Token={true}
         contractAddress={contractAddress}
+        decimals={Number(token.decimals)}
         balance={getOptimalTokenBalance(token.balance.toString(), token.symbol)}
         name={token.name}
         symbol={token.symbol}

@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 type TokenListItemProps = {
   isErc20Token?: boolean;
   contractAddress?: string;
+  decimals?: number;
   icon?: string;
   balance: string;
   name: string;
@@ -24,6 +25,7 @@ type TokenListItemProps = {
 const TokenListItem = ({
   isErc20Token = false,
   contractAddress,
+  decimals,
   icon,
   balance,
   name,
@@ -34,9 +36,10 @@ const TokenListItem = ({
   const onSend = () => {
     navigate(ROUTES.TOKEN_TRANSFER, {
       state: {
-        isErc20Token,
         tokenDetails: {
+          isErc20Token,
           tokenContractAddress: contractAddress,
+          tokenDecimals: decimals,
           tokenIcon: icon,
           tokenBalance: balance,
           tokenName: name,
