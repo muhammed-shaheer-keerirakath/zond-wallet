@@ -29,6 +29,8 @@ const ImportedToken = observer(({ contractAddress }: ImportedTokenProps) => {
   return (
     !!token && (
       <TokenListItem
+        isErc20Token={true}
+        contractAddress={contractAddress}
         balance={getOptimalTokenBalance(token.balance.toString(), token.symbol)}
         name={token.name}
         symbol={token.symbol}

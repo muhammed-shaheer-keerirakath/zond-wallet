@@ -13,19 +13,30 @@ import { Send, TextSelect } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type TokenListItemProps = {
+  isErc20Token?: boolean;
+  contractAddress?: string;
   icon?: string;
   balance: string;
   name: string;
   symbol: string;
 };
 
-const TokenListItem = ({ icon, balance, name, symbol }: TokenListItemProps) => {
+const TokenListItem = ({
+  isErc20Token = false,
+  contractAddress,
+  icon,
+  balance,
+  name,
+  symbol,
+}: TokenListItemProps) => {
   const navigate = useNavigate();
 
   const onSend = () => {
     navigate(ROUTES.TOKEN_TRANSFER, {
       state: {
+        isErc20Token,
         tokenDetails: {
+          tokenContractAddress: contractAddress,
           tokenIcon: icon,
           tokenBalance: balance,
           tokenName: name,
