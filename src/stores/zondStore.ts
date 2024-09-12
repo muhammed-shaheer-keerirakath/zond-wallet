@@ -1,4 +1,5 @@
 import { ZOND_PROVIDER } from "@/configuration/zondConfig";
+import { ERC_20_CONTRACT_ABI } from "@/constants/erc20Token";
 import { getHexSeedFromMnemonic } from "@/functions/getHexSeedFromMnemonic";
 import { getOptimalTokenBalance } from "@/functions/getOptimalTokenBalance";
 import StorageUtil from "@/utilities/storageUtil";
@@ -47,6 +48,7 @@ class ZondStore {
       getAccountBalance: action.bound,
       signAndSendTransaction: action.bound,
       getErc20TokenDetails: action.bound,
+      signAndSendErc20Token: action.bound,
     });
     this.initializeBlockchain();
   }
@@ -191,7 +193,7 @@ class ZondStore {
     return (
       this.zondAccounts.accounts.find(
         (account) => account.accountAddress === accountAddress,
-      )?.accountBalance ?? "0 QRL"
+      )?.accountBalance ?? "0.0 QRL"
     );
   }
 
@@ -244,43 +246,7 @@ class ZondStore {
       error: "",
     };
 
-    const contractAbi = [
-      {
-        inputs: [],
-        name: "name",
-        outputs: [{ internalType: "string", name: "", type: "string" }],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "symbol",
-        outputs: [{ internalType: "string", name: "", type: "string" }],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "decimals",
-        outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "totalSupply",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [{ internalType: "address", name: "", type: "address" }],
-        name: "balanceOf",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-      },
-    ] as const;
+    const contractAbi = ERC_20_CONTRACT_ABI;
 
     if (this.zondInstance && this.zondInstance.Contract) {
       try {
@@ -315,6 +281,67 @@ class ZondStore {
     }
 
     return tokenDetails;
+  }
+
+  async signAndSendErc20Token(
+    from: string,
+    to: string,
+    value: number,
+    mnemonicPhrases: string,
+    contractAddress: string,
+    decimals: number,
+  ) {
+    let transaction: {
+      transactionReceipt?: TransactionReceipt;
+      error: string;
+    } = { transactionReceipt: undefined, error: "" };
+
+    const contractAbi = ERC_20_CONTRACT_ABI;
+
+    if (this.zondInstance && this.zondInstance.Contract) {
+      try {
+        this.zondInstance.wallet?.add(getHexSeedFromMnemonic(mnemonicPhrases));
+        this.zondInstance.transactionConfirmationBlocks = 12;
+        const contract = new this.zondInstance.Contract(
+          contractAbi,
+          contractAddress,
+        );
+        const contractTransfer = contract.methods.transfer(
+          to,
+          BigInt(value * 10 ** decimals),
+        );
+        const estimatedGas = await contractTransfer.estimateGas({
+          from,
+        });
+        const transactionObject = {
+          type: "0x2",
+          gas: estimatedGas,
+          from,
+          data: contractTransfer.encodeABI(),
+          to: contractAddress,
+        };
+
+        const transactionReceipt = await this.zondInstance.sendTransaction(
+          transactionObject,
+          undefined,
+          {
+            checkRevertBeforeSending: true,
+          },
+        );
+
+        transaction = {
+          ...transaction,
+          transactionReceipt,
+        };
+      } catch (error) {
+        transaction = {
+          ...transaction,
+          error: `Transaction could not be completed. ${error}`,
+        };
+      }
+    }
+
+    return transaction;
   }
 }
 
