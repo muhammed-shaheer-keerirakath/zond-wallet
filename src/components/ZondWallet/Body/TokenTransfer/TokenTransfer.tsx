@@ -1,3 +1,10 @@
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/UI/AlertDialog";
 import { Button } from "@/components/UI/Button";
 import {
   Card,
@@ -355,6 +362,24 @@ const TokenTransfer = observer(() => {
               </Button>
             </CardFooter>
           </Card>
+          <AlertDialog open={isSubmitting}>
+            <AlertDialogContent className="w-80 rounded-md">
+              <AlertDialogHeader className="text-left">
+                <AlertDialogTitle>
+                  <div className="flex items-center gap-2">
+                    <Loader
+                      className="animate-spin text-foreground"
+                      size="18"
+                    />
+                    Transaction running
+                  </div>
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Please wait while the transaction completes.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </form>
     </Form>
