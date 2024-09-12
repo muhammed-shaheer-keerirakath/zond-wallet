@@ -1,3 +1,5 @@
+import { ERC_20_CONTRACT_ABI } from "@/constants/erc20Token";
+import { NATIVE_TOKEN } from "@/constants/nativeToken";
 import { getOptimalGasFee } from "@/functions/getOptimalGasFee";
 import { useStore } from "@/stores/store";
 import { utils } from "@theqrl/web3";
@@ -7,6 +9,9 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
 type GasFeeNoticeProps = {
+  isErc20Token: boolean;
+  tokenContractAddress: string;
+  tokenDecimals: number;
   from: string;
   to: string;
   value: number;
@@ -29,7 +34,15 @@ const gasFeeNoticeClasses = cva(
 );
 
 export const GasFeeNotice = observer(
-  ({ from, to, value, isSubmitting }: GasFeeNoticeProps) => {
+  ({
+    isErc20Token,
+    tokenContractAddress,
+    tokenDecimals,
+    from,
+    to,
+    value,
+    isSubmitting,
+  }: GasFeeNoticeProps) => {
     const { zondStore } = useStore();
     const { zondInstance } = zondStore;
 
@@ -41,20 +54,48 @@ export const GasFeeNotice = observer(
       error: "",
     });
 
-    const fetchGasFee = async () => {
-      setGasFee({ ...gasFee, isLoading: true, error: "" });
-      try {
+    const fetchNativeTokenGas = async () => {
+      if (zondInstance) {
         const transaction = {
           from,
           to,
-          value: utils.toWei(value, "ether"),
+          value: BigInt(value * 10 ** NATIVE_TOKEN.decimals),
         };
         const estimatedTransactionGas =
-          (await zondInstance?.estimateGas(transaction)) ?? BigInt(0);
-        const gasPrice = (await zondInstance?.getGasPrice()) ?? BigInt(0);
-        const estimatedGas = getOptimalGasFee(
-          utils.fromWei(estimatedTransactionGas * gasPrice, "ether"),
+          await zondInstance.estimateGas(transaction);
+        const gasPrice = await zondInstance.getGasPrice();
+        return utils.fromWei(estimatedTransactionGas * gasPrice, "ether");
+      }
+      return "";
+    };
+
+    const fetchErc20TokenGas = async () => {
+      if (zondInstance && zondInstance.Contract) {
+        const contract = new zondInstance.Contract(
+          ERC_20_CONTRACT_ABI,
+          tokenContractAddress,
         );
+        const contractTransfer = contract.methods.transfer(
+          to,
+          BigInt(value * 10 ** tokenDecimals),
+        );
+        const estimatedTransactionGas = await contractTransfer.estimateGas({
+          from,
+        });
+        const gasPrice = await zondInstance.getGasPrice();
+        return utils.fromWei(estimatedTransactionGas * gasPrice, "ether");
+      }
+      return "";
+    };
+
+    const fetchGasFee = async () => {
+      setGasFee({ ...gasFee, isLoading: true, error: "" });
+      try {
+        let gasFeeAmount = "";
+        gasFeeAmount = await (isErc20Token
+          ? fetchErc20TokenGas()
+          : fetchNativeTokenGas());
+        const estimatedGas = getOptimalGasFee(gasFeeAmount);
         setGasFee({ ...gasFee, estimatedGas, error: "", isLoading: false });
       } catch (error) {
         setGasFee({ ...gasFee, error: `${error}`, isLoading: false });

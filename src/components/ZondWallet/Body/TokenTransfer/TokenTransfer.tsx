@@ -334,6 +334,9 @@ const TokenTransfer = observer(() => {
                 )}
               />
               <GasFeeNotice
+                isErc20Token={isErc20Token}
+                tokenContractAddress={tokenContractAddress}
+                tokenDecimals={tokenDecimals}
                 from={accountAddress}
                 to={watch().receiverAddress}
                 value={watch().amount}
