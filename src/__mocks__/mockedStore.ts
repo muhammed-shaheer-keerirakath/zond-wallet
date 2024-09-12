@@ -48,6 +48,22 @@ const mockedStoreValues: StoreType = {
       token: undefined,
       error: "",
     }),
+    signAndSendErc20Token: async (
+      from: string,
+      to: string,
+      value: number,
+      mnemonicPhrases: string,
+      contractAddress: string,
+      decimals: number,
+    ) => {
+      from;
+      to;
+      value;
+      mnemonicPhrases;
+      contractAddress;
+      decimals;
+      return { transactionReceipt: undefined, error: "" };
+    },
   },
 };
 
