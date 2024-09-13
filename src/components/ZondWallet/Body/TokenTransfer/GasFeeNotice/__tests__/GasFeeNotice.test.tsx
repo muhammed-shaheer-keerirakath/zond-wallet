@@ -19,6 +19,9 @@ describe("GasFeeNotice", () => {
   const renderComponent = (
     mockedStoreValues = mockedStore(),
     mockedProps: ComponentProps<typeof GasFeeNotice> = {
+      isErc20Token: false,
+      tokenContractAddress: "",
+      tokenDecimals: 18,
       isSubmitting: false,
       from: "",
       to: "",
@@ -35,6 +38,9 @@ describe("GasFeeNotice", () => {
 
   it("should render the gas fee notice component", async () => {
     renderComponent(undefined, {
+      isErc20Token: false,
+      tokenContractAddress: "",
+      tokenDecimals: 18,
       isSubmitting: false,
       from: "0x205046e6A6E159eD6ACedE46A36CAD6D449C80A1",
       to: "0x20fB08fF1f1376A14C055E9F56df80563E16722b",
@@ -87,6 +93,9 @@ describe("GasFeeNotice", () => {
         },
       }),
       {
+        isErc20Token: false,
+        tokenContractAddress: "",
+        tokenDecimals: 18,
         isSubmitting: false,
         from: "0x205046e6A6E159eD6ACedE46A36CAD6D449C80A1",
         to: "0x20fB08fF1f1376A14C055E9F56df80563E16722b",
