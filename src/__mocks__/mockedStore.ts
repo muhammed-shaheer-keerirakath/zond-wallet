@@ -31,7 +31,7 @@ const mockedStoreValues: StoreType = {
       selectedBlockchain;
     },
     setActiveAccount: async () => {},
-    signAndSendTransaction: async (
+    signAndSendNativeToken: async (
       from: string,
       to: string,
       value: number,

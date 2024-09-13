@@ -127,7 +127,7 @@ describe("TokenTransfer", () => {
     renderComponent(
       mockedStore({
         zondStore: {
-          signAndSendTransaction: async (
+          signAndSendNativeToken: async (
             from: string,
             to: string,
             value: number,

@@ -58,7 +58,7 @@ const TokenTransfer = observer(() => {
   const { zondStore } = useStore();
   const {
     activeAccount,
-    signAndSendTransaction,
+    signAndSendNativeToken,
     zondConnection,
     fetchAccounts,
     signAndSendErc20Token,
@@ -77,7 +77,7 @@ const TokenTransfer = observer(() => {
   const [tokenSymbol, setTokenSymbol] = useState(NATIVE_TOKEN.symbol);
 
   const sendNativeToken = async (formData: z.infer<typeof FormSchema>) => {
-    return await signAndSendTransaction(
+    return await signAndSendNativeToken(
       accountAddress,
       formData.receiverAddress,
       formData.amount,

@@ -46,7 +46,7 @@ class ZondStore {
       fetchZondConnection: action.bound,
       fetchAccounts: action.bound,
       getAccountBalance: action.bound,
-      signAndSendTransaction: action.bound,
+      signAndSendNativeToken: action.bound,
       getErc20TokenDetails: action.bound,
       signAndSendErc20Token: action.bound,
     });
@@ -197,7 +197,7 @@ class ZondStore {
     );
   }
 
-  async signAndSendTransaction(
+  async signAndSendNativeToken(
     from: string,
     to: string,
     value: number,
