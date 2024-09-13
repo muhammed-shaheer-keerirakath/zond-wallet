@@ -54,7 +54,7 @@ export const GasFeeNotice = observer(
       error: "",
     });
 
-    const fetchNativeTokenGas = async () => {
+    const calculateNativeTokenGas = async () => {
       if (zondInstance) {
         const transaction = {
           from,
@@ -69,7 +69,7 @@ export const GasFeeNotice = observer(
       return "";
     };
 
-    const fetchErc20TokenGas = async () => {
+    const calculateErc20TokenGas = async () => {
       if (zondInstance && zondInstance.Contract) {
         const contract = new zondInstance.Contract(
           ERC_20_CONTRACT_ABI,
@@ -88,12 +88,12 @@ export const GasFeeNotice = observer(
       return "";
     };
 
-    const fetchGasFee = async () => {
+    const calculateGasFee = async () => {
       setGasFee({ ...gasFee, isLoading: true, error: "" });
       try {
         const gasFeeAmount = await (isErc20Token
-          ? fetchErc20TokenGas()
-          : fetchNativeTokenGas());
+          ? calculateErc20TokenGas()
+          : calculateNativeTokenGas());
         const estimatedGas = getOptimalGasFee(gasFeeAmount);
         setGasFee({ ...gasFee, estimatedGas, error: "", isLoading: false });
       } catch (error) {
@@ -102,7 +102,7 @@ export const GasFeeNotice = observer(
     };
 
     useEffect(() => {
-      fetchGasFee();
+      calculateGasFee();
     }, [from, to, value]);
 
     return (
