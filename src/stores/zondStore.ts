@@ -327,11 +327,16 @@ class ZondStore {
         to,
         BigInt(value * 10 ** decimals),
       );
-      const estimatedTransactionGas = await contractTransfer.estimateGas({
-        from,
-      });
-      const gasPrice = await this.zondInstance.getGasPrice();
-      return utils.fromWei(estimatedTransactionGas * gasPrice, "ether");
+      const gasLimit = Number(
+        await contractTransfer.estimateGas({
+          from,
+        }),
+      );
+      const baseFee = Number((await this.getGasFeeData()).baseFeePerGas);
+      const priorityFee = Number(
+        (await this.getGasFeeData()).maxPriorityFeePerGas,
+      );
+      return utils.fromWei(gasLimit * (baseFee + priorityFee), "ether");
     }
     return "";
   }
@@ -363,15 +368,17 @@ class ZondStore {
           to,
           BigInt(value * 10 ** decimals),
         );
-        const estimatedGas = await contractTransfer.estimateGas({
-          from,
-        });
         const transactionObject = {
-          type: "0x2",
-          gas: estimatedGas,
           from,
-          data: contractTransfer.encodeABI(),
           to: contractAddress,
+          data: contractTransfer.encodeABI(),
+          nonce: await this.zondInstance?.getTransactionCount(from),
+          gasLimit: 65000,
+          maxFeePerGas: Number((await this.getGasFeeData()).maxFeePerGas),
+          maxPriorityFeePerGas: Number(
+            (await this.getGasFeeData()).maxPriorityFeePerGas,
+          ),
+          type: 2,
         };
 
         const transactionReceipt = await this.zondInstance.sendTransaction(
