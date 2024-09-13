@@ -2,9 +2,9 @@ import { useStore } from "@/stores/store";
 import StorageUtil from "@/utilities/storageUtil";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import ImportedToken from "./ImportedToken/ImportedToken";
+import ImportedToken from "./ERC20Token/ERC20Token";
 
-const ImportedTokens = observer(() => {
+const ERC20Tokens = observer(() => {
   const { zondStore } = useStore();
   const { activeAccount, zondConnection } = zondStore;
   const { accountAddress } = activeAccount;
@@ -27,4 +27,4 @@ const ImportedTokens = observer(() => {
   ));
 });
 
-export default ImportedTokens;
+export default ERC20Tokens;
