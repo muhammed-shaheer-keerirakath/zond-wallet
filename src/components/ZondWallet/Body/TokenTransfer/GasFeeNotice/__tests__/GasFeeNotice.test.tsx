@@ -1,14 +1,7 @@
 import { mockedStore } from "@/__mocks__/mockedStore";
 import { StoreProvider } from "@/stores/store";
-import { afterEach, describe, expect, it } from "@jest/globals";
+import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import { act, cleanup, render, screen } from "@testing-library/react";
-import {
-  BlockNumberOrTag,
-  DataFormat,
-  DEFAULT_RETURN_FORMAT,
-  NumberTypes,
-  Transaction,
-} from "@theqrl/web3";
 import { ComponentProps } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { GasFeeNotice } from "../GasFeeNotice";
@@ -64,32 +57,18 @@ describe("GasFeeNotice", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("should display the estimated gas fee", async () => {
+  it("should display the estimated gas fee for native token", async () => {
     renderComponent(
       mockedStore({
         zondStore: {
-          zondInstance: {
-            estimateGas: async <
-              ReturnFormat extends DataFormat = typeof DEFAULT_RETURN_FORMAT,
-            >(
-              transaction: Transaction,
-              blockNumber?: BlockNumberOrTag,
-              returnFormat: ReturnFormat = DEFAULT_RETURN_FORMAT as ReturnFormat,
-            ) => {
-              transaction;
-              blockNumber;
-              returnFormat;
-              return 24000000000 as NumberTypes[ReturnFormat["number"]];
+          getNativeTokenGas: jest.fn(
+            async (from: string, to: string, value: number) => {
+              from;
+              to;
+              value;
+              return "2.64";
             },
-            getGasPrice: async <
-              ReturnFormat extends DataFormat = typeof DEFAULT_RETURN_FORMAT,
-            >(
-              returnFormat: ReturnFormat = DEFAULT_RETURN_FORMAT as ReturnFormat,
-            ) => {
-              returnFormat;
-              return 110000000 as NumberTypes[ReturnFormat["number"]];
-            },
-          },
+          ),
         },
       }),
       {
