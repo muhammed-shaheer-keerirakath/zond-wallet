@@ -2,7 +2,7 @@ import { useStore } from "@/stores/store";
 import StorageUtil from "@/utilities/storageUtil";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import ImportedToken from "./ERC20Token/ERC20Token";
+import ERC20Token from "./ERC20Token/ERC20Token";
 
 const ERC20Tokens = observer(() => {
   const { zondStore } = useStore();
@@ -23,7 +23,7 @@ const ERC20Tokens = observer(() => {
   }, [blockchain, accountAddress]);
 
   return tokenContractsList.map((contractAddress) => (
-    <ImportedToken key={contractAddress} contractAddress={contractAddress} />
+    <ERC20Token key={contractAddress} contractAddress={contractAddress} />
   ));
 });
 

@@ -4,11 +4,11 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import TokenListItem from "../../TokenListItem/TokenListItem";
 
-type ImportedTokenProps = {
+type ERC20TokenProps = {
   contractAddress: string;
 };
 
-const ImportedToken = observer(({ contractAddress }: ImportedTokenProps) => {
+const ERC20Token = observer(({ contractAddress }: ERC20TokenProps) => {
   const { zondStore } = useStore();
   const { zondConnection, activeAccount, getErc20TokenDetails } = zondStore;
   const { blockchain } = zondConnection;
@@ -40,4 +40,4 @@ const ImportedToken = observer(({ contractAddress }: ImportedTokenProps) => {
   );
 });
 
-export default ImportedToken;
+export default ERC20Token;
