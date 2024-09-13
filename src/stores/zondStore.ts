@@ -1,5 +1,9 @@
 import { ZOND_PROVIDER } from "@/configuration/zondConfig";
-import { ERC_20_CONTRACT_ABI } from "@/constants/erc20Token";
+import {
+  ERC_20_CONTRACT_ABI,
+  ERC_20_TOKEN_UNITS_OF_GAS,
+} from "@/constants/erc20Token";
+import { NATIVE_TOKEN_UNITS_OF_GAS } from "@/constants/nativeToken";
 import { getHexSeedFromMnemonic } from "@/functions/getHexSeedFromMnemonic";
 import { getOptimalTokenBalance } from "@/functions/getOptimalTokenBalance";
 import StorageUtil from "@/utilities/storageUtil";
@@ -212,7 +216,7 @@ class ZondStore {
   }
 
   async getNativeTokenGas() {
-    const gasLimit = 21000;
+    const gasLimit = NATIVE_TOKEN_UNITS_OF_GAS;
     const baseFee = Number((await this.getGasFeeData()).baseFeePerGas);
     const priorityFee = Number(
       (await this.getGasFeeData()).maxPriorityFeePerGas,
@@ -237,7 +241,7 @@ class ZondStore {
         to,
         value: utils.toWei(value, "ether"),
         nonce: await this.zondInstance?.getTransactionCount(from),
-        gasLimit: 21000,
+        gasLimit: NATIVE_TOKEN_UNITS_OF_GAS,
         maxFeePerGas: Number((await this.getGasFeeData()).maxFeePerGas),
         maxPriorityFeePerGas: Number(
           (await this.getGasFeeData()).maxPriorityFeePerGas,
@@ -373,7 +377,7 @@ class ZondStore {
           to: contractAddress,
           data: contractTransfer.encodeABI(),
           nonce: await this.zondInstance?.getTransactionCount(from),
-          gasLimit: 65000,
+          gasLimit: ERC_20_TOKEN_UNITS_OF_GAS,
           maxFeePerGas: Number((await this.getGasFeeData()).maxFeePerGas),
           maxPriorityFeePerGas: Number(
             (await this.getGasFeeData()).maxPriorityFeePerGas,

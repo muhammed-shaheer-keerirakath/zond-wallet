@@ -148,3 +148,5 @@ export const ERC_20_CONTRACT_ABI = [
     type: "function",
   },
 ] as const;
+
+export const ERC_20_TOKEN_UNITS_OF_GAS = 65000;

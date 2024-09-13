@@ -4,3 +4,5 @@ export const NATIVE_TOKEN = {
   symbol: "QRL",
   decimals: 8,
 };
+
+export const NATIVE_TOKEN_UNITS_OF_GAS = 21000;
