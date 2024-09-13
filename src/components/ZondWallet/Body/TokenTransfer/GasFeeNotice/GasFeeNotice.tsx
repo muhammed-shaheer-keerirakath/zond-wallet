@@ -91,8 +91,7 @@ export const GasFeeNotice = observer(
     const fetchGasFee = async () => {
       setGasFee({ ...gasFee, isLoading: true, error: "" });
       try {
-        let gasFeeAmount = "";
-        gasFeeAmount = await (isErc20Token
+        const gasFeeAmount = await (isErc20Token
           ? fetchErc20TokenGas()
           : fetchNativeTokenGas());
         const estimatedGas = getOptimalGasFee(gasFeeAmount);
