@@ -1,6 +1,5 @@
 import { ZOND_PROVIDER } from "@/configuration/zondConfig";
 import { ERC_20_CONTRACT_ABI } from "@/constants/erc20Token";
-import { NATIVE_TOKEN } from "@/constants/nativeToken";
 import { getHexSeedFromMnemonic } from "@/functions/getHexSeedFromMnemonic";
 import { getOptimalTokenBalance } from "@/functions/getOptimalTokenBalance";
 import StorageUtil from "@/utilities/storageUtil";
@@ -192,6 +191,18 @@ class ZondStore {
     };
   }
 
+  async getGasFeeData() {
+    const latestBlock = await this.zondInstance?.getBlock("latest");
+    const baseFeePerGas = latestBlock?.baseFeePerGas ?? BigInt(0);
+    const maxPriorityFeePerGas = utils.toWei("2", "gwei");
+    const maxFeePerGas = baseFeePerGas + BigInt(maxPriorityFeePerGas);
+    return {
+      baseFeePerGas,
+      maxPriorityFeePerGas,
+      maxFeePerGas,
+    };
+  }
+
   getAccountBalance(accountAddress: string) {
     return (
       this.zondAccounts.accounts.find(
@@ -200,17 +211,14 @@ class ZondStore {
     );
   }
 
-  async getNativeTokenGas(from: string, to: string, value: number) {
+  async getNativeTokenGas() {
     if (this.zondInstance) {
-      const transaction = {
-        from,
-        to,
-        value: BigInt(value * 10 ** NATIVE_TOKEN.decimals),
-      };
-      const estimatedTransactionGas =
-        await this.zondInstance.estimateGas(transaction);
-      const gasPrice = await this.zondInstance.getGasPrice();
-      return utils.fromWei(estimatedTransactionGas * gasPrice, "ether");
+      const gasLimit = 21000;
+      const baseFee = Number((await this.getGasFeeData()).baseFeePerGas);
+      const priorityFee = Number(
+        (await this.getGasFeeData()).maxPriorityFeePerGas,
+      );
+      return utils.fromWei(gasLimit * (baseFee + priorityFee), "ether");
     }
     return "";
   }
@@ -231,8 +239,13 @@ class ZondStore {
         from,
         to,
         value: utils.toWei(value, "ether"),
-        maxFeePerGas: 21000,
-        maxPriorityFeePerGas: 21000,
+        nonce: await this.zondInstance?.getTransactionCount(from),
+        gasLimit: 21000,
+        maxFeePerGas: Number((await this.getGasFeeData()).maxFeePerGas),
+        maxPriorityFeePerGas: Number(
+          (await this.getGasFeeData()).maxPriorityFeePerGas,
+        ),
+        type: 2,
       };
       const signedTransaction =
         await this.zondInstance?.accounts.signTransaction(

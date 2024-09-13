@@ -61,14 +61,9 @@ describe("GasFeeNotice", () => {
     renderComponent(
       mockedStore({
         zondStore: {
-          getNativeTokenGas: jest.fn(
-            async (from: string, to: string, value: number) => {
-              from;
-              to;
-              value;
-              return "2.64";
-            },
-          ),
+          getNativeTokenGas: jest.fn(async () => {
+            return "2.64";
+          }),
         },
       }),
       {

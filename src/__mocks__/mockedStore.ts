@@ -31,10 +31,7 @@ const mockedStoreValues: StoreType = {
       selectedBlockchain;
     },
     setActiveAccount: async () => {},
-    getNativeTokenGas: async (from: string, to: string, value: number) => {
-      from;
-      to;
-      value;
+    getNativeTokenGas: async () => {
       return "";
     },
     signAndSendNativeToken: async (
@@ -50,6 +47,13 @@ const mockedStoreValues: StoreType = {
       return { transactionReceipt: undefined, error: "" };
     },
     validateActiveAccount: async () => {},
+    getGasFeeData: async () => {
+      return {
+        baseFeePerGas: BigInt(0),
+        maxFeePerGas: BigInt(0),
+        maxPriorityFeePerGas: "0",
+      };
+    },
     getErc20TokenDetails: async () => ({
       token: undefined,
       error: "",

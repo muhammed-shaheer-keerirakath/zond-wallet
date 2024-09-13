@@ -52,7 +52,7 @@ export const GasFeeNotice = observer(
     });
 
     const calculateNativeTokenGas = async () => {
-      return await getNativeTokenGas(from, to, value);
+      return await getNativeTokenGas();
     };
 
     const calculateErc20TokenGas = async () => {

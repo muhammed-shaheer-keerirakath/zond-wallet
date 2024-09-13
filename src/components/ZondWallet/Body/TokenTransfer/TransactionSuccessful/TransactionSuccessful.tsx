@@ -64,7 +64,7 @@ export const TransactionSuccessful = ({
                 <div className="font-bold text-secondary">
                   {getOptimalGasFee(
                     utils.fromWei(
-                      BigInt(gasUsed) * BigInt(effectiveGasPrice ?? 0),
+                      Number(gasUsed) * Number(effectiveGasPrice ?? 0),
                       "ether",
                     ),
                   )}
