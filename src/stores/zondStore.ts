@@ -212,15 +212,12 @@ class ZondStore {
   }
 
   async getNativeTokenGas() {
-    if (this.zondInstance) {
-      const gasLimit = 21000;
-      const baseFee = Number((await this.getGasFeeData()).baseFeePerGas);
-      const priorityFee = Number(
-        (await this.getGasFeeData()).maxPriorityFeePerGas,
-      );
-      return utils.fromWei(gasLimit * (baseFee + priorityFee), "ether");
-    }
-    return "";
+    const gasLimit = 21000;
+    const baseFee = Number((await this.getGasFeeData()).baseFeePerGas);
+    const priorityFee = Number(
+      (await this.getGasFeeData()).maxPriorityFeePerGas,
+    );
+    return utils.fromWei(gasLimit * (baseFee + priorityFee), "ether");
   }
 
   async signAndSendNativeToken(
