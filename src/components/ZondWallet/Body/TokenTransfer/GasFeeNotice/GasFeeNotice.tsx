@@ -1,5 +1,4 @@
 import { ERC_20_CONTRACT_ABI } from "@/constants/erc20Token";
-import { NATIVE_TOKEN } from "@/constants/nativeToken";
 import { getOptimalGasFee } from "@/functions/getOptimalGasFee";
 import { useStore } from "@/stores/store";
 import { utils } from "@theqrl/web3";
@@ -44,7 +43,7 @@ export const GasFeeNotice = observer(
     isSubmitting,
   }: GasFeeNoticeProps) => {
     const { zondStore } = useStore();
-    const { zondInstance } = zondStore;
+    const { zondInstance, getNativeTokenGas } = zondStore;
 
     const hasValuesForGasCalculation = !!from && !!to && !!value;
 
@@ -55,18 +54,7 @@ export const GasFeeNotice = observer(
     });
 
     const calculateNativeTokenGas = async () => {
-      if (zondInstance) {
-        const transaction = {
-          from,
-          to,
-          value: BigInt(value * 10 ** NATIVE_TOKEN.decimals),
-        };
-        const estimatedTransactionGas =
-          await zondInstance.estimateGas(transaction);
-        const gasPrice = await zondInstance.getGasPrice();
-        return utils.fromWei(estimatedTransactionGas * gasPrice, "ether");
-      }
-      return "";
+      return await getNativeTokenGas(from, to, value);
     };
 
     const calculateErc20TokenGas = async () => {

@@ -31,6 +31,12 @@ const mockedStoreValues: StoreType = {
       selectedBlockchain;
     },
     setActiveAccount: async () => {},
+    getNativeTokenGas: async (from: string, to: string, value: number) => {
+      from;
+      to;
+      value;
+      return "";
+    },
     signAndSendNativeToken: async (
       from: string,
       to: string,

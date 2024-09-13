@@ -1,5 +1,6 @@
 import { ZOND_PROVIDER } from "@/configuration/zondConfig";
 import { ERC_20_CONTRACT_ABI } from "@/constants/erc20Token";
+import { NATIVE_TOKEN } from "@/constants/nativeToken";
 import { getHexSeedFromMnemonic } from "@/functions/getHexSeedFromMnemonic";
 import { getOptimalTokenBalance } from "@/functions/getOptimalTokenBalance";
 import StorageUtil from "@/utilities/storageUtil";
@@ -46,6 +47,7 @@ class ZondStore {
       fetchZondConnection: action.bound,
       fetchAccounts: action.bound,
       getAccountBalance: action.bound,
+      getNativeTokenGas: action.bound,
       signAndSendNativeToken: action.bound,
       getErc20TokenDetails: action.bound,
       signAndSendErc20Token: action.bound,
@@ -195,6 +197,21 @@ class ZondStore {
         (account) => account.accountAddress === accountAddress,
       )?.accountBalance ?? "0.0 QRL"
     );
+  }
+
+  async getNativeTokenGas(from: string, to: string, value: number) {
+    if (this.zondInstance) {
+      const transaction = {
+        from,
+        to,
+        value: BigInt(value * 10 ** NATIVE_TOKEN.decimals),
+      };
+      const estimatedTransactionGas =
+        await this.zondInstance.estimateGas(transaction);
+      const gasPrice = await this.zondInstance.getGasPrice();
+      return utils.fromWei(estimatedTransactionGas * gasPrice, "ether");
+    }
+    return "";
   }
 
   async signAndSendNativeToken(
