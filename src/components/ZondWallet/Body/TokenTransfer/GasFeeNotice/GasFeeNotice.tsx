@@ -1,7 +1,5 @@
-import { ERC_20_CONTRACT_ABI } from "@/constants/erc20Token";
 import { getOptimalGasFee } from "@/functions/getOptimalGasFee";
 import { useStore } from "@/stores/store";
-import { utils } from "@theqrl/web3";
 import { cva } from "class-variance-authority";
 import { Loader } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -43,7 +41,7 @@ export const GasFeeNotice = observer(
     isSubmitting,
   }: GasFeeNoticeProps) => {
     const { zondStore } = useStore();
-    const { zondInstance, getNativeTokenGas } = zondStore;
+    const { getNativeTokenGas, getErc20TokenGas } = zondStore;
 
     const hasValuesForGasCalculation = !!from && !!to && !!value;
 
@@ -58,22 +56,13 @@ export const GasFeeNotice = observer(
     };
 
     const calculateErc20TokenGas = async () => {
-      if (zondInstance && zondInstance.Contract) {
-        const contract = new zondInstance.Contract(
-          ERC_20_CONTRACT_ABI,
-          tokenContractAddress,
-        );
-        const contractTransfer = contract.methods.transfer(
-          to,
-          BigInt(value * 10 ** tokenDecimals),
-        );
-        const estimatedTransactionGas = await contractTransfer.estimateGas({
-          from,
-        });
-        const gasPrice = await zondInstance.getGasPrice();
-        return utils.fromWei(estimatedTransactionGas * gasPrice, "ether");
-      }
-      return "";
+      return await getErc20TokenGas(
+        from,
+        to,
+        value,
+        tokenContractAddress,
+        tokenDecimals,
+      );
     };
 
     const calculateGasFee = async () => {
@@ -82,8 +71,12 @@ export const GasFeeNotice = observer(
         const gasFeeAmount = await (isErc20Token
           ? calculateErc20TokenGas()
           : calculateNativeTokenGas());
-        const estimatedGas = getOptimalGasFee(gasFeeAmount);
-        setGasFee({ ...gasFee, estimatedGas, error: "", isLoading: false });
+        setGasFee({
+          ...gasFee,
+          estimatedGas: getOptimalGasFee(gasFeeAmount),
+          error: "",
+          isLoading: false,
+        });
       } catch (error) {
         setGasFee({ ...gasFee, error: `${error}`, isLoading: false });
       }

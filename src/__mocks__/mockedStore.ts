@@ -54,6 +54,20 @@ const mockedStoreValues: StoreType = {
       token: undefined,
       error: "",
     }),
+    getErc20TokenGas: async (
+      from: string,
+      to: string,
+      value: number,
+      contractAddress: string,
+      decimals: number,
+    ) => {
+      from;
+      to;
+      value;
+      contractAddress;
+      decimals;
+      return "";
+    },
     signAndSendErc20Token: async (
       from: string,
       to: string,

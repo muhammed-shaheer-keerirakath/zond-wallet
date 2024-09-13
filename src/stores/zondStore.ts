@@ -50,6 +50,7 @@ class ZondStore {
       getNativeTokenGas: action.bound,
       signAndSendNativeToken: action.bound,
       getErc20TokenDetails: action.bound,
+      getErc20TokenGas: action.bound,
       signAndSendErc20Token: action.bound,
     });
     this.initializeBlockchain();
@@ -298,6 +299,31 @@ class ZondStore {
     }
 
     return tokenDetails;
+  }
+
+  async getErc20TokenGas(
+    from: string,
+    to: string,
+    value: number,
+    contractAddress: string,
+    decimals: number,
+  ) {
+    if (this.zondInstance && this.zondInstance.Contract) {
+      const contract = new this.zondInstance.Contract(
+        ERC_20_CONTRACT_ABI,
+        contractAddress,
+      );
+      const contractTransfer = contract.methods.transfer(
+        to,
+        BigInt(value * 10 ** decimals),
+      );
+      const estimatedTransactionGas = await contractTransfer.estimateGas({
+        from,
+      });
+      const gasPrice = await this.zondInstance.getGasPrice();
+      return utils.fromWei(estimatedTransactionGas * gasPrice, "ether");
+    }
+    return "";
   }
 
   async signAndSendErc20Token(
