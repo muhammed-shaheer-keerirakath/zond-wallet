@@ -3,6 +3,7 @@ import { useStore } from "@/stores/store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import TokenListItem from "../../TokenListItem/TokenListItem";
+import TokenListItemLoading from "../../TokenListItemLoading/TokenListItemLoading";
 
 type ERC20TokenProps = {
   contractAddress: string;
@@ -26,17 +27,17 @@ const ERC20Token = observer(({ contractAddress }: ERC20TokenProps) => {
     })();
   }, [blockchain, accountAddress]);
 
-  return (
-    !!token && (
-      <TokenListItem
-        isErc20Token={true}
-        contractAddress={contractAddress}
-        decimals={Number(token.decimals)}
-        balance={getOptimalTokenBalance(token.balance.toString(), token.symbol)}
-        name={token.name}
-        symbol={token.symbol}
-      />
-    )
+  return !token ? (
+    <TokenListItemLoading />
+  ) : (
+    <TokenListItem
+      isErc20Token={true}
+      contractAddress={contractAddress}
+      decimals={Number(token.decimals)}
+      balance={getOptimalTokenBalance(token.balance.toString(), token.symbol)}
+      name={token.name}
+      symbol={token.symbol}
+    />
   );
 });
 
