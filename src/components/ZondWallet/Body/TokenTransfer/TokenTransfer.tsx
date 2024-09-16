@@ -114,7 +114,7 @@ const TokenTransfer = observer(() => {
         const isTransactionSuccessful =
           transactionReceipt?.status.toString() === "1";
         if (isTransactionSuccessful) {
-          resetForm();
+          await resetForm();
           setTransactionReceipt(transactionReceipt);
           await fetchAccounts();
           window.scrollTo(0, 0);
@@ -131,8 +131,8 @@ const TokenTransfer = observer(() => {
     }
   }
 
-  const resetForm = () => {
-    StorageUtil.clearTransactionValues(blockchain);
+  const resetForm = async () => {
+    await StorageUtil.clearTransactionValues(blockchain);
     reset({ receiverAddress: "", amount: 0, mnemonicPhrases: "" });
   };
 
@@ -167,7 +167,7 @@ const TokenTransfer = observer(() => {
     (async () => {
       const shouldStartFresh = state?.shouldStartFresh;
       if (shouldStartFresh) {
-        resetForm();
+        await resetForm();
       } else {
         const storedTransactionValues =
           await StorageUtil.getTransactionValues(blockchain);
@@ -184,6 +184,7 @@ const TokenTransfer = observer(() => {
         };
 
         if (tokenDetailsFromState) {
+          await resetForm();
           setIsErc20Token(tokenDetailsFromState?.isErc20Token);
           setTokenContractAddress(tokenDetailsFromState?.tokenContractAddress);
           setTokenDecimals(tokenDetailsFromState?.tokenDecimals);
