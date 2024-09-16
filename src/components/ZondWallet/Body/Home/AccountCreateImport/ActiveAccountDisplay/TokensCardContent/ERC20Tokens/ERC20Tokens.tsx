@@ -22,7 +22,7 @@ const ERC20Tokens = observer(
     const [tokenContractsList, setTokenContractsList] = useState<string[]>([]);
 
     const numberOfTokens = tokenContractsList.length;
-    const tokenDisplayLimit = 1;
+    const tokenDisplayLimit = 2;
     const shouldDisplayViewAllButton =
       !!numberOfTokens &&
       numberOfTokens > tokenDisplayLimit &&
@@ -40,9 +40,17 @@ const ERC20Tokens = observer(
 
     return (
       <>
-        {tokenContractsList.map((contractAddress) => (
-          <ERC20Token key={contractAddress} contractAddress={contractAddress} />
-        ))}
+        {tokenContractsList
+          .slice(
+            0,
+            shouldDisplayAllTokens ? numberOfTokens + 1 : tokenDisplayLimit,
+          )
+          .map((contractAddress) => (
+            <ERC20Token
+              key={contractAddress}
+              contractAddress={contractAddress}
+            />
+          ))}
         {shouldDisplayViewAllButton && (
           <Link className="w-full" to={ROUTES.ALL_ERC_20_TOKENS}>
             <Button className="w-full" type="button" variant="ghost">
