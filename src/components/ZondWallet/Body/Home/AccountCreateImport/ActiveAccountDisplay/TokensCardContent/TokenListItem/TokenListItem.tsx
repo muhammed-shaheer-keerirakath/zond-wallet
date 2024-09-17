@@ -72,6 +72,7 @@ const TokenListItem = ({
               variant="outline"
               type="button"
               size="icon"
+              aria-label={symbol}
               onClick={onSend}
             >
               <Send size="18" />
