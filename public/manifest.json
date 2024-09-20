@@ -13,7 +13,13 @@
   "action": {
     "default_popup": "index.html",
     "default_title": "Zond Wallet",
-    "default_icon": "icons/qrl/default.png"
+    "default_icon": {
+      "16": "icons/qrl/16.png",
+      "24": "icons/qrl/24.png",
+      "48": "icons/qrl/48.png",
+      "64": "icons/qrl/64.png",
+      "128": "icons/qrl/128.png"
+    }
   },
   "background": {
     "service_worker": "background.js",
