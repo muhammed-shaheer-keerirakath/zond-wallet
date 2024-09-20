@@ -27,5 +27,5 @@
     "storage",
     "unlimitedStorage"
   ],
-  "host_permissions": ["http://localhost/*", "http://209.250.255.226/*"]
+  "host_permissions": ["<all_urls>"]
 }
