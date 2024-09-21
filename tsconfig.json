@@ -26,6 +26,13 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "public", "jest.setup.ts"],
+  "include": [
+    "src",
+    "public",
+    "scripts",
+    "jest.setup.ts",
+    "scripts/background.ts",
+    "scripts/contentScript.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
