@@ -22,6 +22,13 @@
     "service_worker": "scripts/background.ts",
     "type": "module"
   },
+  "content_scripts": [
+    {
+      "js": ["scripts/contentScript.ts"],
+      "matches": ["<all_urls>"],
+      "all_frames": true
+    }
+  ],
   "permissions": [
     "scripting",
     "tabs",
