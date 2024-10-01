@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Zond Wallet",
   "version": "1.0",
-  "description": "Zond Wallet browser extention.",
+  "description": "A wallet that run on the zond blockchain.",
   "icons": {
     "16": "icons/qrl/16.png",
     "24": "icons/qrl/24.png",
