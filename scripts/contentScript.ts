@@ -1,5 +1,7 @@
-import { WindowPostMessageStream } from "@/wallet-provider/helpers/post-message-stream";
-import { initiateZondWalletProvider } from "@/wallet-provider/helpers/providers";
+import {
+  initiateZondWalletProvider,
+  WindowPostMessageStream,
+} from "@/wallet-provider";
 import { v4 as uuid } from "uuid";
 import {
   ZOND_POST_MESSAGE_STREAM,
