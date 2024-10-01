@@ -1,7 +1,5 @@
-import {
-  initiateZondWalletProvider,
-  WindowPostMessageStream,
-} from "@/wallet-provider";
+import { WindowPostMessageStream } from "@/wallet-provider/post-message-stream";
+import { initializeProvider } from "@/wallet-provider/providers";
 import { v4 as uuid } from "uuid";
 import {
   ZOND_POST_MESSAGE_STREAM,
@@ -14,7 +12,7 @@ const initiateZondContentScript = () => {
       name: ZOND_POST_MESSAGE_STREAM.NAME,
       target: ZOND_POST_MESSAGE_STREAM.TARGET,
     });
-    initiateZondWalletProvider({
+    initializeProvider({
       connectionStream: zondStream,
       providerInfo: {
         uuid: uuid(),
@@ -22,7 +20,6 @@ const initiateZondContentScript = () => {
         icon: ZOND_WALLET_PROVIDER_INFO.ICON,
         rdns: ZOND_WALLET_PROVIDER_INFO.RDNS,
       },
-      shouldSupportLegacyMethod: true,
     });
   } catch (error) {
     console.warn("Zond Wallet: Failed to inject the zond provider", error);
