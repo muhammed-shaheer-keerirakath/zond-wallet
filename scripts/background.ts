@@ -1,7 +1,5 @@
 import browser from "webextension-polyfill";
 
-console.log("Zond Wallet: Background service worker script running!");
-
 const initiateBackgroundScript = async () => {
   await browser.scripting.registerContentScripts([
     {

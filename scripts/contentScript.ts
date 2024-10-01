@@ -1,11 +1,29 @@
-console.log("Zond Wallet: Content script running!");
+import { WindowPostMessageStream } from "@/wallet-provider/helpers/post-message-stream";
+import { initiateZondWalletProvider } from "@/wallet-provider/helpers/providers";
+import { v4 as uuid } from "uuid";
+import {
+  ZOND_POST_MESSAGE_STREAM,
+  ZOND_WALLET_PROVIDER_INFO,
+} from "./constants";
 
 const initiateZondContentScript = () => {
   try {
-    // call this with required params
-    // initiateZondWalletProvider();
+    const zondStream = new WindowPostMessageStream({
+      name: ZOND_POST_MESSAGE_STREAM.NAME,
+      target: ZOND_POST_MESSAGE_STREAM.TARGET,
+    });
+    initiateZondWalletProvider({
+      connectionStream: zondStream,
+      providerInfo: {
+        uuid: uuid(),
+        name: ZOND_WALLET_PROVIDER_INFO.NAME,
+        icon: ZOND_WALLET_PROVIDER_INFO.ICON,
+        rdns: ZOND_WALLET_PROVIDER_INFO.RDNS,
+      },
+      shouldSupportLegacyMethod: true,
+    });
   } catch (error) {
-    console.warn("Zond Wallet: Failed to inject the zond provider");
+    console.warn("Zond Wallet: Failed to inject the zond provider", error);
   }
 };
 
