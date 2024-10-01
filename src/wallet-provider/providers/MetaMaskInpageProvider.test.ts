@@ -1063,11 +1063,11 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
     });
   });
 
-  describe("isMetaMask", () => {
+  describe("isZondWallet", () => {
     it('should be set to "true"', async () => {
       const { provider } = await getInitializedProvider();
 
-      expect(provider.isMetaMask).toBe(true);
+      expect(provider.isZondWallet).toBe(true);
     });
   });
 

@@ -79,7 +79,7 @@ export class MetaMaskInpageProvider extends AbstractStreamProvider {
   /**
    * Indicating that this provider is a MetaMask provider.
    */
-  public readonly isMetaMask: true;
+  public readonly isZondWallet: true;
 
   /**
    * Creates a new `MetaMaskInpageProvider`.
@@ -117,7 +117,7 @@ export class MetaMaskInpageProvider extends AbstractStreamProvider {
     this._initializeStateAsync();
 
     this.#networkVersion = null;
-    this.isMetaMask = true;
+    this.isZondWallet = true;
 
     this._sendSync = this._sendSync.bind(this);
     this.enable = this.enable.bind(this);
