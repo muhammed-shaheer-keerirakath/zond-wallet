@@ -25,5 +25,5 @@ const initiateZondContentScript = () => {
   }
 };
 
-// This function injects the zond provider to be used by the dApps.
+// This function accounces the zond provider(based on EIP-6963) to be listened by the dApps.
 initiateZondContentScript();

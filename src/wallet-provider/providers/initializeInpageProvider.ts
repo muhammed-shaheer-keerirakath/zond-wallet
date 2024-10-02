@@ -1,10 +1,10 @@
-import type { Duplex } from 'readable-stream';
+import type { Duplex } from "readable-stream";
 
-import type { EIP6963ProviderInfo } from './EIP6963';
-import { announceProvider } from './EIP6963';
-import type { MetaMaskInpageProviderOptions } from './MetaMaskInpageProvider';
-import { MetaMaskInpageProvider } from './MetaMaskInpageProvider';
-import { shimWeb3 } from './shimWeb3';
+import type { EIP6963ProviderInfo } from "./EIP6963";
+import { announceProvider } from "./EIP6963";
+import type { MetaMaskInpageProviderOptions } from "./MetaMaskInpageProvider";
+import { MetaMaskInpageProvider } from "./MetaMaskInpageProvider";
+import { shimWeb3 } from "./shimWeb3";
 
 type InitializeProviderOptions = {
   /**
@@ -64,7 +64,7 @@ export function initializeProvider({
     deleteProperty: () => true,
     // fix issue with Proxy unable to access private variables from getters
     // https://stackoverflow.com/a/73051482
-    get(target, propName: 'chainId' | 'networkVersion' | 'selectedAddress') {
+    get(target, propName: "chainId" | "networkVersion" | "selectedAddress") {
       return target[propName];
     },
   });
@@ -97,5 +97,5 @@ export function setGlobalProvider(
   providerInstance: MetaMaskInpageProvider,
 ): void {
   (window as Record<string, any>).ethereum = providerInstance;
-  window.dispatchEvent(new Event('ethereum#initialized'));
+  window.dispatchEvent(new Event("ethereum#initialized"));
 }
