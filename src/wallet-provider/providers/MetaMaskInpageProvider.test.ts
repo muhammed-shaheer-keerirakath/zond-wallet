@@ -3,7 +3,7 @@ import type { JsonRpcRequest } from "../utils";
 import messages from "./messages";
 import {
   MetaMaskInpageProvider,
-  MetaMaskInpageProviderStreamName,
+  ZondWalletInpageProviderStreamName,
 } from "./MetaMaskInpageProvider";
 import { MockConnectionStream } from "./test/mocks/MockConnectionStream";
 
@@ -745,7 +745,7 @@ describe("MetaMaskInpageProvider: RPC", () => {
           resolve(undefined);
         });
 
-        connectionStream.notify(MetaMaskInpageProviderStreamName, {
+        connectionStream.notify(ZondWalletInpageProviderStreamName, {
           jsonrpc: "2.0",
           method: "metamask_chainChanged",
           params: { chainId: "0x1", networkVersion: "1" },
@@ -762,7 +762,7 @@ describe("MetaMaskInpageProvider: RPC", () => {
           resolve(undefined);
         });
 
-        connectionStream.notify(MetaMaskInpageProviderStreamName, {
+        connectionStream.notify(ZondWalletInpageProviderStreamName, {
           jsonrpc: "2.0",
           method: "metamask_chainChanged",
           params: { chainId: "0x1", networkVersion: "1" },
@@ -786,7 +786,7 @@ describe("MetaMaskInpageProvider: RPC", () => {
           resolve();
         });
 
-        connectionStream.notify(MetaMaskInpageProviderStreamName, {
+        connectionStream.notify(ZondWalletInpageProviderStreamName, {
           jsonrpc: "2.0",
           method: "metamask_chainChanged",
           // A "loading" networkVersion indicates the network is changing.
@@ -811,7 +811,7 @@ describe("MetaMaskInpageProvider: RPC", () => {
           resolve();
         });
 
-        connectionStream.notify(MetaMaskInpageProviderStreamName, {
+        connectionStream.notify(ZondWalletInpageProviderStreamName, {
           jsonrpc: "2.0",
           method: "metamask_chainChanged",
           params: { chainId: "0x1", networkVersion: "1" },

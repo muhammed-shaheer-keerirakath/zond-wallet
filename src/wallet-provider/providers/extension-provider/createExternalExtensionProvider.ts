@@ -1,16 +1,16 @@
-import { detect } from 'detect-browser';
-import { PortDuplexStream as PortStream } from 'extension-port-stream';
-import type { Duplex } from 'readable-stream';
-import type { Runtime } from 'webextension-polyfill';
+import { detect } from "detect-browser";
+import { PortDuplexStream as PortStream } from "extension-port-stream";
+import type { Duplex } from "readable-stream";
+import type { Runtime } from "webextension-polyfill";
 
-import config from './external-extension-config.json';
-import { MetaMaskInpageProviderStreamName } from '../MetaMaskInpageProvider';
-import { StreamProvider } from '../StreamProvider';
-import { getDefaultExternalMiddleware } from '../utils';
+import { ZondWalletInpageProviderStreamName } from "../MetaMaskInpageProvider";
+import { StreamProvider } from "../StreamProvider";
+import { getDefaultExternalMiddleware } from "../utils";
+import config from "./external-extension-config.json";
 
 const browser = detect();
 
-export type ExtensionType = 'stable' | 'flask' | 'beta' | string;
+export type ExtensionType = "stable" | "flask" | "beta" | string;
 
 /**
  * Creates an external extension provider for the given extension type or ID.
@@ -19,7 +19,7 @@ export type ExtensionType = 'stable' | 'flask' | 'beta' | string;
  * @returns The external extension provider.
  */
 export function createExternalExtensionProvider(
-  typeOrId: ExtensionType = 'stable',
+  typeOrId: ExtensionType = "stable",
 ) {
   let provider;
 
@@ -29,7 +29,7 @@ export function createExternalExtensionProvider(
 
     const pluginStream = new PortStream(metamaskPort);
     provider = new StreamProvider(pluginStream as unknown as Duplex, {
-      jsonRpcStreamName: MetaMaskInpageProviderStreamName,
+      jsonRpcStreamName: ZondWalletInpageProviderStreamName,
       logger: console,
       rpcMiddleware: getDefaultExternalMiddleware(console),
     });
@@ -54,6 +54,6 @@ export function createExternalExtensionProvider(
  */
 function getExtensionId(typeOrId: ExtensionType) {
   const ids =
-    browser?.name === 'firefox' ? config.firefoxIds : config.chromeIds;
+    browser?.name === "firefox" ? config.firefoxIds : config.chromeIds;
   return ids[typeOrId as keyof typeof ids] ?? typeOrId;
 }

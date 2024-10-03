@@ -16,7 +16,7 @@ type InitializeProviderOptions = {
 } & MetaMaskInpageProviderOptions;
 
 /**
- * Initializes a MetaMaskInpageProvider and (optionally) assigns it as window.ethereum.
+ * Initializes a MetaMaskInpageProvider.
  *
  * @param options - An options bag.
  * @param options.connectionStream - A Node.js stream.

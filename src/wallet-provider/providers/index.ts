@@ -14,7 +14,7 @@ import { createExternalExtensionProvider } from "./extension-provider/createExte
 import { initializeProvider } from "./initializeInpageProvider";
 import {
   MetaMaskInpageProvider,
-  MetaMaskInpageProviderStreamName,
+  ZondWalletInpageProviderStreamName,
 } from "./MetaMaskInpageProvider";
 import { StreamProvider } from "./StreamProvider";
 import type { ConsoleLike } from "./utils";
@@ -35,6 +35,6 @@ export {
   eip6963RequestProvider,
   initializeProvider,
   MetaMaskInpageProvider,
-  MetaMaskInpageProviderStreamName,
   StreamProvider,
+  ZondWalletInpageProviderStreamName,
 };

@@ -1,7 +1,6 @@
 import type { Duplex } from "readable-stream";
 import { rpcErrors } from "../rpc-errors";
 import type { Json, JsonRpcRequest, JsonRpcResponse } from "../utils";
-
 import type { UnvalidatedJsonRpcRequest } from "./BaseProvider";
 import messages from "./messages";
 import { sendSiteMetadata } from "./siteMetadata";
@@ -29,7 +28,6 @@ export type MetaMaskInpageProviderOptions = {
    * Whether the provider should send page metadata.
    */
   shouldSendMetadata?: boolean;
-
   jsonRpcStreamName?: string | undefined;
 } & Partial<Omit<StreamProviderOptions, "rpcMiddleware">>;
 
@@ -50,7 +48,7 @@ type SentWarningsState = {
 /**
  * The name of the stream consumed by {@link MetaMaskInpageProvider}.
  */
-export const MetaMaskInpageProviderStreamName = "metamask-provider";
+export const ZondWalletInpageProviderStreamName = "zond-wallet-provider";
 
 export class MetaMaskInpageProvider extends AbstractStreamProvider {
   protected _sentWarnings: SentWarningsState = {
@@ -97,7 +95,7 @@ export class MetaMaskInpageProvider extends AbstractStreamProvider {
   constructor(
     connectionStream: Duplex,
     {
-      jsonRpcStreamName = MetaMaskInpageProviderStreamName,
+      jsonRpcStreamName = ZondWalletInpageProviderStreamName,
       logger = console,
       maxEventListeners = 100,
       shouldSendMetadata,
