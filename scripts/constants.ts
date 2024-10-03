@@ -1,6 +1,6 @@
 export const ZOND_POST_MESSAGE_STREAM = {
-  NAME: "zond-inpage",
-  TARGET: "zond-content-script",
+  INPAGE: "zond-inpage",
+  CONTENT_SCRIPT: "zond-content-script",
 };
 
 export const ZOND_WALLET_PROVIDER_INFO = {

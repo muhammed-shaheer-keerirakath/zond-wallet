@@ -8,8 +8,8 @@ import {
 const initializeContentScript = () => {
   try {
     const zondStream = new WindowPostMessageStream({
-      name: ZOND_POST_MESSAGE_STREAM.NAME,
-      target: ZOND_POST_MESSAGE_STREAM.TARGET,
+      name: ZOND_POST_MESSAGE_STREAM.INPAGE,
+      target: ZOND_POST_MESSAGE_STREAM.CONTENT_SCRIPT,
     });
     initializeProvider({
       connectionStream: zondStream,
