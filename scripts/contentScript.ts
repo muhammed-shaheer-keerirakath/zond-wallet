@@ -21,7 +21,7 @@ const initializeContentScript = () => {
       },
     });
   } catch (error) {
-    console.warn("Zond Wallet: Failed to inject the zond provider", error);
+    console.warn("Zond Wallet: Failed to setup the zond provider", error);
   }
 };
 
