@@ -3,11 +3,11 @@ const messages = {
     disconnected: () =>
       "ZondWallet: Disconnected from chain. Attempting to connect.",
     permanentlyDisconnected: () =>
-      "ZondWallet: Disconnected from MetaMask background. Page reload required.",
+      "ZondWallet: Disconnected from ZondWallet background. Page reload required.",
     sendSiteMetadata: () =>
       `ZondWallet: Failed to send site metadata. This is an internal error, please report this bug.`,
     unsupportedSync: (method: string) =>
-      `ZondWallet: The MetaMask Ethereum provider does not support synchronous methods like ${method} without a callback parameter.`,
+      `ZondWallet: The ZondWallet Ethereum provider does not support synchronous methods like ${method} without a callback parameter.`,
     invalidDuplexStream: () => "Must provide a Node.js-style duplex stream.",
     invalidNetworkParams: () =>
       "ZondWallet: Received invalid network parameters. Please report this bug.",
@@ -37,7 +37,7 @@ const messages = {
     rpc: {
       ethDecryptDeprecation: `ZondWallet: The RPC method 'eth_decrypt' is deprecated and may be removed in the future.\nFor more information, see: https://medium.com/metamask/metamask-api-method-deprecation-2b0564a84686`,
       ethGetEncryptionPublicKeyDeprecation: `ZondWallet: The RPC method 'eth_getEncryptionPublicKey' is deprecated and may be removed in the future.\nFor more information, see: https://medium.com/metamask/metamask-api-method-deprecation-2b0564a84686`,
-      walletWatchAssetNFTExperimental: `ZondWallet: The RPC method 'wallet_watchAsset' is experimental for ERC721/ERC1155 assets and may change in the future.\nFor more information, see: https://github.com/MetaMask/metamask-improvement-proposals/blob/main/MIPs/mip-1.md and https://github.com/MetaMask/metamask-improvement-proposals/blob/main/PROCESS-GUIDE.md#proposal-lifecycle`,
+      walletWatchAssetNFTExperimental: `ZondWallet: The RPC method 'wallet_watchAsset' is experimental for ERC721/ERC1155 assets and may change in the future.`,
     },
     // misc
     experimentalMethods: `ZondWallet: 'ethereum._metamask' exposes non-standard, experimental methods. They may be removed or changed without warning.`,

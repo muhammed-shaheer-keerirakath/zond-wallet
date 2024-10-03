@@ -57,7 +57,7 @@ function createErrorMiddleware(
       if (!error) {
         return done();
       }
-      log.warn(`MetaMask - RPC Error: ${error.message}`, error);
+      log.warn(`ZondWallet - RPC Error: ${error.message}`, error);
       return done();
     });
   };

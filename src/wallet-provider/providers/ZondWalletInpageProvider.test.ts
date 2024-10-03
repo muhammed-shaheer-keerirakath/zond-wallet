@@ -951,7 +951,7 @@ describe("ZondWalletInpageProvider: RPC", () => {
   });
 });
 
-describe("MetaMaskInpageProvider: Miscellanea", () => {
+describe("ZondWalletInpageProvider: Miscellanea", () => {
   describe("constructor", () => {
     it("succeeds if stream is provided", () => {
       expect(

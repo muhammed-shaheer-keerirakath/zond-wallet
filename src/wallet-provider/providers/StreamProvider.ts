@@ -73,7 +73,7 @@ export abstract class AbstractStreamProvider extends BaseProvider {
       connectionStream,
       mux as unknown as Duplex,
       connectionStream,
-      this._handleStreamDisconnect.bind(this, "MetaMask"),
+      this._handleStreamDisconnect.bind(this, "ZondWallet"),
     );
 
     // Set up RPC connection
@@ -87,7 +87,7 @@ export abstract class AbstractStreamProvider extends BaseProvider {
       this._jsonRpcConnection.stream,
       mux.createStream(jsonRpcStreamName) as unknown as Duplex,
       this._jsonRpcConnection.stream,
-      this._handleStreamDisconnect.bind(this, "MetaMask RpcProvider"),
+      this._handleStreamDisconnect.bind(this, "ZondWallet RpcProvider"),
     );
 
     // Wire up the JsonRpcEngine to the JSON-RPC connection stream

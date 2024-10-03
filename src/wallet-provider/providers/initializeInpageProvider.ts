@@ -1,7 +1,7 @@
 import type { Duplex } from "readable-stream";
 import type { EIP6963ProviderInfo } from "./EIP6963";
 import { announceProvider } from "./EIP6963";
-import type { MetaMaskInpageProviderOptions } from "./ZondWalletInpageProvider";
+import type { ZondWalletInpageProviderOptions } from "./ZondWalletInpageProvider";
 import { ZondWalletInpageProvider } from "./ZondWalletInpageProvider";
 
 type InitializeProviderOptions = {
@@ -13,10 +13,10 @@ type InitializeProviderOptions = {
    * The EIP-6963 provider info that should be announced if set.
    */
   providerInfo?: EIP6963ProviderInfo;
-} & MetaMaskInpageProviderOptions;
+} & ZondWalletInpageProviderOptions;
 
 /**
- * Initializes a MetaMaskInpageProvider.
+ * Initializes a ZondWalletInpageProvider.
  *
  * @param options - An options bag.
  * @param options.connectionStream - A Node.js stream.

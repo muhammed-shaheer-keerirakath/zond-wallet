@@ -30,7 +30,7 @@ type InitializedExtensionProviderDetails = {
  *
  * @param options - Options bag.
  * @param options.initialState - The initial provider state returned on
- * initialization.  See {@link MetaMaskInpageProvider._initializeState}.
+ * initialization.  See {@link ZondWalletInpageProvider._initializeState}.
  * @param options.onMethodCalled - A set of configuration objects for adding
  * method-specific callbacks.
  * @returns A tuple of the initialized provider, the mock port used, and an

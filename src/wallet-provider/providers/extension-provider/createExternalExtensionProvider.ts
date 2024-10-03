@@ -40,7 +40,7 @@ export function createExternalExtensionProvider(
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     provider.initialize();
   } catch (error) {
-    console.dir(`MetaMask connect error.`, error);
+    console.dir(`ZondWallet connect error.`, error);
     throw error;
   }
   return provider;

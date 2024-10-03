@@ -23,7 +23,7 @@ export type SendSyncJsonRpcRequest = {
 
 type WarningEventName = keyof SentWarningsState["events"];
 
-export type MetaMaskInpageProviderOptions = {
+export type ZondWalletInpageProviderOptions = {
   /**
    * Whether the provider should send page metadata.
    */
@@ -99,7 +99,7 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
       logger = console,
       maxEventListeners = 100,
       shouldSendMetadata,
-    }: MetaMaskInpageProviderOptions = {},
+    }: ZondWalletInpageProviderOptions = {},
   ) {
     super(connectionStream, {
       jsonRpcStreamName,
@@ -409,9 +409,9 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
     return new Proxy(
       {
         /**
-         * Determines if MetaMask is unlocked by the user.
+         * Determines if ZondWallet is unlocked by the user.
          *
-         * @returns Promise resolving to true if MetaMask is currently unlocked.
+         * @returns Promise resolving to true if ZondWallet is currently unlocked.
          */
         isUnlocked: async () => {
           if (!this._state.initialized) {
