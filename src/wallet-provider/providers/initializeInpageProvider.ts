@@ -12,7 +12,7 @@ type InitializeProviderOptions = {
   /**
    * The EIP-6963 provider info that should be announced if set.
    */
-  providerInfo?: EIP6963ProviderInfo;
+  providerInfo: EIP6963ProviderInfo;
 } & ZondWalletInpageProviderOptions;
 
 /**
@@ -52,12 +52,10 @@ export function initializeProvider({
     },
   });
 
-  if (providerInfo) {
-    announceProvider({
-      info: providerInfo,
-      provider: proxiedProvider,
-    });
-  }
+  announceProvider({
+    info: providerInfo,
+    provider: proxiedProvider,
+  });
 
   return proxiedProvider;
 }
