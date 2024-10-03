@@ -46,11 +46,11 @@ type SentWarningsState = {
 };
 
 /**
- * The name of the stream consumed by {@link MetaMaskInpageProvider}.
+ * The name of the stream consumed by {@link ZondWalletInpageProvider}.
  */
 export const ZondWalletInpageProviderStreamName = "zond-wallet-provider";
 
-export class MetaMaskInpageProvider extends AbstractStreamProvider {
+export class ZondWalletInpageProvider extends AbstractStreamProvider {
   protected _sentWarnings: SentWarningsState = {
     // methods
     enable: false,
@@ -69,23 +69,23 @@ export class MetaMaskInpageProvider extends AbstractStreamProvider {
    * Experimental methods can be found here.
    */
   public readonly _metamask: ReturnType<
-    MetaMaskInpageProvider["_getExperimentalApi"]
+    ZondWalletInpageProvider["_getExperimentalApi"]
   >;
 
   #networkVersion: string | null;
 
   /**
-   * Indicating that this provider is a MetaMask provider.
+   * Indicating that this provider is a ZondWallet provider.
    */
   public readonly isZondWallet: true;
 
   /**
-   * Creates a new `MetaMaskInpageProvider`.
+   * Creates a new `ZondWalletInpageProvider`.
    *
    * @param connectionStream - A Node.js duplex stream.
    * @param options - An options bag.
    * @param options.jsonRpcStreamName - The name of the internal JSON-RPC stream.
-   * Default: `metamask-provider`.
+   * Default: `zond-wallet-provider`.
    * @param options.logger - The logging API to use. Default: `console`.
    * @param options.maxEventListeners - The maximum number of event
    * listeners. Default: 100.

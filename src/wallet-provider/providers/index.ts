@@ -12,12 +12,12 @@ import {
 } from "./EIP6963";
 import { createExternalExtensionProvider } from "./extension-provider/createExternalExtensionProvider";
 import { initializeProvider } from "./initializeInpageProvider";
-import {
-  MetaMaskInpageProvider,
-  ZondWalletInpageProviderStreamName,
-} from "./MetaMaskInpageProvider";
 import { StreamProvider } from "./StreamProvider";
 import type { ConsoleLike } from "./utils";
+import {
+  ZondWalletInpageProvider,
+  ZondWalletInpageProviderStreamName,
+} from "./ZondWalletInpageProvider";
 
 export type {
   ConsoleLike,
@@ -34,7 +34,7 @@ export {
   eip6963AnnounceProvider,
   eip6963RequestProvider,
   initializeProvider,
-  MetaMaskInpageProvider,
   StreamProvider,
+  ZondWalletInpageProvider,
   ZondWalletInpageProviderStreamName,
 };

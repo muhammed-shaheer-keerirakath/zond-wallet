@@ -135,7 +135,7 @@ export abstract class AbstractStreamProvider extends BaseProvider {
       })) as Parameters<BaseProvider["_initializeState"]>[0];
     } catch (error) {
       this._log.error(
-        "MetaMask: Failed to get initial state. Please report this bug.",
+        "ZondWallet: Failed to get initial state. Please report this bug.",
         error,
       );
     }
@@ -153,7 +153,7 @@ export abstract class AbstractStreamProvider extends BaseProvider {
    */
   // eslint-disable-next-line no-restricted-syntax
   private _handleStreamDisconnect(streamName: string, error: Error | null) {
-    let warningMsg = `MetaMask: Lost connection to "${streamName}".`;
+    let warningMsg = `ZondWallet: Lost connection to "${streamName}".`;
     if (error?.stack) {
       warningMsg += `\n${error.stack}`;
     }

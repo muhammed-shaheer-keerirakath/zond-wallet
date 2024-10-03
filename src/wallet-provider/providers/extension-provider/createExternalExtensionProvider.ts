@@ -3,9 +3,9 @@ import { PortDuplexStream as PortStream } from "extension-port-stream";
 import type { Duplex } from "readable-stream";
 import type { Runtime } from "webextension-polyfill";
 
-import { ZondWalletInpageProviderStreamName } from "../MetaMaskInpageProvider";
 import { StreamProvider } from "../StreamProvider";
 import { getDefaultExternalMiddleware } from "../utils";
+import { ZondWalletInpageProviderStreamName } from "../ZondWalletInpageProvider";
 import config from "./external-extension-config.json";
 
 const browser = detect();

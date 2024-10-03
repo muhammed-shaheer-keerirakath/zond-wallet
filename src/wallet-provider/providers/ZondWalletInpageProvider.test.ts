@@ -1,11 +1,11 @@
 import type { JsonRpcRequest } from "../utils";
 
 import messages from "./messages";
-import {
-  MetaMaskInpageProvider,
-  ZondWalletInpageProviderStreamName,
-} from "./MetaMaskInpageProvider";
 import { MockConnectionStream } from "./test/mocks/MockConnectionStream";
+import {
+  ZondWalletInpageProvider,
+  ZondWalletInpageProviderStreamName,
+} from "./ZondWalletInpageProvider";
 
 /**
  * A fully initialized inpage provider, and additional mocks to help
@@ -13,7 +13,7 @@ import { MockConnectionStream } from "./test/mocks/MockConnectionStream";
  */
 type InitializedProviderDetails = {
   /** The initialized provider, created using a mocked connection stream. */
-  provider: MetaMaskInpageProvider;
+  provider: ZondWalletInpageProvider;
   /** The mock connection stream used to create the provider. */
   connectionStream: MockConnectionStream;
   /**
@@ -24,9 +24,9 @@ type InitializedProviderDetails = {
 };
 
 /**
- * For legacy purposes, MetaMaskInpageProvider retrieves state from the wallet
+ * For legacy purposes, ZondWalletInpageProvider retrieves state from the wallet
  * in its constructor. This operation is asynchronous, and initiated via
- * {@link MetaMaskInpageProvider._initializeStateAsync}. This helper function
+ * {@link ZondWalletInpageProvider._initializeStateAsync}. This helper function
  * returns a provider initialized with the specified values.
  *
  * The mock connection stream used to create the provider is also returned.
@@ -37,7 +37,7 @@ type InitializedProviderDetails = {
  *
  * @param options - Options bag.
  * @param options.initialState - The initial provider state returned on
- * initialization.  See {@link MetaMaskInpageProvider._initializeState}.
+ * initialization.  See {@link ZondWalletInpageProvider._initializeState}.
  * @param options.onMethodCalled - A set of configuration objects for adding
  * method-specific callbacks.
  * @returns The initialized provider, its stream, and an "onWrite" stub that
@@ -53,7 +53,7 @@ async function getInitializedProvider({
   onMethodCalled = [],
 }: {
   initialState?: Partial<
-    Parameters<MetaMaskInpageProvider["_initializeState"]>[0]
+    Parameters<ZondWalletInpageProvider["_initializeState"]>[0]
   >;
   onMethodCalled?: {
     substream: string;
@@ -64,14 +64,14 @@ async function getInitializedProvider({
   const onWrite = jest.fn();
   const connectionStream = new MockConnectionStream((name, data) => {
     if (
-      name === "metamask-provider" &&
+      name === "zond-wallet-provider" &&
       data.method === "metamask_getProviderState"
     ) {
       // Wrap in `setTimeout` to ensure a reply is received by the provider
       // after the provider has processed the request, to ensure that the
       // provider recognizes the id.
       setTimeout(() =>
-        connectionStream.reply("metamask-provider", {
+        connectionStream.reply("zond-wallet-provider", {
           id: onWrite.mock.calls[0][1].id,
           jsonrpc: "2.0",
           result: {
@@ -94,7 +94,7 @@ async function getInitializedProvider({
     onWrite(name, data);
   });
 
-  const provider = new MetaMaskInpageProvider(connectionStream);
+  const provider = new ZondWalletInpageProvider(connectionStream);
   await new Promise<void>((resolve: () => void) => {
     provider.on("_initialized", resolve);
   });
@@ -102,20 +102,19 @@ async function getInitializedProvider({
   return { provider, connectionStream, onWrite };
 }
 
-describe("MetaMaskInpageProvider: RPC", () => {
+describe("ZondWalletInpageProvider: RPC", () => {
   const MOCK_ERROR_MESSAGE = "Did you specify a mock return value?";
 
   /**
-   * Creates a new MetaMaskInpageProvider instance, with a mocked connection
+   * Creates a new ZondWalletInpageProvider instance, with a mocked connection
    * stream.
    *
-   * @returns The new MetaMaskInpageProvider instance.
+   * @returns The new ZondWalletInpageProvider instance.
    */
   function initializeProvider() {
     const mockStream = new MockConnectionStream();
-    const provider: any | MetaMaskInpageProvider = new MetaMaskInpageProvider(
-      mockStream,
-    );
+    const provider: any | ZondWalletInpageProvider =
+      new ZondWalletInpageProvider(mockStream);
     provider.mockStream = mockStream;
     provider.autoRefreshOnNetworkChange = false;
     return provider;
@@ -124,7 +123,7 @@ describe("MetaMaskInpageProvider: RPC", () => {
   // mocking the underlying stream, and testing the basic functionality of
   // .reqest, .sendAsync, and .send
   describe("integration", () => {
-    let provider: any | MetaMaskInpageProvider;
+    let provider: any | ZondWalletInpageProvider;
     const mockRpcEngineResponse = jest
       .fn()
       .mockReturnValue([new Error(MOCK_ERROR_MESSAGE), undefined]);
@@ -440,7 +439,7 @@ describe("MetaMaskInpageProvider: RPC", () => {
 
   // this also tests sendAsync, it being effectively an alias for this method
   describe("._rpcRequest", () => {
-    let provider: any | MetaMaskInpageProvider;
+    let provider: any | ZondWalletInpageProvider;
     const mockRpcEngineResponse = jest
       .fn()
       .mockReturnValue([new Error(MOCK_ERROR_MESSAGE), undefined]);
@@ -557,7 +556,7 @@ describe("MetaMaskInpageProvider: RPC", () => {
   });
 
   describe(".send", () => {
-    let provider: any | MetaMaskInpageProvider;
+    let provider: any | ZondWalletInpageProvider;
     const mockRpcRequestResponse = jest
       .fn()
       .mockReturnValue([new Error(MOCK_ERROR_MESSAGE), undefined]);
@@ -850,10 +849,10 @@ describe("MetaMaskInpageProvider: RPC", () => {
               {
                 onMethodCalled: [
                   {
-                    substream: "metamask-provider",
+                    substream: "zond-wallet-provider",
                     method,
                     callback: ({ id }) => {
-                      connectionStream.reply("metamask-provider", {
+                      connectionStream.reply("zond-wallet-provider", {
                         id,
                         jsonrpc: "2.0",
                         result: null,
@@ -875,10 +874,10 @@ describe("MetaMaskInpageProvider: RPC", () => {
               {
                 onMethodCalled: [
                   {
-                    substream: "metamask-provider",
+                    substream: "zond-wallet-provider",
                     method,
                     callback: ({ id }) => {
-                      connectionStream.reply("metamask-provider", {
+                      connectionStream.reply("zond-wallet-provider", {
                         id,
                         jsonrpc: "2.0",
                         result: null,
@@ -902,10 +901,10 @@ describe("MetaMaskInpageProvider: RPC", () => {
               {
                 onMethodCalled: [
                   {
-                    substream: "metamask-provider",
+                    substream: "zond-wallet-provider",
                     method,
                     callback: ({ id }) => {
-                      connectionStream.reply("metamask-provider", {
+                      connectionStream.reply("zond-wallet-provider", {
                         id,
                         jsonrpc: "2.0",
                         result: "success!",
@@ -925,10 +924,10 @@ describe("MetaMaskInpageProvider: RPC", () => {
               {
                 onMethodCalled: [
                   {
-                    substream: "metamask-provider",
+                    substream: "zond-wallet-provider",
                     method,
                     callback: ({ id }) => {
-                      connectionStream.reply("metamask-provider", {
+                      connectionStream.reply("zond-wallet-provider", {
                         id,
                         jsonrpc: "2.0",
                         error: { code: 0, message: "failure!" },
@@ -956,7 +955,7 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
   describe("constructor", () => {
     it("succeeds if stream is provided", () => {
       expect(
-        () => new MetaMaskInpageProvider(new MockConnectionStream()),
+        () => new ZondWalletInpageProvider(new MockConnectionStream()),
       ).not.toThrow();
     });
 
@@ -965,21 +964,21 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
 
       expect(
         () =>
-          new MetaMaskInpageProvider(stream, {
+          new ZondWalletInpageProvider(stream, {
             maxEventListeners: 10,
           }),
       ).not.toThrow();
 
       expect(
         () =>
-          new MetaMaskInpageProvider(stream, {
+          new ZondWalletInpageProvider(stream, {
             shouldSendMetadata: false,
           }),
       ).not.toThrow();
 
       expect(
         () =>
-          new MetaMaskInpageProvider(stream, {
+          new ZondWalletInpageProvider(stream, {
             maxEventListeners: 10,
             shouldSendMetadata: false,
           }),
@@ -987,15 +986,15 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
     });
 
     it("throws if no or invalid stream is provided", () => {
-      expect(() => new MetaMaskInpageProvider(undefined as any)).toThrow(
+      expect(() => new ZondWalletInpageProvider(undefined as any)).toThrow(
         messages.errors.invalidDuplexStream(),
       );
 
-      expect(() => new MetaMaskInpageProvider("foo" as any)).toThrow(
+      expect(() => new ZondWalletInpageProvider("foo" as any)).toThrow(
         messages.errors.invalidDuplexStream(),
       );
 
-      expect(() => new MetaMaskInpageProvider({} as any)).toThrow(
+      expect(() => new ZondWalletInpageProvider({} as any)).toThrow(
         messages.errors.invalidDuplexStream(),
       );
     });
@@ -1013,7 +1012,7 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
 
       expect(
         () =>
-          new MetaMaskInpageProvider(stream, {
+          new ZondWalletInpageProvider(stream, {
             logger: customLogger,
           }),
       ).not.toThrow();
@@ -1022,7 +1021,7 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
     it("gets initial state", async () => {
       // This will be called via the constructor
       const requestMock = jest
-        .spyOn(MetaMaskInpageProvider.prototype, "request")
+        .spyOn(ZondWalletInpageProvider.prototype, "request")
         .mockImplementationOnce(async () => {
           return {
             accounts: ["0xabc"],
@@ -1033,7 +1032,7 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
         });
 
       const mockStream = new MockConnectionStream();
-      const inpageProvider = new MetaMaskInpageProvider(mockStream);
+      const inpageProvider = new ZondWalletInpageProvider(mockStream);
 
       await new Promise<void>((resolve) => setTimeout(() => resolve(), 1));
       expect(requestMock).toHaveBeenCalledTimes(1);
@@ -1046,7 +1045,7 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
 
   describe("isConnected", () => {
     it("returns isConnected state", () => {
-      const provider: any = new MetaMaskInpageProvider(
+      const provider: any = new ZondWalletInpageProvider(
         new MockConnectionStream(),
       );
       provider.autoRefreshOnNetworkChange = false;
@@ -1072,7 +1071,7 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
   });
 
   describe("chainId", () => {
-    let provider: any | MetaMaskInpageProvider;
+    let provider: any | ZondWalletInpageProvider;
 
     beforeEach(async () => {
       provider = (
@@ -1093,7 +1092,7 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
   });
 
   describe("networkVersion", () => {
-    let provider: any | MetaMaskInpageProvider;
+    let provider: any | ZondWalletInpageProvider;
 
     beforeEach(async () => {
       provider = (
@@ -1114,7 +1113,7 @@ describe("MetaMaskInpageProvider: Miscellanea", () => {
   });
 
   describe("selectedAddress", () => {
-    let provider: any | MetaMaskInpageProvider;
+    let provider: any | ZondWalletInpageProvider;
 
     beforeEach(async () => {
       provider = (

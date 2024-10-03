@@ -1,8 +1,8 @@
 import type { Duplex } from "readable-stream";
 import type { EIP6963ProviderInfo } from "./EIP6963";
 import { announceProvider } from "./EIP6963";
-import type { MetaMaskInpageProviderOptions } from "./MetaMaskInpageProvider";
-import { MetaMaskInpageProvider } from "./MetaMaskInpageProvider";
+import type { MetaMaskInpageProviderOptions } from "./ZondWalletInpageProvider";
+import { ZondWalletInpageProvider } from "./ZondWalletInpageProvider";
 
 type InitializeProviderOptions = {
   /**
@@ -34,8 +34,8 @@ export function initializeProvider({
   maxEventListeners = 100,
   providerInfo,
   shouldSendMetadata = true,
-}: InitializeProviderOptions): MetaMaskInpageProvider {
-  const provider = new MetaMaskInpageProvider(connectionStream, {
+}: InitializeProviderOptions): ZondWalletInpageProvider {
+  const provider = new ZondWalletInpageProvider(connectionStream, {
     jsonRpcStreamName,
     logger,
     maxEventListeners,
