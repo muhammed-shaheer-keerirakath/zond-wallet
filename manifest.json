@@ -19,7 +19,7 @@
     }
   },
   "background": {
-    "service_worker": "scripts/background.ts",
+    "service_worker": "scripts/serviceWorker.ts",
     "type": "module"
   },
   "content_scripts": [

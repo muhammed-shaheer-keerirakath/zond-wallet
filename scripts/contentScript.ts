@@ -1,4 +1,5 @@
 import { initializeProvider, WindowPostMessageStream } from "@/wallet-provider";
+import log from "loglevel";
 import { v4 as uuid } from "uuid";
 import {
   ZOND_POST_MESSAGE_STREAM,
@@ -11,8 +12,10 @@ const initializeContentScript = () => {
       name: ZOND_POST_MESSAGE_STREAM.INPAGE,
       target: ZOND_POST_MESSAGE_STREAM.CONTENT_SCRIPT,
     });
+
     initializeProvider({
       connectionStream: zondStream,
+      logger: log,
       providerInfo: {
         uuid: uuid(),
         name: ZOND_WALLET_PROVIDER_INFO.NAME,

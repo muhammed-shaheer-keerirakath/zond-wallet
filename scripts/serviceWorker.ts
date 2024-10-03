@@ -2,7 +2,7 @@ import browser from "webextension-polyfill";
 
 type ContentScriptEntry = browser.Scripting.RegisteredContentScript;
 
-const initializeBackgroundScript = async () => {
+const initializeServiceWorker = async () => {
   try {
     const previouslyRegisteredScriptIds = (
       await browser.scripting.getRegisteredContentScripts()
@@ -34,4 +34,4 @@ const initializeBackgroundScript = async () => {
 
 // This is the starting point of script execution of zond wallet.
 // This file is set as an entry in the "background" section of the manifest file.
-initializeBackgroundScript();
+initializeServiceWorker();
