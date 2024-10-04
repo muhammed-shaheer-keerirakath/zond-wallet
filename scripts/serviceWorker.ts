@@ -9,9 +9,9 @@ const initializeServiceWorker = async () => {
     ).map((script) => script.id);
     const contentScripts: ContentScriptEntry[] = [
       {
-        id: "zondContentScript",
+        id: "zondInPageScript",
         matches: ["<all_urls>"],
-        js: ["scripts/contentScript.js"],
+        js: ["scripts/inPageScript.js"],
         runAt: "document_start",
         allFrames: true,
         // @ts-expect-error.
@@ -21,14 +21,15 @@ const initializeServiceWorker = async () => {
       },
     ];
 
-    // This registers the content scripts to browser pages, if not already done.
+    // This registers the in-page script to browser pages, if not already done.
+    // "MAIN" world does not work if this script was invoked from manifest file instead.
     await browser.scripting.registerContentScripts(
       contentScripts.filter(
         (script) => !previouslyRegisteredScriptIds.includes(script.id),
       ),
     );
   } catch (error) {
-    console.warn("Zond Wallet: Failed to register the content scripts", error);
+    console.warn("Zond Wallet: Failed to initialize the service worker", error);
   }
 };
 
