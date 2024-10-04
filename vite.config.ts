@@ -7,7 +7,10 @@ import webExtension from "vite-plugin-web-extension";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), webExtension()],
+  plugins: [
+    react(),
+    webExtension({ additionalInputs: ["scripts/inPageScript.ts"] }),
+  ],
   build: {
     outDir: "Extension",
     emptyOutDir: true,
