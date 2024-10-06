@@ -29,7 +29,10 @@ const initializeServiceWorker = async () => {
       ),
     );
   } catch (error) {
-    console.warn("Zond Wallet: Failed to initialize the service worker", error);
+    console.warn(
+      "Zond Wallet: Failed to initialize the service worker\n",
+      error,
+    );
   }
 };
 

@@ -24,7 +24,10 @@ const initializeInPageScript = () => {
       },
     });
   } catch (error) {
-    console.warn("Zond Wallet: Failed to initialize the in-page script", error);
+    console.warn(
+      "Zond Wallet: Failed to initialize the in-page script\n",
+      error,
+    );
   }
 };
 
