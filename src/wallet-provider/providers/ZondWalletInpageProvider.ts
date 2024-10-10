@@ -1,17 +1,10 @@
 import type { Duplex } from "readable-stream";
-import { rpcErrors } from "../rpc-errors";
 import type { Json, JsonRpcRequest, JsonRpcResponse } from "../utils";
-import type { UnvalidatedJsonRpcRequest } from "./BaseProvider";
 import messages from "./messages";
 import { sendSiteMetadata } from "./siteMetadata";
 import type { StreamProviderOptions } from "./StreamProvider";
 import { AbstractStreamProvider } from "./StreamProvider";
-import {
-  EMITTED_NOTIFICATIONS,
-  getDefaultExternalMiddleware,
-  getRpcPromiseCallback,
-  NOOP,
-} from "./utils";
+import { EMITTED_NOTIFICATIONS, getDefaultExternalMiddleware } from "./utils";
 
 export type SendSyncJsonRpcRequest = {
   method:
@@ -65,13 +58,6 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
     },
   };
 
-  /**
-   * Experimental methods can be found here.
-   */
-  public readonly _metamask: ReturnType<
-    ZondWalletInpageProvider["_getExperimentalApi"]
-  >;
-
   #networkVersion: string | null;
 
   /**
@@ -117,13 +103,8 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
     this.#networkVersion = null;
     this.isZondWallet = true;
 
-    this._sendSync = this._sendSync.bind(this);
-    this.enable = this.enable.bind(this);
-    this.send = this.send.bind(this);
     this.sendAsync = this.sendAsync.bind(this);
     this._warnOfDeprecation = this._warnOfDeprecation.bind(this);
-
-    this._metamask = this._getExperimentalApi();
 
     // handle JSON-RPC notifications
     this._jsonRpcConnection.events.on("notification", (payload) => {
@@ -258,207 +239,12 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
     }
   }
 
-  //====================
-  // Deprecated Methods
-  //====================
-
-  /**
-   * Equivalent to: `ethereum.request('eth_requestAccounts')`.
-   *
-   * @deprecated Use request({ method: 'eth_requestAccounts' }) instead.
-   * @returns A promise that resolves to an array of addresses.
-   */
-  async enable(): Promise<string[]> {
-    if (!this._sentWarnings.enable) {
-      this._log.warn(messages.warnings.enableDeprecation);
-      this._sentWarnings.enable = true;
-    }
-
-    return new Promise<string[]>((resolve, reject) => {
-      try {
-        this._rpcRequest(
-          { method: "eth_requestAccounts", params: [] },
-          getRpcPromiseCallback(resolve, reject),
-        );
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
-
-  /**
-   * Submits an RPC request for the given method, with the given params.
-   *
-   * @deprecated Use "request" instead.
-   * @param method - The method to request.
-   * @param params - Any params for the method.
-   * @returns A Promise that resolves with the JSON-RPC response object for the
-   * request.
-   */
-  send<Type extends Json>(
-    method: string,
-    params?: Type[],
-  ): Promise<JsonRpcResponse<Type>>;
-
-  /**
-   * Submits an RPC request per the given JSON-RPC request object.
-   *
-   * @deprecated Use "request" instead.
-   * @param payload - A JSON-RPC request object.
-   * @param callback - An error-first callback that will receive the JSON-RPC
-   * response object.
-   */
-  send<Type extends Json>(
-    payload: JsonRpcRequest,
-    callback: (error: Error | null, result?: JsonRpcResponse<Type>) => void,
-  ): void;
-
-  /**
-   * Accepts a JSON-RPC request object, and synchronously returns the cached result
-   * for the given method. Only supports 4 specific RPC methods.
-   *
-   * @deprecated Use "request" instead.
-   * @param payload - A JSON-RPC request object.
-   * @returns A JSON-RPC response object.
-   */
-  send<Type extends Json>(
-    payload: SendSyncJsonRpcRequest,
-  ): JsonRpcResponse<Type>;
-
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
-  send(methodOrPayload: unknown, callbackOrArgs?: unknown): unknown {
-    if (!this._sentWarnings.send) {
-      this._log.warn(messages.warnings.sendDeprecation);
-      this._sentWarnings.send = true;
-    }
-
-    if (
-      typeof methodOrPayload === "string" &&
-      (!callbackOrArgs || Array.isArray(callbackOrArgs))
-    ) {
-      return new Promise((resolve, reject) => {
-        try {
-          this._rpcRequest(
-            { method: methodOrPayload, params: callbackOrArgs },
-            getRpcPromiseCallback(resolve, reject, false),
-          );
-        } catch (error) {
-          reject(error);
-        }
-      });
-    } else if (
-      methodOrPayload &&
-      typeof methodOrPayload === "object" &&
-      typeof callbackOrArgs === "function"
-    ) {
-      return this._rpcRequest(
-        methodOrPayload as JsonRpcRequest,
-        callbackOrArgs as (...args: unknown[]) => void,
-      );
-    }
-    return this._sendSync(methodOrPayload as SendSyncJsonRpcRequest);
-  }
-
-  /**
-   * Internal backwards compatibility method, used in send.
-   *
-   * @param payload - A JSON-RPC request object.
-   * @returns A JSON-RPC response object.
-   * @deprecated
-   */
-  protected _sendSync(payload: SendSyncJsonRpcRequest) {
-    let result;
-    switch (payload.method) {
-      case "eth_accounts":
-        result = this.selectedAddress ? [this.selectedAddress] : [];
-        break;
-
-      case "eth_coinbase":
-        result = this.selectedAddress ?? null;
-        break;
-
-      case "eth_uninstallFilter":
-        this._rpcRequest(payload, NOOP);
-        result = true;
-        break;
-
-      case "net_version":
-        result = this.#networkVersion ?? null;
-        break;
-
-      default:
-        throw new Error(messages.errors.unsupportedSync(payload.method));
-    }
-
-    return {
-      id: payload.id,
-      jsonrpc: payload.jsonrpc,
-      result,
-    };
-  }
-
-  /**
-   * Constructor helper.
-   *
-   * Gets the experimental _metamask API as Proxy, so that we can warn consumers
-   * about its experimental nature.
-   *
-   * @returns The experimental _metamask API.
-   */
-  protected _getExperimentalApi() {
-    return new Proxy(
-      {
-        /**
-         * Determines if ZondWallet is unlocked by the user.
-         *
-         * @returns Promise resolving to true if ZondWallet is currently unlocked.
-         */
-        isUnlocked: async () => {
-          if (!this._state.initialized) {
-            await new Promise<void>((resolve) => {
-              this.on("_initialized", () => resolve());
-            });
-          }
-          return this._state.isUnlocked;
-        },
-
-        /**
-         * Make a batch RPC request.
-         *
-         * @param requests - The RPC requests to make.
-         */
-        requestBatch: async (requests: UnvalidatedJsonRpcRequest[]) => {
-          if (!Array.isArray(requests)) {
-            throw rpcErrors.invalidRequest({
-              message:
-                "Batch requests must be made with an array of request objects.",
-              data: requests,
-            });
-          }
-
-          return new Promise((resolve, reject) => {
-            this._rpcRequest(requests, getRpcPromiseCallback(resolve, reject));
-          });
-        },
-      },
-      {
-        get: (obj, prop, ...args) => {
-          if (!this._sentWarnings.experimentalMethods) {
-            this._log.warn(messages.warnings.experimentalMethods);
-            this._sentWarnings.experimentalMethods = true;
-          }
-          return Reflect.get(obj, prop, ...args);
-        },
-      },
-    );
-  }
-
   /**
    * Upon receipt of a new chainId and networkVersion, emits corresponding
    * events and sets relevant public state. Does nothing if neither the chainId
    * nor the networkVersion are different from existing values.
    *
-   * @fires MetamaskInpageProvider#networkChanged
+   * @fires ZondWalletInpageProvider#networkChanged
    * @param networkInfo - An object with network info.
    * @param networkInfo.chainId - The latest chain ID.
    * @param networkInfo.networkVersion - The latest network ID.
