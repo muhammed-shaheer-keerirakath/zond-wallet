@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import {
   ZOND_POST_MESSAGE_STREAM,
   ZOND_WALLET_PROVIDER_INFO,
-} from "./constants";
+} from "./constants/constants";
 
 const initializeInPageScript = () => {
   try {
@@ -31,5 +31,5 @@ const initializeInPageScript = () => {
   }
 };
 
-// This function accounces the zond provider(based on EIP-6963) to be listened by the dApps.
+// This function accounces the zond wallet provider(based on EIP-6963), to be detected by the dApps.
 initializeInPageScript();
