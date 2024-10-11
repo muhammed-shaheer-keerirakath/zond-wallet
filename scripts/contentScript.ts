@@ -47,7 +47,7 @@ const setupPageStreams = () => {
   pageMux.setMaxListeners(25);
 
   pipeline(pageMux, pageStream, pageMux, (err: Error | null) => {
-    console.log("ZondWallet: Inpage Multiplex", err);
+    console.warn("ZondWallet: Inpage Multiplex", err);
   });
 
   pageChannel = pageMux.createStream(ZOND_WALLET_PROVIDER_NAME);
@@ -156,14 +156,14 @@ const setupExtensionStreams = () => {
   extensionMux.setMaxListeners(25);
 
   pipeline(extensionMux, extensionStream, extensionMux, (err: Error | null) => {
-    console.log("ZondWallet: Background Multiplex", err);
+    console.warn("ZondWallet: Background Multiplex", err);
     notifyInpageOfStreamFailure();
   });
 
   // forward communication across inpage-background for these channels only
   extensionChannel = extensionMux.createStream(ZOND_WALLET_PROVIDER_NAME);
   pipeline(pageChannel, extensionChannel, pageChannel, (error: Error | null) =>
-    console.log(
+    console.warn(
       `ZondWallet: Muxed traffic for channel "${ZOND_WALLET_PROVIDER_NAME}" failed.`,
       error,
     ),
