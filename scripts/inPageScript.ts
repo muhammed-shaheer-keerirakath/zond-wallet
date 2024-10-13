@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import {
   ZOND_POST_MESSAGE_STREAM,
   ZOND_WALLET_PROVIDER_INFO,
-} from "./constants/constants";
+} from "./constants/streamConstants";
 
 const initializeInPageScript = () => {
   try {

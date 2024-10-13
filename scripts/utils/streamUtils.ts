@@ -1,7 +1,7 @@
 import { ObjectMultiplex } from "@/wallet-provider/object-multiplex";
 import PortStream from "extension-port-stream";
 import { pipeline } from "readable-stream";
-import { EXTENSION_MESSAGES } from "../constants/constants";
+import { EXTENSION_MESSAGES } from "../constants/streamConstants";
 
 // Sets up stream multiplexing for the given stream
 export function setupMultiplex(connectionStream: PortStream) {

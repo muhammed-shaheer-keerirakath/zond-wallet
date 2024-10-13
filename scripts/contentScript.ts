@@ -9,7 +9,7 @@ import {
   EXTENSION_MESSAGES,
   ZOND_POST_MESSAGE_STREAM,
   ZOND_WALLET_PROVIDER_NAME,
-} from "./constants/constants";
+} from "./constants/streamConstants";
 import { checkForLastError } from "./utils/scriptUtils";
 
 type MessageType = {
