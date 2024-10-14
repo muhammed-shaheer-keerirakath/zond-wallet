@@ -1,7 +1,5 @@
 import type { Duplex } from "readable-stream";
-import type { Json, JsonRpcRequest, JsonRpcResponse } from "../utils";
-import messages from "./messages";
-import { sendSiteMetadata } from "./siteMetadata";
+import type { JsonRpcRequest } from "../utils";
 import type { StreamProviderOptions } from "./StreamProvider";
 import { AbstractStreamProvider } from "./StreamProvider";
 import { EMITTED_NOTIFICATIONS, getDefaultExternalMiddleware } from "./utils";
@@ -14,8 +12,6 @@ export type SendSyncJsonRpcRequest = {
     | "net_version";
 } & JsonRpcRequest;
 
-type WarningEventName = keyof SentWarningsState["events"];
-
 export type ZondWalletInpageProviderOptions = {
   /**
    * Whether the provider should send page metadata.
@@ -24,40 +20,12 @@ export type ZondWalletInpageProviderOptions = {
   jsonRpcStreamName?: string | undefined;
 } & Partial<Omit<StreamProviderOptions, "rpcMiddleware">>;
 
-type SentWarningsState = {
-  // methods
-  enable: boolean;
-  experimentalMethods: boolean;
-  send: boolean;
-  // events
-  events: {
-    close: boolean;
-    data: boolean;
-    networkChanged: boolean;
-    notification: boolean;
-  };
-};
-
 /**
  * The name of the stream consumed by {@link ZondWalletInpageProvider}.
  */
 export const ZondWalletInpageProviderStreamName = "zond-wallet-provider";
 
 export class ZondWalletInpageProvider extends AbstractStreamProvider {
-  protected _sentWarnings: SentWarningsState = {
-    // methods
-    enable: false,
-    experimentalMethods: false,
-    send: false,
-    // events
-    events: {
-      close: false,
-      data: false,
-      networkChanged: false,
-      notification: false,
-    },
-  };
-
   #networkVersion: string | null;
 
   /**
@@ -84,7 +52,6 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
       jsonRpcStreamName = ZondWalletInpageProviderStreamName,
       logger = console,
       maxEventListeners = 100,
-      shouldSendMetadata,
     }: ZondWalletInpageProviderOptions = {},
   ) {
     super(connectionStream, {
@@ -103,9 +70,6 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
     this.#networkVersion = null;
     this.isZondWallet = true;
 
-    this.sendAsync = this.sendAsync.bind(this);
-    this._warnOfDeprecation = this._warnOfDeprecation.bind(this);
-
     // handle JSON-RPC notifications
     this._jsonRpcConnection.events.on("notification", (payload) => {
       const { method } = payload;
@@ -117,24 +81,6 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
         this.emit("notification", payload.params.result);
       }
     });
-
-    // send website metadata
-    if (shouldSendMetadata) {
-      if (document.readyState === "complete") {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        sendSiteMetadata(this._rpcEngine, this._log);
-      } else {
-        const domContentLoadedHandler = () => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          sendSiteMetadata(this._rpcEngine, this._log);
-          window.removeEventListener(
-            "DOMContentLoaded",
-            domContentLoadedHandler,
-          );
-        };
-        window.addEventListener("DOMContentLoaded", domContentLoadedHandler);
-      }
-    }
   }
 
   //====================
@@ -151,57 +97,6 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
 
   get selectedAddress(): string | null {
     return super.selectedAddress;
-  }
-
-  //====================
-  // Public Methods
-  //====================
-
-  /**
-   * Submits an RPC request per the given JSON-RPC request object.
-   *
-   * @param payload - The RPC request object.
-   * @param callback - The callback function.
-   */
-  sendAsync(
-    payload: JsonRpcRequest,
-    callback: (error: Error | null, result?: JsonRpcResponse<Json>) => void,
-  ): void {
-    this._rpcRequest(payload, callback);
-  }
-
-  /**
-   * We override the following event methods so that we can warn consumers
-   * about deprecated events:
-   * `addListener`, `on`, `once`, `prependListener`, `prependOnceListener`.
-   */
-
-  addListener(eventName: string, listener: (...args: unknown[]) => void) {
-    this._warnOfDeprecation(eventName);
-    return super.addListener(eventName, listener);
-  }
-
-  on(eventName: string, listener: (...args: unknown[]) => void) {
-    this._warnOfDeprecation(eventName);
-    return super.on(eventName, listener);
-  }
-
-  once(eventName: string, listener: (...args: unknown[]) => void) {
-    this._warnOfDeprecation(eventName);
-    return super.once(eventName, listener);
-  }
-
-  prependListener(eventName: string, listener: (...args: unknown[]) => void) {
-    this._warnOfDeprecation(eventName);
-    return super.prependListener(eventName, listener);
-  }
-
-  prependOnceListener(
-    eventName: string,
-    listener: (...args: unknown[]) => void,
-  ) {
-    this._warnOfDeprecation(eventName);
-    return super.prependOnceListener(eventName, listener);
   }
 
   //====================
@@ -223,19 +118,6 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
     super._handleDisconnect(isRecoverable, errorMessage);
     if (this.#networkVersion && !isRecoverable) {
       this.#networkVersion = null;
-    }
-  }
-
-  /**
-   * Warns of deprecation for the given event, if applicable.
-   *
-   * @param eventName - The name of the event.
-   */
-  protected _warnOfDeprecation(eventName: string): void {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
-    if (this._sentWarnings?.events[eventName as WarningEventName] === false) {
-      this._log.warn(messages.warnings.events[eventName as WarningEventName]);
-      this._sentWarnings.events[eventName as WarningEventName] = true;
     }
   }
 

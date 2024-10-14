@@ -33,13 +33,11 @@ export function initializeProvider({
   logger = console,
   maxEventListeners = 100,
   providerInfo,
-  shouldSendMetadata = false,
 }: InitializeProviderOptions): ZondWalletInpageProvider {
   const provider = new ZondWalletInpageProvider(connectionStream, {
     jsonRpcStreamName,
     logger,
     maxEventListeners,
-    shouldSendMetadata,
   });
 
   const proxiedProvider = new Proxy(provider, {
