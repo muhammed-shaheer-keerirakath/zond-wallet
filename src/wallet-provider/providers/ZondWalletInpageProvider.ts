@@ -1,8 +1,9 @@
 import type { Duplex } from "readable-stream";
+import { ZOND_WALLET_PROVIDER_NAME } from "../../../scripts/constants/streamConstants";
 import type { JsonRpcRequest } from "../utils";
 import type { StreamProviderOptions } from "./StreamProvider";
 import { AbstractStreamProvider } from "./StreamProvider";
-import { EMITTED_NOTIFICATIONS, getDefaultExternalMiddleware } from "./utils";
+import { getDefaultExternalMiddleware } from "./utils";
 
 export type SendSyncJsonRpcRequest = {
   method:
@@ -19,11 +20,6 @@ export type ZondWalletInpageProviderOptions = {
   shouldSendMetadata?: boolean;
   jsonRpcStreamName?: string | undefined;
 } & Partial<Omit<StreamProviderOptions, "rpcMiddleware">>;
-
-/**
- * The name of the stream consumed by {@link ZondWalletInpageProvider}.
- */
-export const ZondWalletInpageProviderStreamName = "zond-wallet-provider";
 
 export class ZondWalletInpageProvider extends AbstractStreamProvider {
   #networkVersion: string | null;
@@ -49,7 +45,7 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
   constructor(
     connectionStream: Duplex,
     {
-      jsonRpcStreamName = ZondWalletInpageProviderStreamName,
+      jsonRpcStreamName = ZOND_WALLET_PROVIDER_NAME,
       logger = console,
       maxEventListeners = 100,
     }: ZondWalletInpageProviderOptions = {},
@@ -61,26 +57,10 @@ export class ZondWalletInpageProvider extends AbstractStreamProvider {
       rpcMiddleware: getDefaultExternalMiddleware(logger),
     });
 
-    // We shouldn't perform asynchronous work in the constructor, but at one
-    // point we started doing so, and changing this class isn't worth it at
-    // the time of writing.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._initializeStateAsync();
 
     this.#networkVersion = null;
     this.isZondWallet = true;
-
-    // handle JSON-RPC notifications
-    this._jsonRpcConnection.events.on("notification", (payload) => {
-      const { method } = payload;
-      if (EMITTED_NOTIFICATIONS.includes(method)) {
-        // deprecated
-        // emitted here because that was the original order
-        this.emit("data", payload);
-        // deprecated
-        this.emit("notification", payload.params.result);
-      }
-    });
   }
 
   //====================

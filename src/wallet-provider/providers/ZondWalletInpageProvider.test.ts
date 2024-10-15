@@ -1,11 +1,11 @@
+import { ZOND_WALLET_PROVIDER_NAME } from "scripts/constants/streamConstants";
 import type { JsonRpcRequest } from "../utils";
 
 import messages from "./messages";
 import { MockConnectionStream } from "./test/mocks/MockConnectionStream";
-import {
-  ZondWalletInpageProvider,
-  ZondWalletInpageProviderStreamName,
-} from "./ZondWalletInpageProvider";
+import { ZondWalletInpageProvider } from "./ZondWalletInpageProvider";
+
+const ZondWalletInpageProviderStreamName = ZOND_WALLET_PROVIDER_NAME;
 
 /**
  * A fully initialized inpage provider, and additional mocks to help

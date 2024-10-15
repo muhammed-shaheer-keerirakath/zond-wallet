@@ -3,12 +3,14 @@ import { PortDuplexStream as PortStream } from "extension-port-stream";
 import type { Duplex } from "readable-stream";
 import type { Runtime } from "webextension-polyfill";
 
+import { ZOND_WALLET_PROVIDER_NAME } from "../../../../scripts/constants/streamConstants";
 import { StreamProvider } from "../StreamProvider";
 import { getDefaultExternalMiddleware } from "../utils";
-import { ZondWalletInpageProviderStreamName } from "../ZondWalletInpageProvider";
 import config from "./external-extension-config.json";
 
 const browser = detect();
+
+const ZondWalletInpageProviderStreamName = ZOND_WALLET_PROVIDER_NAME;
 
 export type ExtensionType = "stable" | "flask" | "beta" | string;
 

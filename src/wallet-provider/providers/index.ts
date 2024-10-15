@@ -14,10 +14,7 @@ import { createExternalExtensionProvider } from "./extension-provider/createExte
 import { initializeProvider } from "./initializeInpageProvider";
 import { StreamProvider } from "./StreamProvider";
 import type { ConsoleLike } from "./utils";
-import {
-  ZondWalletInpageProvider,
-  ZondWalletInpageProviderStreamName,
-} from "./ZondWalletInpageProvider";
+import { ZondWalletInpageProvider } from "./ZondWalletInpageProvider";
 
 export type {
   ConsoleLike,
@@ -36,5 +33,4 @@ export {
   initializeProvider,
   StreamProvider,
   ZondWalletInpageProvider,
-  ZondWalletInpageProviderStreamName,
 };
