@@ -77,10 +77,8 @@ export abstract class AbstractStreamProvider extends BaseProvider {
     );
 
     // Set up RPC connection
-    // Typecast: The type of `Duplex` is incompatible with the type of
-    // `JsonRpcConnection`.
     this._jsonRpcConnection = createStreamMiddleware({
-      retryOnMessage: "METAMASK_EXTENSION_CONNECT_CAN_RETRY",
+      retryOnMessage: "ZOND_WALLET_EXTENSION_CONNECT_CAN_RETRY",
     }) as unknown as JsonRpcConnection;
 
     pipeline(
