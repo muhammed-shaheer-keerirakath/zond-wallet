@@ -50,6 +50,7 @@ export function initializeProvider({
     },
   });
 
+  // Announces provider based on EIP-6963, so that dApps can detect the zond wallet
   announceProvider({
     info: providerInfo,
     provider: proxiedProvider,
