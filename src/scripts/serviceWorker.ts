@@ -22,7 +22,7 @@ const registerScripts = async () => {
     {
       id: "zondInPageScript",
       matches: ["<all_urls>"],
-      js: ["scripts/inPageScript.js"],
+      js: ["src/scripts/inPageScript.js"],
       runAt: "document_start",
       allFrames: true,
       // @ts-expect-error.

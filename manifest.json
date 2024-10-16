@@ -19,12 +19,12 @@
     }
   },
   "background": {
-    "service_worker": "scripts/serviceWorker.ts",
+    "service_worker": "src/scripts/serviceWorker.ts",
     "type": "module"
   },
   "content_scripts": [
     {
-      "js": ["scripts/contentScript.ts"],
+      "js": ["src/scripts/contentScript.ts"],
       "matches": ["<all_urls>"],
       "all_frames": true
     }

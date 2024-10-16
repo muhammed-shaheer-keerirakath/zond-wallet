@@ -1,5 +1,5 @@
+import { ZOND_WALLET_PROVIDER_NAME } from "@/scripts/constants/streamConstants";
 import type { Duplex } from "readable-stream";
-import { ZOND_WALLET_PROVIDER_NAME } from "../../../scripts/constants/streamConstants";
 import type { JsonRpcRequest } from "../utils";
 import type { StreamProviderOptions } from "./StreamProvider";
 import { AbstractStreamProvider } from "./StreamProvider";

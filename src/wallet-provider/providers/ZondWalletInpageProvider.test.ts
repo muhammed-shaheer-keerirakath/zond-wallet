@@ -1,4 +1,4 @@
-import { ZOND_WALLET_PROVIDER_NAME } from "scripts/constants/streamConstants";
+import { ZOND_WALLET_PROVIDER_NAME } from "@/scripts/constants/streamConstants";
 import type { JsonRpcRequest } from "../utils";
 
 import messages from "./messages";

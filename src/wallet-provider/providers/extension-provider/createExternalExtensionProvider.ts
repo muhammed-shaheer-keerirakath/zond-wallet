@@ -3,7 +3,7 @@ import { PortDuplexStream as PortStream } from "extension-port-stream";
 import type { Duplex } from "readable-stream";
 import type { Runtime } from "webextension-polyfill";
 
-import { ZOND_WALLET_PROVIDER_NAME } from "../../../../scripts/constants/streamConstants";
+import { ZOND_WALLET_PROVIDER_NAME } from "@/scripts/constants/streamConstants";
 import { StreamProvider } from "../StreamProvider";
 import { getDefaultExternalMiddleware } from "../utils";
 import config from "./external-extension-config.json";
