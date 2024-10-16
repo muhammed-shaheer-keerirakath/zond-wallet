@@ -173,10 +173,10 @@ const setupExtensionStreams = () => {
 };
 
 /**
- * When the extension service worker is ready, it sends the EXTENSION_MESSAGES.READY message to the browser tabs.
+ * When the extension service worker is ready, it sends messages. Initially the EXTENSION_MESSAGES.READY message is sent to the browser tabs.
  * This listener/callback receives the message and set up the streams after a service worker inactivity.
  */
-const onMessageServiceWorkerReady = (message: MessageType) => {
+const onMessageFromServiceWorker = (message: MessageType) => {
   if (message.name === EXTENSION_MESSAGES.READY) {
     if (!extensionStream) {
       setupExtensionStreams();
@@ -188,7 +188,7 @@ const onMessageServiceWorkerReady = (message: MessageType) => {
 
 const prepareListeners = () => {
   // listens to messages coming from the service worker(browser.tabs.sendMessage)
-  browser.runtime.onMessage.addListener(onMessageServiceWorkerReady);
+  browser.runtime.onMessage.addListener(onMessageFromServiceWorker);
 };
 
 const initializeContentScript = () => {
