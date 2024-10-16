@@ -172,23 +172,19 @@ const setupExtensionStreams = () => {
   extensionPort.onDisconnect.addListener(onDisconnectExtensionStream);
 };
 
-/**
- * When the extension service worker is ready, it sends messages. Initially the EXTENSION_MESSAGES.READY message is sent to the browser tabs.
- * This listener/callback receives the message and set up the streams after a service worker inactivity.
- */
-const onMessageFromServiceWorker = (message: MessageType) => {
-  if (message.name === EXTENSION_MESSAGES.READY) {
-    if (!extensionStream) {
-      setupExtensionStreams();
-    }
-    return Promise.resolve("ZondWallet: handled service worker ready message");
-  }
-  return;
-};
-
 const prepareListeners = () => {
   // listens to messages coming from the service worker(browser.tabs.sendMessage)
-  browser.runtime.onMessage.addListener(onMessageFromServiceWorker);
+  browser.runtime.onMessage.addListener((message: MessageType) => {
+    if (message.name === EXTENSION_MESSAGES.READY) {
+      if (!extensionStream) {
+        setupExtensionStreams();
+      }
+      return Promise.resolve(
+        "ZondWallet: handled service worker ready message",
+      );
+    }
+    return;
+  });
 };
 
 const initializeContentScript = () => {
