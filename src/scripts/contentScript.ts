@@ -183,7 +183,6 @@ const prepareListeners = () => {
         "ZondWallet: handled service worker ready message",
       );
     }
-    return;
   });
 };
 

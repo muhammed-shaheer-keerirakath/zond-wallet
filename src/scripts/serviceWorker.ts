@@ -41,6 +41,13 @@ const registerScripts = async () => {
   );
 };
 
+const prepareListeners = () => {
+  // listens to messages coming from the content script(browser.runtime.sendMessage)
+  browser.runtime.onMessage.addListener((message: any) => {
+    console.log(">>>onMessageFromContentScript message", message);
+  });
+};
+
 /**
  * Sends a message to the dapp(s) content script to signal it can connect to the background as
  * the backend is not active. It is required to re-connect dapps after service worker re-activates.
@@ -61,8 +68,7 @@ const announceServiceWorkerReady = async () => {
         checkForLastError();
       })
       .catch((error) => {
-        // An error may happen if the contentscript is blocked from loading,
-        // and thus there is no runtime.onMessage handler to listen to the message.
+        // An error may happen if the contentscript is blocked from loading.
         checkForLastError();
         console.warn(`ZondWallet: error from tab '${tab.title}'`, error);
       });
@@ -82,6 +88,18 @@ const setupProviderEngineEip1193 = ({
 
   // Appends the sender details to the request.
   engine.push(appendSenderDataMiddleware({ sender }));
+
+  // Open popup
+  engine.push((req, res, next, end) => {
+    if (req.method === "eth_popup") {
+      // Open the popup for user approval
+      browser.action.openPopup();
+      res.result = { data: "approved" };
+      end();
+    } else {
+      next();
+    }
+  });
 
   return engine;
 };
@@ -107,8 +125,7 @@ const setupProviderConnectionEip1193 = async (port: browser.Runtime.Port) => {
   // const connectionId = this.addConnection(origin, { engine });
 
   pipeline(outStream, providerStream, outStream, (err) => {
-    err;
-    // console.log(">>> pipeline err", err);
+    console.log(">>> pipeline err", err);
 
     // handle any middleware cleanup
     // @ts-ignore
@@ -121,11 +138,7 @@ const setupProviderConnectionEip1193 = async (port: browser.Runtime.Port) => {
   });
 
   providerStream.on("data", async (data) => {
-    data;
-    // console.log(">>>providerStream data", data);
-
-    // temp popup
-    browser.action.openPopup();
+    console.log(">>>providerStream data", data);
   });
 
   // Used to show wallet liveliness to the provider
@@ -139,8 +152,7 @@ const establishContenScriptConnection = () => {
     // Ensuring the port connected to is the content script
     if (port.name === ZOND_POST_MESSAGE_STREAM.CONTENT_SCRIPT) {
       port.onMessage.addListener((message) => {
-        message;
-        // console.log(">>>port onMessage", message);
+        console.log(">>>port onMessage", message);
       });
 
       await announceServiceWorkerReady();
@@ -152,6 +164,7 @@ const establishContenScriptConnection = () => {
 const initializeServiceWorker = async () => {
   try {
     await registerScripts();
+    prepareListeners();
     establishContenScriptConnection();
   } catch (error) {
     console.warn(
