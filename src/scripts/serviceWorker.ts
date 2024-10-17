@@ -118,15 +118,11 @@ const setupProviderConnectionEip1193 = async (port: browser.Runtime.Port) => {
     // @ts-ignore
     sender,
   });
-
   // setup connection
   const providerStream = createEngineStream({ engine });
 
-  // const connectionId = this.addConnection(origin, { engine });
-
   pipeline(outStream, providerStream, outStream, (err) => {
-    console.log(">>> pipeline err", err);
-
+    console.warn("Zond Wallet: Error in stream pipeline\n", err);
     // handle any middleware cleanup
     // @ts-ignore
     engine?._middleware?.forEach((mid: any) => {
@@ -134,27 +130,17 @@ const setupProviderConnectionEip1193 = async (port: browser.Runtime.Port) => {
         mid.destroy();
       }
     });
-    // connectionId && this.removeConnection(origin, connectionId);
   });
 
   providerStream.on("data", async (data) => {
     console.log(">>>providerStream data", data);
   });
-
-  // Used to show wallet liveliness to the provider
-  // if (subjectType !== SubjectType.Internal) {
-  //   this._notifyChainChangeForConnection({ engine }, origin);
-  // }
 };
 
 const establishContenScriptConnection = () => {
   browser.runtime.onConnect.addListener(async (port) => {
     // Ensuring the port connected to is the content script
     if (port.name === ZOND_POST_MESSAGE_STREAM.CONTENT_SCRIPT) {
-      port.onMessage.addListener((message) => {
-        console.log(">>>port onMessage", message);
-      });
-
       await announceServiceWorkerReady();
       await setupProviderConnectionEip1193(port);
     }
