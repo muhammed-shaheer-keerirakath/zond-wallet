@@ -4,6 +4,7 @@ import path from "path";
 import nodePolyfills from "rollup-plugin-node-polyfills";
 import { Plugin, defineConfig } from "vite";
 import webExtension from "vite-plugin-web-extension";
+import { version } from "./package.json";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,6 +13,10 @@ export default defineConfig({
     webExtension({
       additionalInputs: ["src/scripts/inPageScript.ts"],
       disableAutoLaunch: true,
+      transformManifest: (manifest) => {
+        manifest.version = version;
+        return manifest;
+      },
     }),
   ],
   build: {

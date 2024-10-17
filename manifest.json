@@ -1,7 +1,6 @@
 {
   "manifest_version": 3,
   "name": "Zond Wallet",
-  "version": "1.0",
   "description": "A wallet that run on the zond blockchain.",
   "icons": {
     "16": "icons/qrl/16.png",
