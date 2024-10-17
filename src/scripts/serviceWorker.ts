@@ -9,6 +9,7 @@ import {
   ZOND_WALLET_PROVIDER_NAME,
 } from "./constants/streamConstants";
 import { appendSenderDataMiddleware } from "./middlewares/appendSenderDataMiddleware";
+import { blockUnSupportedMethodsMiddleware } from "./middlewares/blockUnSupportedMethodsMiddleware";
 import { checkForLastError } from "./utils/scriptUtils";
 import { setupMultiplex } from "./utils/streamUtils";
 
@@ -86,12 +87,14 @@ const setupProviderEngineEip1193 = ({
 }) => {
   const engine = new JsonRpcEngine();
 
+  // If the requested method is not supported, this ends the request.
+  engine.push(blockUnSupportedMethodsMiddleware);
   // Appends the sender details to the request.
   engine.push(appendSenderDataMiddleware({ sender }));
 
   // Open popup
   engine.push((req, res, next, end) => {
-    if (req.method === "eth_popup") {
+    if (req.method === "zondWallet_popup") {
       // Open the popup for user approval
       browser.action.openPopup();
       res.result = { data: "approved" };
