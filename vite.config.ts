@@ -9,7 +9,10 @@ import webExtension from "vite-plugin-web-extension";
 export default defineConfig({
   plugins: [
     react(),
-    webExtension({ additionalInputs: ["src/scripts/inPageScript.ts"] }),
+    webExtension({
+      additionalInputs: ["src/scripts/inPageScript.ts"],
+      disableAutoLaunch: true,
+    }),
   ],
   build: {
     outDir: "Extension",
