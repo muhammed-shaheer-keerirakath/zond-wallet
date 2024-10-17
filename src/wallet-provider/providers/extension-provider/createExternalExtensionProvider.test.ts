@@ -56,7 +56,7 @@ async function getInitializedProvider({
   const port = new MockPort((name, data) => {
     if (
       name === "zond-wallet-provider" &&
-      data.method === "metamask_getProviderState"
+      data.method === "zondWallet_getProviderState"
     ) {
       // Wrap in `setTimeout` to ensure a reply is received by the provider
       // after the provider has processed the request, to ensure that the

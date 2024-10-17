@@ -120,7 +120,7 @@ export abstract class AbstractStreamProvider extends BaseProvider {
   /**
    * MUST be called by child classes.
    *
-   * Calls `metamask_getProviderState` and passes the result to
+   * Calls `zondWallet_getProviderState` and passes the result to
    * {@link BaseProvider._initializeState}. Logs an error if getting initial state
    * fails. Throws if called after initialization has completed.
    */
@@ -129,7 +129,7 @@ export abstract class AbstractStreamProvider extends BaseProvider {
 
     try {
       initialState = (await this.request({
-        method: "metamask_getProviderState",
+        method: "zondWallet_getProviderState",
       })) as Parameters<BaseProvider["_initializeState"]>[0];
     } catch (error) {
       this._log.error(
@@ -211,7 +211,7 @@ export class StreamProvider extends AbstractStreamProvider {
   /**
    * MUST be called after instantiation to complete initialization.
    *
-   * Calls `metamask_getProviderState` and passes the result to
+   * Calls `zondWallet_getProviderState` and passes the result to
    * {@link BaseProvider._initializeState}. Logs an error if getting initial state
    * fails. Throws if called after initialization has completed.
    */
