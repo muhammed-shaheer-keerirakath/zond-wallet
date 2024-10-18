@@ -10,6 +10,7 @@ import {
 } from "./constants/streamConstants";
 import { appendSenderDataMiddleware } from "./middlewares/appendSenderDataMiddleware";
 import { blockUnSupportedMethodsMiddleware } from "./middlewares/blockUnSupportedMethodsMiddleware";
+import { connectWalletMiddleware } from "./middlewares/connectWalletMiddleware";
 import { checkForLastError } from "./utils/scriptUtils";
 import { setupMultiplex } from "./utils/streamUtils";
 
@@ -91,18 +92,8 @@ const setupProviderEngineEip1193 = ({
   engine.push(blockUnSupportedMethodsMiddleware);
   // Appends the sender details to the request.
   engine.push(appendSenderDataMiddleware({ sender }));
-
-  // Open popup
-  engine.push((req, res, next, end) => {
-    if (req.method === "zondWallet_popup") {
-      // Open the popup for user approval
-      browser.action.openPopup();
-      res.result = { data: "approved" };
-      end();
-    } else {
-      next();
-    }
-  });
+  // Handles the dApp's connect wallet functionality
+  engine.push(connectWalletMiddleware);
 
   return engine;
 };

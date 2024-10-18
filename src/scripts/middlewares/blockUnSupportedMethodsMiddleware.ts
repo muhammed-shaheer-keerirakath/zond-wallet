@@ -1,7 +1,7 @@
 import { JsonRpcMiddleware } from "@/wallet-provider/json-rpc-engine";
 import { rpcErrors } from "@/wallet-provider/rpc-errors";
 import { Json, JsonRpcRequest } from "@/wallet-provider/utils";
-import { allowedRequestMethods } from "../constants/requestConstants";
+import { ALLOWED_REQUEST_METHODS } from "../constants/requestConstants";
 
 export const blockUnSupportedMethodsMiddleware: JsonRpcMiddleware<
   JsonRpcRequest,
@@ -10,8 +10,8 @@ export const blockUnSupportedMethodsMiddleware: JsonRpcMiddleware<
   const requestedMethod = req.method ?? "";
   if (
     !!requestedMethod.length &&
-    allowedRequestMethods.includes(
-      requestedMethod as (typeof allowedRequestMethods)[number],
+    ALLOWED_REQUEST_METHODS.includes(
+      requestedMethod as (typeof ALLOWED_REQUEST_METHODS)[number],
     )
   ) {
     next();
