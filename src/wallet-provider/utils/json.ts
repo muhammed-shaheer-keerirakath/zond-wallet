@@ -314,11 +314,21 @@ export type InferWithParams<
   params?: Params;
 };
 
+export type AdditionalJsonRpcRequestKeys = {
+  senderData?: {
+    tabId?: number;
+    title?: string;
+    url?: string;
+    favIconUrl?: string;
+  };
+};
+
 /**
  * A JSON-RPC request object.
  */
 export type JsonRpcRequest<Params extends JsonRpcParams = JsonRpcParams> =
-  InferWithParams<typeof JsonRpcRequestStruct, Params>;
+  InferWithParams<typeof JsonRpcRequestStruct, Params> &
+    AdditionalJsonRpcRequestKeys;
 
 export const JsonRpcNotificationStruct = object({
   jsonrpc: JsonRpcVersionStruct,

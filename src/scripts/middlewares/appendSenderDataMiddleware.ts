@@ -12,7 +12,6 @@ export const appendSenderDataMiddleware =
   }: appendSenderDataParams): JsonRpcMiddleware<JsonRpcRequest, Json> =>
   (req, _, next) => {
     const { tab } = sender;
-    // @ts-ignore
     req.senderData = {
       tabId: tab?.id,
       title: tab?.title,
