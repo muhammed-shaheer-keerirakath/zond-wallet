@@ -7,6 +7,7 @@ const ACTIVE_ACCOUNT_IDENTIFIER = "ACTIVE_ACCOUNT";
 const ACCOUNT_LIST_IDENTIFIER = "ACCOUNT_LIST";
 const TRANSACTION_VALUES_IDENTIFIER = "TRANSACTION_VALUES";
 const TOKENS_LIST_IDENTIFIER = "TOKENS_LIST";
+const DAPP_REQUEST_DATA_IDENTIFIER = "DAPP_REQUEST_DATA";
 
 type BlockchainType = keyof typeof ZOND_PROVIDER;
 type TransactionValuesType = {
@@ -22,6 +23,10 @@ type TransactionValuesType = {
     tokenName: string;
     tokenSymbol: string;
   };
+};
+type DAppRequestDataType = {
+  method: string;
+  requestData?: Record<string, any>;
 };
 
 /**
@@ -216,6 +221,27 @@ class StorageUtil {
         ),
       ),
     });
+  }
+
+  /**
+   * A function for storing the reuqest info temporarily by the dApp, which will be read by the zond wallet.
+   * Call the getDAppRequestData function to retrieve the stored value, and clearFromTokenList for clearing the stored value.
+   */
+  static async setDAppRequestData(data: DAppRequestDataType) {
+    await browser.storage.session.set({
+      [DAPP_REQUEST_DATA_IDENTIFIER]: data,
+    });
+  }
+
+  static async getDAppRequestData() {
+    const storedDAppRequestData = await browser.storage.session.get(
+      DAPP_REQUEST_DATA_IDENTIFIER,
+    );
+    return storedDAppRequestData[DAPP_REQUEST_DATA_IDENTIFIER];
+  }
+
+  static async clearDAppRequestData() {
+    await browser.storage.session.remove(DAPP_REQUEST_DATA_IDENTIFIER);
   }
 }
 
