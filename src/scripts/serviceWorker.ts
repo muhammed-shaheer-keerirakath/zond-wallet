@@ -1,3 +1,4 @@
+import StorageUtil from "@/utilities/storageUtil";
 import { JsonRpcEngine } from "@/wallet-provider/json-rpc-engine";
 import { createEngineStream } from "@/wallet-provider/json-rpc-middleware-stream";
 import PortStream from "extension-port-stream";
@@ -45,8 +46,18 @@ const registerScripts = async () => {
 
 const prepareListeners = () => {
   // listens to messages coming from the content script(browser.runtime.sendMessage)
-  browser.runtime.onMessage.addListener((message: any) => {
-    console.log(">>>onMessageFromContentScript message", message);
+  // browser.runtime.onMessage.addListener((message: any) => {
+  //   console.log(">>>onMessageFromContentScript message", message);
+  // });
+  browser.storage.onChanged.addListener(async () => {
+    const storedDAppRequestData = await StorageUtil.getDAppRequestData();
+    if (!!storedDAppRequestData) {
+      // If there is a pending request, the badge with 1 notification will be displayed.
+      browser.action.setBadgeText({ text: "1" });
+      browser.action.setBadgeBackgroundColor({ color: "#4AAFFF" });
+    } else {
+      browser.action.setBadgeText({ text: "" });
+    }
   });
 };
 
