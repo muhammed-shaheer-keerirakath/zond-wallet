@@ -18,13 +18,21 @@ import DAppRequestDetails from "./DAppRequestDetails/DAppRequestDetails";
 
 const DAppRequest = () => {
   const onPermission = async (hasApproved: boolean) => {
-    await StorageUtil.clearDAppRequestData();
-    const response: DAppResponseType = {
-      action: EXTENSION_MESSAGES.DAPP_RESPONSE,
-      hasApproved,
-    };
-    await browser.runtime.sendMessage(response);
-    window.close();
+    try {
+      await StorageUtil.clearDAppRequestData();
+      const response: DAppResponseType = {
+        action: EXTENSION_MESSAGES.DAPP_RESPONSE,
+        hasApproved,
+      };
+      await browser.runtime.sendMessage(response);
+    } catch (error) {
+      console.warn(
+        "ZondWallet: Error while resolving the permission request\n",
+        error,
+      );
+    } finally {
+      window.close();
+    }
   };
 
   return (
@@ -45,7 +53,7 @@ const DAppRequest = () => {
           </CardHeader>
           <CardContent className="space-y-8">
             <DAppRequestDetails />
-            <Alert>
+            <Alert variant="destructive">
               <ShieldAlert className="h-4 w-4" />
               <AlertTitle>Careful!</AlertTitle>
               <AlertDescription>
