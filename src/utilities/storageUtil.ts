@@ -225,22 +225,28 @@ class StorageUtil {
    * Call the getDAppRequestData function to retrieve the stored value, and clearFromTokenList for clearing the stored value.
    */
   static async setDAppRequestData(data: DAppRequestType) {
+    const blockChain = await this.getBlockChain();
+    const dAppRequestDataIdentifier = `${blockChain}_${DAPP_REQUEST_DATA_IDENTIFIER}`;
     await browser.storage.session.set({
-      [DAPP_REQUEST_DATA_IDENTIFIER]: data,
+      [dAppRequestDataIdentifier]: data,
     });
   }
 
   static async getDAppRequestData() {
+    const blockChain = await this.getBlockChain();
+    const dAppRequestDataIdentifier = `${blockChain}_${DAPP_REQUEST_DATA_IDENTIFIER}`;
     const storedDAppRequestData = await browser.storage.session.get(
-      DAPP_REQUEST_DATA_IDENTIFIER,
+      dAppRequestDataIdentifier,
     );
-    return storedDAppRequestData[DAPP_REQUEST_DATA_IDENTIFIER] as
+    return storedDAppRequestData[dAppRequestDataIdentifier] as
       | DAppRequestType
       | undefined;
   }
 
   static async clearDAppRequestData() {
-    await browser.storage.session.remove(DAPP_REQUEST_DATA_IDENTIFIER);
+    const blockChain = await this.getBlockChain();
+    const dAppRequestDataIdentifier = `${blockChain}_${DAPP_REQUEST_DATA_IDENTIFIER}`;
+    await browser.storage.session.remove(dAppRequestDataIdentifier);
   }
 }
 
