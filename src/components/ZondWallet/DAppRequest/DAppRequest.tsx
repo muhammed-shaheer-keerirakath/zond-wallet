@@ -9,20 +9,42 @@ import {
   CardTitle,
 } from "@/components/UI/Card";
 import { EXTENSION_MESSAGES } from "@/scripts/constants/streamConstants";
-import { DAppResponseType } from "@/scripts/middlewares/middlewareTypes";
+import {
+  DAppRequestType,
+  DAppResponseType,
+} from "@/scripts/middlewares/middlewareTypes";
 import StorageUtil from "@/utilities/storageUtil";
-import { Check, ShieldAlert, X } from "lucide-react";
+import { Check, Loader, ShieldAlert, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 import ConnectionBadge from "../Body/Home/ConnectionBadge/ConnectionBadge";
 import DAppRequestDetails from "./DAppRequestDetails/DAppRequestDetails";
 
 const DAppRequest = () => {
+  const [dAppRequestData, setDAppRequestData] = useState<
+    DAppRequestType | undefined
+  >();
+
+  useEffect(() => {
+    (async () => {
+      const storedDAppRequestData = await StorageUtil.getDAppRequestData();
+      setDAppRequestData(storedDAppRequestData);
+    })();
+  }, []);
+
+  let responseData = {};
+
+  const addToResponseData = (data: any) => {
+    responseData = { ...responseData, ...data };
+  };
+
   const onPermission = async (hasApproved: boolean) => {
     try {
       await StorageUtil.clearDAppRequestData();
       const response: DAppResponseType = {
         action: EXTENSION_MESSAGES.DAPP_RESPONSE,
         hasApproved,
+        response: responseData,
       };
       await browser.runtime.sendMessage(response);
     } catch (error) {
@@ -35,7 +57,7 @@ const DAppRequest = () => {
     }
   };
 
-  return (
+  return dAppRequestData ? (
     <>
       <img
         className="fixed z-0 h-96 w-96 -translate-x-8 animate-rotate-scale overflow-hidden opacity-30"
@@ -52,8 +74,11 @@ const DAppRequest = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
-            <DAppRequestDetails />
-            <Alert variant="destructive">
+            <DAppRequestDetails
+              dAppRequestData={dAppRequestData}
+              addToResponseData={addToResponseData}
+            />
+            <Alert>
               <ShieldAlert className="h-4 w-4" />
               <AlertTitle>Careful!</AlertTitle>
               <AlertDescription>
@@ -85,6 +110,11 @@ const DAppRequest = () => {
         </Card>
       </div>
     </>
+  ) : (
+    <div className="flex justify-center p-4">
+      <Loader className="mr-2 h-4 w-4 animate-spin" />
+      Checking for pending requests
+    </div>
   );
 };
 
