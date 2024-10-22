@@ -1,3 +1,4 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/UI/Alert";
 import { Button } from "@/components/UI/Button";
 import {
   Card,
@@ -8,16 +9,17 @@ import {
   CardTitle,
 } from "@/components/UI/Card";
 import { EXTENSION_MESSAGES } from "@/scripts/constants/streamConstants";
-import { DappResponseType } from "@/scripts/middlewares/connectWalletMiddleware";
+import { DAppResponseType } from "@/scripts/middlewares/connectWalletMiddleware";
 import StorageUtil from "@/utilities/storageUtil";
-import { Check, X } from "lucide-react";
+import { Check, ShieldAlert, X } from "lucide-react";
 import browser from "webextension-polyfill";
 import ConnectionBadge from "../Body/Home/ConnectionBadge/ConnectionBadge";
+import DAppRequestDetails from "./DAppRequestDetails/DAppRequestDetails";
 
 const DAppRequest = () => {
   const onPermission = async (hasApproved: boolean) => {
     await StorageUtil.clearDAppRequestData();
-    const response: DappResponseType = {
+    const response: DAppResponseType = {
       action: EXTENSION_MESSAGES.DAPP_RESPONSE,
       hasApproved,
     };
@@ -37,10 +39,22 @@ const DAppRequest = () => {
           <CardHeader>
             <CardTitle>Your permission required</CardTitle>
             <CardDescription>
-              Make sure you only approve this if you trust this transaction
+              Here is a request coming in. Go through the details and decide if
+              it needs to be allowed.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-8">Details</CardContent>
+          <CardContent className="space-y-8">
+            <DAppRequestDetails />
+            <Alert>
+              <ShieldAlert className="h-4 w-4" />
+              <AlertTitle>Careful!</AlertTitle>
+              <AlertDescription>
+                There are token approval scams out there. Ensure you only
+                connect your wallet with the websites you trust.
+              </AlertDescription>
+            </Alert>
+            <div className="font-bold">Do you want to allow this?</div>
+          </CardContent>
           <CardFooter className="grid grid-cols-2 gap-4">
             <Button
               className="w-full"
