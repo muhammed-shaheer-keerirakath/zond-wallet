@@ -1,4 +1,4 @@
-import { DAppRequestType } from "@/scripts/constants/types";
+import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
 import StorageUtil from "@/utilities/storageUtil";
 import { useEffect, useState } from "react";
 import DAppRequestWebsite from "./DAppRequestWebsite/DAppRequestWebsite";

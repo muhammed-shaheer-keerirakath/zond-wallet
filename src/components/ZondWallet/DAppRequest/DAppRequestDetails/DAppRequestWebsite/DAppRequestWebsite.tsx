@@ -1,5 +1,5 @@
 import { Card } from "@/components/UI/Card";
-import { DAppRequestType } from "@/scripts/constants/types";
+import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
 
 type DAppRequestWebsiteProps = {
   dAppRequestData: DAppRequestType;
