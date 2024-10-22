@@ -1,5 +1,5 @@
 import { Card } from "@/components/UI/Card";
-import { DAppRequestType } from "@/scripts/middlewares/connectWalletMiddleware";
+import { DAppRequestType } from "@/scripts/constants/types";
 
 type DAppRequestWebsiteProps = {
   dAppRequestData: DAppRequestType;

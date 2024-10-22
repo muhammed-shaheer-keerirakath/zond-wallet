@@ -1,5 +1,5 @@
 import { ZOND_PROVIDER } from "@/configuration/zondConfig";
-import { DAppRequestType } from "@/scripts/middlewares/connectWalletMiddleware";
+import { DAppRequestType } from "@/scripts/constants/types";
 import browser from "webextension-polyfill";
 
 const ACTIVE_PAGE_IDENTIFIER = "ACTIVE_PAGE";

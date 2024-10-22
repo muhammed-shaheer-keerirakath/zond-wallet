@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/UI/Card";
 import { EXTENSION_MESSAGES } from "@/scripts/constants/streamConstants";
-import { DAppResponseType } from "@/scripts/middlewares/connectWalletMiddleware";
+import { DAppResponseType } from "@/scripts/constants/types";
 import StorageUtil from "@/utilities/storageUtil";
 import { Check, ShieldAlert, X } from "lucide-react";
 import browser from "webextension-polyfill";
