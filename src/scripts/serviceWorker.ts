@@ -12,6 +12,7 @@ import {
 import { appendSenderDataMiddleware } from "./middlewares/appendSenderDataMiddleware";
 import { blockUnSupportedMethodsMiddleware } from "./middlewares/blockUnSupportedMethodsMiddleware";
 import { connectWalletMiddleware } from "./middlewares/connectWalletMiddleware";
+import { initialStateMiddleware } from "./middlewares/initialStateMiddleware";
 import { checkForLastError } from "./utils/scriptUtils";
 import { setupMultiplex } from "./utils/streamUtils";
 
@@ -99,6 +100,8 @@ const setupProviderEngineEip1193 = ({
   engine.push(blockUnSupportedMethodsMiddleware);
   // Appends the sender details to the request.
   engine.push(appendSenderDataMiddleware({ sender }));
+  // Sets the initial state of the provider
+  engine.push(initialStateMiddleware);
   // Handles the dApp's connect wallet functionality
   engine.push(connectWalletMiddleware);
 
