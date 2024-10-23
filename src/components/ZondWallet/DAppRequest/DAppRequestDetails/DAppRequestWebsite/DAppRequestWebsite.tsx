@@ -6,11 +6,13 @@ import DAppRequestFeature from "../DAppRequestFeature/DAppRequestFeature";
 type DAppRequestWebsiteProps = {
   dAppRequestData: DAppRequestType;
   addToResponseData: (data: any) => void;
+  decideCanProceed: (decision: boolean) => void;
 };
 
 const DAppRequestWebsite = ({
   dAppRequestData,
   addToResponseData,
+  decideCanProceed,
 }: DAppRequestWebsiteProps) => {
   return (
     <Card className="flex flex-col gap-4 p-4">
@@ -33,6 +35,7 @@ const DAppRequestWebsite = ({
       <DAppRequestFeature
         dAppRequestData={dAppRequestData}
         addToResponseData={addToResponseData}
+        decideCanProceed={decideCanProceed}
       />
     </Card>
   );

@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 
 type EthRequestAccountProps = {
   addToResponseData: (data: any) => void;
+  decideCanProceed: (decision: boolean) => void;
 };
 
 const EthRequestAccount = observer(
-  ({ addToResponseData }: EthRequestAccountProps) => {
+  ({ addToResponseData, decideCanProceed }: EthRequestAccountProps) => {
     const { zondStore } = useStore();
     const { activeAccount } = zondStore;
     const account = activeAccount?.accountAddress;
@@ -34,8 +35,10 @@ const EthRequestAccount = observer(
               onCheckedChange={(checked) => {
                 if (checked) {
                   setResponse({ accounts: [account] });
+                  decideCanProceed(true);
                 } else {
                   setResponse({ accounts: [] });
+                  decideCanProceed(false);
                 }
               }}
             />

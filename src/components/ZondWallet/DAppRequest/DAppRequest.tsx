@@ -24,6 +24,8 @@ const DAppRequest = () => {
   const [dAppRequestData, setDAppRequestData] = useState<
     DAppRequestType | undefined
   >();
+  const [responseData, setResponseData] = useState<any>({});
+  const [canProceed, setCanProceed] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -32,10 +34,12 @@ const DAppRequest = () => {
     })();
   }, []);
 
-  let responseData = {};
-
   const addToResponseData = (data: any) => {
-    responseData = { ...responseData, ...data };
+    setResponseData({ ...responseData, ...data });
+  };
+
+  const decideCanProceed = (decision: boolean) => {
+    setCanProceed(decision);
   };
 
   const onPermission = async (hasApproved: boolean) => {
@@ -77,6 +81,7 @@ const DAppRequest = () => {
             <DAppRequestDetails
               dAppRequestData={dAppRequestData}
               addToResponseData={addToResponseData}
+              decideCanProceed={decideCanProceed}
             />
             <Alert>
               <ShieldAlert className="h-4 w-4" />
@@ -101,6 +106,7 @@ const DAppRequest = () => {
             <Button
               className="w-full"
               type="button"
+              disabled={!canProceed}
               onClick={() => onPermission(true)}
             >
               <Check className="mr-2 h-4 w-4" />
