@@ -15,13 +15,13 @@ import { connectWalletMiddleware } from "./middlewares/connectWalletMiddleware";
 import { checkForLastError } from "./utils/scriptUtils";
 import { setupMultiplex } from "./utils/streamUtils";
 
-type ContentScript = browser.Scripting.RegisteredContentScript;
+type ContentScriptType = browser.Scripting.RegisteredContentScript;
 
 const registerScripts = async () => {
   const previouslyRegisteredScriptIds = (
     await browser.scripting.getRegisteredContentScripts()
   ).map((script) => script.id);
-  const contentScripts: ContentScript[] = [
+  const contentScripts: ContentScriptType[] = [
     {
       id: "zondInPageScript",
       matches: ["<all_urls>"],
@@ -45,10 +45,6 @@ const registerScripts = async () => {
 };
 
 const prepareListeners = () => {
-  // listens to messages coming from the content script(browser.runtime.sendMessage)
-  // browser.runtime.onMessage.addListener((message: any) => {
-  //   console.log(">>>onMessageFromContentScript message", message);
-  // });
   browser.storage.onChanged.addListener(async () => {
     const storedDAppRequestData = await StorageUtil.getDAppRequestData();
     if (!!storedDAppRequestData) {
@@ -135,10 +131,6 @@ const setupProviderConnectionEip1193 = async (port: browser.Runtime.Port) => {
         mid.destroy();
       }
     });
-  });
-
-  providerStream.on("data", async (data) => {
-    console.log(">>>providerStream data", data);
   });
 };
 
