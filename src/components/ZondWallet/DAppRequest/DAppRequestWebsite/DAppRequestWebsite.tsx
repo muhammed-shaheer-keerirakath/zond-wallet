@@ -1,7 +1,7 @@
 import { Card } from "@/components/UI/Card";
 import { Separator } from "@/components/UI/Separator";
 import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
-import DAppRequestFeature from "../DAppRequestFeature/DAppRequestFeature";
+import DAppRequestFeature from "./DAppRequestFeature/DAppRequestFeature";
 
 type DAppRequestWebsiteProps = {
   dAppRequestData: DAppRequestType;
