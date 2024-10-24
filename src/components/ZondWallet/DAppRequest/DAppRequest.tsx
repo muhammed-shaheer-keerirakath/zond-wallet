@@ -18,7 +18,7 @@ import { Check, Loader, ShieldAlert, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 import ConnectionBadge from "../Body/Home/ConnectionBadge/ConnectionBadge";
-import DAppRequestDetails from "./DAppRequestDetails/DAppRequestDetails";
+import DAppRequestWebsite from "./DAppRequestWebsite/DAppRequestWebsite";
 
 const DAppRequest = () => {
   const [dAppRequestData, setDAppRequestData] = useState<
@@ -78,7 +78,7 @@ const DAppRequest = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
-            <DAppRequestDetails
+            <DAppRequestWebsite
               dAppRequestData={dAppRequestData}
               addToResponseData={addToResponseData}
               decideCanProceed={decideCanProceed}
