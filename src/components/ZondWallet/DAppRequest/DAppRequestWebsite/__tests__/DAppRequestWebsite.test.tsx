@@ -6,7 +6,7 @@ import { ComponentProps } from "react";
 import { MemoryRouter } from "react-router-dom";
 import DAppRequestWebsite from "../DAppRequestWebsite";
 
-jest.mock("../../DAppRequestFeature/DAppRequestFeature", () => () => (
+jest.mock("../DAppRequestFeature/DAppRequestFeature", () => () => (
   <div>Mocked DApp Request Feature</div>
 ));
 

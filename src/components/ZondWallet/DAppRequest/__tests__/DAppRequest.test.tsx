@@ -5,8 +5,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import DAppRequest from "../DAppRequest";
 
-jest.mock("../DAppRequestDetails/DAppRequestDetails", () => () => (
-  <div>Mocked DApp Request Details</div>
+jest.mock("../DAppRequestWebsite/DAppRequestWebsite", () => () => (
+  <div>Mocked DApp Request Website</div>
 ));
 jest.mock("@/utilities/storageUtil", () => {
   const originalModule = jest.requireActual<
@@ -57,7 +57,7 @@ describe("DAppRequest", () => {
         "Here is a request coming in. Go through the details and decide if it needs to be allowed.",
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText("Mocked DApp Request Details")).toBeInTheDocument();
+    expect(screen.getByText("Mocked DApp Request Website")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
       "Careful!",
     );
