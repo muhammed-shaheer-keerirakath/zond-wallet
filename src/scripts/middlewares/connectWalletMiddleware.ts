@@ -1,7 +1,7 @@
 import StorageUtil from "@/utilities/storageUtil";
-import { JsonRpcMiddleware } from "@/wallet-provider/json-rpc-engine";
-import { providerErrors } from "@/wallet-provider/rpc-errors";
-import { Json, JsonRpcRequest } from "@/wallet-provider/utils";
+import { JsonRpcMiddleware } from "@theqrl/zond-wallet-provider/json-rpc-engine";
+import { providerErrors } from "@theqrl/zond-wallet-provider/rpc-errors";
+import { Json, JsonRpcRequest } from "@theqrl/zond-wallet-provider/utils";
 import browser from "webextension-polyfill";
 import { REQUEST_METHODS } from "../constants/requestConstants";
 import { EXTENSION_MESSAGES } from "../constants/streamConstants";

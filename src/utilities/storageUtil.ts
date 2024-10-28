@@ -1,6 +1,6 @@
 import { ZOND_PROVIDER } from "@/configuration/zondConfig";
 import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
-import { BaseProvider } from "@/wallet-provider/providers";
+import { BaseProvider } from "@theqrl/zond-wallet-provider/providers";
 import { PartialDeep } from "type-fest";
 import browser from "webextension-polyfill";
 

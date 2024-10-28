@@ -1,7 +1,7 @@
 import StorageUtil from "@/utilities/storageUtil";
-import { JsonRpcMiddleware } from "@/wallet-provider/json-rpc-engine";
-import { BaseProvider } from "@/wallet-provider/providers";
-import { Json, JsonRpcRequest } from "@/wallet-provider/utils";
+import { JsonRpcMiddleware } from "@theqrl/zond-wallet-provider/json-rpc-engine";
+import { BaseProvider } from "@theqrl/zond-wallet-provider/providers";
+import { Json, JsonRpcRequest } from "@theqrl/zond-wallet-provider/utils";
 import { REQUEST_METHODS } from "../constants/requestConstants";
 
 export const initialStateMiddleware: JsonRpcMiddleware<
