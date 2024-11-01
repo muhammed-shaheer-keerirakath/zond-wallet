@@ -2,11 +2,11 @@ import PortStream from "extension-port-stream";
 import { pipeline } from "readable-stream";
 import browser from "webextension-polyfill";
 
-import { WindowPostMessageStream } from "@theqrl/zond-wallet-provider";
 import {
   ObjectMultiplex,
   Substream,
 } from "@theqrl/zond-wallet-provider/object-multiplex";
+import { WindowPostMessageStream } from "@theqrl/zond-wallet-provider/post-message-stream";
 import {
   EXTENSION_MESSAGES,
   ZOND_POST_MESSAGE_STREAM,
