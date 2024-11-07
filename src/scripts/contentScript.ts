@@ -118,7 +118,7 @@ export const onDisconnectExtensionStream = (err: unknown) => {
    */
   if (lastErr) {
     console.warn(`${JSON.stringify(lastErr)}\nResetting the streams.`);
-    setTimeout(setupExtensionStreams, 3000);
+    setTimeout(setupExtensionStreams, 1000);
   }
 };
 
