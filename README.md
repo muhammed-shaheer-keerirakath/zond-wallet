@@ -6,7 +6,7 @@ A wallet for creating accounts, importing accounts and sending transactions over
 
 ## :keyboard: Run locally
 
-- Run `git clone THIS_REPOSITORY_URL` for cloning this repo to your machine.
+- Run `git clone https://github.com/theQRL/zond-wallet.git` for cloning this repo to your machine.
 - Run `npm install` for installing all dependencies of this project.
 - Run `npm run build` to generate a production build of the extension to the `Extension` folder.
 - The production build output folder is named `Extension` (not `dist`) and this folder alone is enough to run the extension.
