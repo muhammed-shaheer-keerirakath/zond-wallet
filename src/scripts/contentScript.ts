@@ -2,9 +2,11 @@ import PortStream from "extension-port-stream";
 import { pipeline } from "readable-stream";
 import browser from "webextension-polyfill";
 
-import { WindowPostMessageStream } from "@/wallet-provider";
-import { ObjectMultiplex } from "@/wallet-provider/object-multiplex";
-import { Substream } from "@/wallet-provider/object-multiplex/Substream";
+import {
+  ObjectMultiplex,
+  Substream,
+} from "@theqrl/zond-wallet-provider/object-multiplex";
+import { WindowPostMessageStream } from "@theqrl/zond-wallet-provider/post-message-stream";
 import {
   EXTENSION_MESSAGES,
   ZOND_POST_MESSAGE_STREAM,
@@ -116,7 +118,7 @@ export const onDisconnectExtensionStream = (err: unknown) => {
    */
   if (lastErr) {
     console.warn(`${JSON.stringify(lastErr)}\nResetting the streams.`);
-    setTimeout(setupExtensionStreams, 3000);
+    setTimeout(setupExtensionStreams, 1000);
   }
 };
 

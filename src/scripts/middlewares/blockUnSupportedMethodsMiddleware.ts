@@ -1,6 +1,6 @@
-import { JsonRpcMiddleware } from "@/wallet-provider/json-rpc-engine";
-import { rpcErrors } from "@/wallet-provider/rpc-errors";
-import { Json, JsonRpcRequest } from "@/wallet-provider/utils";
+import { JsonRpcMiddleware } from "@theqrl/zond-wallet-provider/json-rpc-engine";
+import { rpcErrors } from "@theqrl/zond-wallet-provider/rpc-errors";
+import { Json, JsonRpcRequest } from "@theqrl/zond-wallet-provider/utils";
 import { ALLOWED_REQUEST_METHODS } from "../constants/requestConstants";
 
 export const blockUnSupportedMethodsMiddleware: JsonRpcMiddleware<

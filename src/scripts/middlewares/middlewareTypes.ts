@@ -1,4 +1,4 @@
-import { AdditionalJsonRpcRequestKeys } from "@/wallet-provider/utils";
+import { AdditionalJsonRpcRequestKeys } from "@theqrl/zond-wallet-provider/utils";
 
 export type DAppRequestType = {
   method: string;

@@ -1,6 +1,6 @@
 import StorageUtil from "@/utilities/storageUtil";
-import { JsonRpcEngine } from "@/wallet-provider/json-rpc-engine";
-import { createEngineStream } from "@/wallet-provider/json-rpc-middleware-stream";
+import { JsonRpcEngine } from "@theqrl/zond-wallet-provider/json-rpc-engine";
+import { createEngineStream } from "@theqrl/zond-wallet-provider/json-rpc-middleware-stream";
 import PortStream from "extension-port-stream";
 import { pipeline } from "readable-stream";
 import browser from "webextension-polyfill";

@@ -1,5 +1,5 @@
-import { JsonRpcMiddleware } from "@/wallet-provider/json-rpc-engine";
-import { Json, JsonRpcRequest } from "@/wallet-provider/utils";
+import { JsonRpcMiddleware } from "@theqrl/zond-wallet-provider/json-rpc-engine";
+import { Json, JsonRpcRequest } from "@theqrl/zond-wallet-provider/utils";
 import browser from "webextension-polyfill";
 
 type appendSenderDataParams = {
