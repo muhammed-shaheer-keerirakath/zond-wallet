@@ -29,10 +29,24 @@ describe("EthRequestAccount", () => {
     );
 
   it("should render the eth request account component, with an account in zond store", () => {
-    renderComponent();
+    renderComponent(
+      mockedStore({
+        zondStore: {
+          zondAccounts: {
+            isLoading: false,
+            accounts: [
+              {
+                accountAddress: "0x2090E9F38771876FB6Fc51a6b464121d3cC093A1",
+                accountBalance: "10",
+              },
+            ],
+          },
+        },
+      }),
+    );
 
     expect(
-      screen.getByText("Connect your zond wallet account"),
+      screen.getByText("Connect your zond wallet accounts"),
     ).toBeInTheDocument();
     const checkBox = screen.getByRole("checkbox", {
       name: "0x 2090E 9F387 71876 FB6Fc 51a6b 46412 1d3cC 093A1",
@@ -56,7 +70,7 @@ describe("EthRequestAccount", () => {
   it("should render the eth request account component, without an account in zond store", () => {
     renderComponent(
       mockedStore({
-        zondStore: { activeAccount: { accountAddress: "" } },
+        zondStore: { zondAccounts: { isLoading: false, accounts: [] } },
       }),
     );
 
@@ -65,15 +79,29 @@ describe("EthRequestAccount", () => {
     });
     expect(checkBox).not.toBeInTheDocument();
     expect(
-      screen.getByText("Account not available to connect"),
+      screen.getByText("No accounts available to connect"),
     ).toBeInTheDocument();
   });
 
   it("should call the addToResponseData and decideCanProceed functions on selecting the account", async () => {
-    renderComponent();
+    renderComponent(
+      mockedStore({
+        zondStore: {
+          zondAccounts: {
+            isLoading: false,
+            accounts: [
+              {
+                accountAddress: "0x2090E9F38771876FB6Fc51a6b464121d3cC093A1",
+                accountBalance: "10",
+              },
+            ],
+          },
+        },
+      }),
+    );
 
     expect(
-      screen.getByText("Connect your zond wallet account"),
+      screen.getByText("Connect your zond wallet accounts"),
     ).toBeInTheDocument();
     const checkBox = screen.getByRole("checkbox", {
       name: "0x 2090E 9F387 71876 FB6Fc 51a6b 46412 1d3cC 093A1",

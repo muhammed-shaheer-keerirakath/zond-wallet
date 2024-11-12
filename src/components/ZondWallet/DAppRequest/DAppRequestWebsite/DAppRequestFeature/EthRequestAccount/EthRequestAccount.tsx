@@ -41,7 +41,7 @@ const EthRequestAccount = observer(
         <div className="text-sm font-bold">
           Connect your zond wallet accounts
         </div>
-        {availableAccounts ? (
+        {!!availableAccounts.length ? (
           availableAccounts.map((account) => (
             <div className="flex items-start space-x-3">
               <Checkbox
