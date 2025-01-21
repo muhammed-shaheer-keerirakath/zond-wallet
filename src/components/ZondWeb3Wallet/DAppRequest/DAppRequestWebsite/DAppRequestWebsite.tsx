@@ -19,7 +19,7 @@ const DAppRequestWebsite = ({
 
   return (
     <Card className="flex flex-col gap-4 p-4">
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-center">
         <img
           className="h-8 w-8"
           src={dAppRequestData?.requestData?.senderData?.favIconUrl}
