@@ -69,7 +69,7 @@ const DAppRequest = () => {
       />
       <div className="relative z-10 flex flex-col items-center space-y-8 p-8">
         <ConnectionBadge isDisabled={true} />
-        <Card>
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Your permission required</CardTitle>
             <CardDescription>
@@ -91,7 +91,7 @@ const DAppRequest = () => {
                 connect your wallet with the websites you trust.
               </AlertDescription>
             </Alert>
-            <div className="font-bold">Do you want to allow this?</div>
+            <div className="font-bold">Do you trust and want to allow this?</div>
           </CardContent>
           <CardFooter className="grid grid-cols-2 gap-4">
             <Button

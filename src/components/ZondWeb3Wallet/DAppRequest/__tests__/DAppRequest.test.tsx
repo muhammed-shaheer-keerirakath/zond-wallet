@@ -66,7 +66,7 @@ describe("DAppRequest", () => {
         "There are token approval scams out there. Ensure you only connect your wallet with the websites you trust.",
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText("Do you want to allow this?")).toBeInTheDocument();
+    expect(screen.getByText("Do you trust and want to allow this?")).toBeInTheDocument();
     const noButton = screen.getByRole("button", { name: "No" });
     const yesButton = screen.getByRole("button", { name: "Yes" });
     expect(noButton).toBeInTheDocument();
