@@ -35,7 +35,7 @@ export const connectWalletMiddleware: JsonRpcMiddleware<
   Json
 > = async (req, res, next, end) => {
   const requestedMethod = req.method;
-  if (requestedMethod === REQUEST_METHODS.ZOND_REQUEST_ACCOUNT) {
+  if (requestedMethod === REQUEST_METHODS.ZOND_REQUEST_ACCOUNTS) {
     const message = await requestAccountsFromZondWeb3Wallet(req);
     const hasApproved = message.hasApproved;
     if (hasApproved) {
