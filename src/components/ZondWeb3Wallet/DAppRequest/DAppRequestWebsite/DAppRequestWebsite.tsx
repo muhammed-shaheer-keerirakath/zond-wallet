@@ -14,6 +14,9 @@ const DAppRequestWebsite = ({
   addToResponseData,
   decideCanProceed,
 }: DAppRequestWebsiteProps) => {
+  const parsedUrl = new URL(dAppRequestData?.requestData?.senderData?.url ?? "");
+  const urlOrigin = parsedUrl.origin;
+
   return (
     <Card className="flex flex-col gap-4 p-4">
       <div className="flex gap-4">
@@ -24,7 +27,7 @@ const DAppRequestWebsite = ({
         />
         <div className="flex flex-col gap-1">
           <span className="font-bold">
-            {dAppRequestData?.requestData?.senderData?.url}
+            {urlOrigin}
           </span>
           <span className="text-xm opacity-80">
             {dAppRequestData?.requestData?.senderData?.title}
