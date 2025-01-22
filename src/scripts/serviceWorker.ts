@@ -86,7 +86,7 @@ const announceServiceWorkerReady = async () => {
 };
 
 /**
- * A method for creating an ethereum provider.
+ * A method for creating a zond provider.
  * Middlewares are pushed to the engine here.
  */
 const setupProviderEngineEip1193 = ({
@@ -109,7 +109,7 @@ const setupProviderEngineEip1193 = ({
 };
 
 /**
- * A method for serving our ethereum provider over a given stream.
+ * A method for serving zond provider over a given stream.
  */
 const setupProviderConnectionEip1193 = async (port: browser.Runtime.Port) => {
   const portStream = new PortStream(port);
