@@ -1,4 +1,4 @@
-import { REQUEST_METHODS } from "@/scripts/constants/requestConstants";
+import { RESTRICTED_METHODS } from "@/scripts/constants/requestConstants";
 import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
 import EthRequestAccount from "./EthRequestAccount/EthRequestAccount";
 
@@ -16,7 +16,7 @@ const DAppRequestFeature = ({
   addToResponseData({});
 
   switch (dAppRequestData?.method) {
-    case REQUEST_METHODS.ZOND_REQUEST_ACCOUNTS:
+    case RESTRICTED_METHODS.ZOND_REQUEST_ACCOUNTS:
       return (
         <EthRequestAccount
           addToResponseData={addToResponseData}

@@ -14,7 +14,7 @@ describe("DAppRequestWebsite", () => {
   const renderComponent = (
     mockedStoreValues = mockedStore(),
     mockedProps: ComponentProps<typeof DAppRequestWebsite> = {
-      addToResponseData: () => {},
+      addToResponseData: () => { },
       dAppRequestData: {
         method: "zond_requestAccounts",
         requestData: {
@@ -26,7 +26,7 @@ describe("DAppRequestWebsite", () => {
           },
         },
       },
-      decideCanProceed: () => {},
+      decideCanProceed: () => { },
     },
   ) =>
     render(
@@ -40,7 +40,7 @@ describe("DAppRequestWebsite", () => {
   it("should render the dapp request website component", () => {
     renderComponent();
 
-    expect(screen.getByText("http://localhost/")).toBeInTheDocument();
+    expect(screen.getByText("http://localhost")).toBeInTheDocument();
     expect(screen.getByText("Mocked Page Title")).toBeInTheDocument();
     expect(screen.getByText("Mocked DApp Request Feature")).toBeInTheDocument();
   });

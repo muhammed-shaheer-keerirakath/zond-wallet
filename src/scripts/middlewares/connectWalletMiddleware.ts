@@ -3,7 +3,7 @@ import { JsonRpcMiddleware } from "@theqrl/zond-wallet-provider/json-rpc-engine"
 import { providerErrors } from "@theqrl/zond-wallet-provider/rpc-errors";
 import { Json, JsonRpcRequest } from "@theqrl/zond-wallet-provider/utils";
 import browser from "webextension-polyfill";
-import { REQUEST_METHODS } from "../constants/requestConstants";
+import { RESTRICTED_METHODS } from "../constants/requestConstants";
 import { EXTENSION_MESSAGES } from "../constants/streamConstants";
 import { DAppRequestType, DAppResponseType } from "./middlewareTypes";
 
@@ -35,7 +35,7 @@ export const connectWalletMiddleware: JsonRpcMiddleware<
   Json
 > = async (req, res, next, end) => {
   const requestedMethod = req.method;
-  if (requestedMethod === REQUEST_METHODS.ZOND_REQUEST_ACCOUNTS) {
+  if (requestedMethod === RESTRICTED_METHODS.ZOND_REQUEST_ACCOUNTS) {
     const message = await requestAccountsFromZondWeb3Wallet(req);
     const hasApproved = message.hasApproved;
     if (hasApproved) {
