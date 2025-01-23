@@ -1,6 +1,7 @@
 import StorageUtil from "@/utilities/storageUtil";
 import { JsonRpcMiddleware } from "@theqrl/zond-wallet-provider/json-rpc-engine";
 import { BaseProvider } from "@theqrl/zond-wallet-provider/providers";
+import { providerErrors } from "@theqrl/zond-wallet-provider/rpc-errors";
 import { Json, JsonRpcRequest } from "@theqrl/zond-wallet-provider/utils";
 import { UNRESTRICTED_METHODS } from "../constants/requestConstants";
 
@@ -14,7 +15,7 @@ const getUnrestrictedMethodResult = async (
       return response;
     case UNRESTRICTED_METHODS.ZOND_GET_BLOCK_BY_NUMBER:
     default:
-      return {};
+      throw new Error(`Implementation not available for ${req.method}`);
   }
 };
 
@@ -31,7 +32,13 @@ export const unrestrictedMethodsMiddleware: JsonRpcMiddleware<
       requestedMethod as UnrestrictedMethodValue,
     )
   ) {
-    res.result = await getUnrestrictedMethodResult(req);
+    try {
+      res.result = await getUnrestrictedMethodResult(req);
+    } catch (error: any) {
+      res.error = providerErrors.unsupportedMethod({
+        message: error?.message as string,
+      });
+    }
     end();
   } else {
     next();
