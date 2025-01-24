@@ -10,19 +10,19 @@ import { DAppRequestType, DAppResponseType } from "./middlewareTypes";
 const requestAccountsFromZondWeb3Wallet = async (
   req: JsonRpcRequest<JsonRpcRequest>,
 ): Promise<DAppResponseType> => {
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     const request: DAppRequestType = {
       method: req.method,
       requestData: { senderData: req.senderData },
     };
-    StorageUtil.setDAppRequestData(request);
-    browser.action.openPopup();
+    await StorageUtil.setDAppRequestData(request);
+    await browser.action.openPopup();
 
-    const handleMessage = (message: DAppResponseType) => {
+    const handleMessage = function messageHandler(message: DAppResponseType) {
       if (message.action === EXTENSION_MESSAGES.DAPP_RESPONSE) {
-        resolve(message);
-        // Remove the listener after the message is processed
+        // Remove the listener when the message is processed
         browser.runtime.onMessage.removeListener(handleMessage);
+        resolve(message);
       }
     };
     // Listen for the approval/rejection from the UI
@@ -30,21 +30,40 @@ const requestAccountsFromZondWeb3Wallet = async (
   });
 };
 
+let isRequestPending = false;
+
 export const connectWalletMiddleware: JsonRpcMiddleware<
   JsonRpcRequest,
   Json
 > = async (req, res, next, end) => {
   const requestedMethod = req.method;
   if (requestedMethod === RESTRICTED_METHODS.ZOND_REQUEST_ACCOUNTS) {
-    const message = await requestAccountsFromZondWeb3Wallet(req);
-    const hasApproved = message.hasApproved;
-    if (hasApproved) {
-      const accounts = message?.response?.accounts;
-      res.result = accounts;
+    if (isRequestPending) {
+      try {
+        await browser.action.openPopup();
+      } finally {
+        res.error = providerErrors.unsupportedMethod({
+          message: "A request is already pending",
+        });
+      }
+      end();
     } else {
-      res.error = providerErrors.userRejectedRequest();
+      let message: DAppResponseType = { action: "test", hasApproved: false };
+      try {
+        isRequestPending = true;
+        message = await requestAccountsFromZondWeb3Wallet(req);
+      } finally {
+        isRequestPending = false;
+        const hasApproved = message.hasApproved;
+        if (hasApproved) {
+          const accounts = message?.response?.accounts;
+          res.result = accounts;
+        } else {
+          res.error = providerErrors.userRejectedRequest();
+        }
+      }
+      end();
     }
-    end();
   } else {
     next();
   }
