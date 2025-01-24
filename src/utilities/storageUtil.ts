@@ -224,7 +224,7 @@ class StorageUtil {
   }
 
   /**
-   * A function for storing the reuqest info temporarily by the dApp, which will be read by the zond web3 wallet.
+   * A function for storing the request info temporarily by the dApp, which will be read by the zond web3 wallet.
    * Call the getDAppRequestData function to retrieve the stored value, and clearFromTokenList for clearing the stored value.
    */
   static async setDAppRequestData(data: DAppRequestType) {
