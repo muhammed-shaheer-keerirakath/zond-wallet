@@ -15,8 +15,13 @@ const requestAccountsFromZondWeb3Wallet = async (
       method: req.method,
       requestData: { senderData: req.senderData },
     };
+
     await StorageUtil.setDAppRequestData(request);
-    await browser.action.openPopup();
+    try {
+      await browser.action.openPopup();
+    } catch (error) {
+      console.warn("ZondWeb3Wallet: Could not open the wallet");
+    }
 
     const handleMessage = function messageHandler(message: DAppResponseType) {
       if (message.action === EXTENSION_MESSAGES.DAPP_RESPONSE) {
@@ -54,7 +59,7 @@ export const connectWalletMiddleware: JsonRpcMiddleware<
         message = await requestAccountsFromZondWeb3Wallet(req);
       } finally {
         isRequestPending = false;
-        const hasApproved = message.hasApproved;
+        const hasApproved = message?.hasApproved;
         if (hasApproved) {
           const accounts = message?.response?.accounts;
           res.result = accounts;
