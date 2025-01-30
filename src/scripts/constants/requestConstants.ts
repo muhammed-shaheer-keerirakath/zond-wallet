@@ -7,7 +7,7 @@ export const RESTRICTED_METHODS = Object.freeze({
   ZOND_REQUEST_ACCOUNTS: "zond_requestAccounts",
 });
 
-export const ALLOWED_REQUEST_METHODS = Object.values({
+export const ALL_REQUEST_METHODS = Object.values({
   ...RESTRICTED_METHODS,
   ...UNRESTRICTED_METHODS,
 });
