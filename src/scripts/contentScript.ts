@@ -197,20 +197,14 @@ const prepareListeners = () => {
           // @ts-ignore
           const [block, hydrated] = message?.data?.params;
           const blockNumber = await zond.getBlock(block, hydrated);
-          const bigIntKeys: string[] = [];
-          const serializableBlockNumber = JSON.parse(
-            JSON.stringify(blockNumber, (key, value) => {
+          return JSON.parse(
+            JSON.stringify(blockNumber, (_, value) => {
               if (typeof value === "bigint") {
-                bigIntKeys.push(key);
                 return "0x".concat(value.toString(16));
               }
               return value;
             }),
           );
-          return {
-            bigIntKeys,
-            blockNumber: serializableBlockNumber,
-          };
         case UNRESTRICTED_METHODS.ZOND_WEB3_WALLET_GET_PROVIDER_STATE:
           const chainId = (await zond?.getChainId())?.toString() ?? "";
           const networkVersion = (await zond?.net.getId())?.toString() ?? "";

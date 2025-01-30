@@ -9,20 +9,10 @@ const getUnrestrictedMethodResult = async (
   req: JsonRpcRequest<JsonRpcRequest>,
 ) => {
   const tabId = req?.senderData?.tabId ?? 0;
-  const response = await browser.tabs.sendMessage(tabId, {
+  return await browser.tabs.sendMessage(tabId, {
     name: EXTENSION_MESSAGES.UNRESTRICTED_METHOD_CALLS,
     data: req,
   });
-
-  const method = req.method;
-  switch (method) {
-    case UNRESTRICTED_METHODS.ZOND_GET_BLOCK_BY_NUMBER:
-      return response?.blockNumber;
-    case UNRESTRICTED_METHODS.ZOND_WEB3_WALLET_GET_PROVIDER_STATE:
-    case UNRESTRICTED_METHODS.NET_VERSION:
-    default:
-      return response;
-  }
 };
 
 type UnrestrictedMethodValue =
