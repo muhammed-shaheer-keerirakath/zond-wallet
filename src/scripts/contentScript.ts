@@ -220,6 +220,9 @@ const prepareListeners = () => {
             isUnlocked: false,
             accounts: [],
           } as Parameters<BaseProvider["_initializeState"]>[0];
+        case UNRESTRICTED_METHODS.NET_VERSION:
+          const networkId = await zond.net.getId();
+          return "0x".concat(networkId.toString(16));
         default:
           return "";
       }

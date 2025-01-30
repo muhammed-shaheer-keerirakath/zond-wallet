@@ -1,6 +1,7 @@
 export const UNRESTRICTED_METHODS = Object.freeze({
   ZOND_WEB3_WALLET_GET_PROVIDER_STATE: "zondWallet_getProviderState",
   ZOND_GET_BLOCK_BY_NUMBER: "zond_getBlockByNumber",
+  NET_VERSION: "net_version",
 });
 
 export const RESTRICTED_METHODS = Object.freeze({

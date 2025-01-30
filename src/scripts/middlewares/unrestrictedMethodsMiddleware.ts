@@ -19,6 +19,7 @@ const getUnrestrictedMethodResult = async (
     case UNRESTRICTED_METHODS.ZOND_GET_BLOCK_BY_NUMBER:
       return response?.blockNumber;
     case UNRESTRICTED_METHODS.ZOND_WEB3_WALLET_GET_PROVIDER_STATE:
+    case UNRESTRICTED_METHODS.NET_VERSION:
     default:
       return response;
   }
