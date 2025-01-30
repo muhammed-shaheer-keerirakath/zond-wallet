@@ -1,21 +1,26 @@
-import StorageUtil from "@/utilities/storageUtil";
 import { JsonRpcMiddleware } from "@theqrl/zond-wallet-provider/json-rpc-engine";
-import { BaseProvider } from "@theqrl/zond-wallet-provider/providers";
 import { providerErrors } from "@theqrl/zond-wallet-provider/rpc-errors";
 import { Json, JsonRpcRequest } from "@theqrl/zond-wallet-provider/utils";
+import browser from "webextension-polyfill";
 import { UNRESTRICTED_METHODS } from "../constants/requestConstants";
+import { EXTENSION_MESSAGES } from "../constants/streamConstants";
 
 const getUnrestrictedMethodResult = async (
   req: JsonRpcRequest<JsonRpcRequest>,
 ) => {
-  switch (req.method) {
-    case UNRESTRICTED_METHODS.ZOND_WEB3_WALLET_GET_PROVIDER_STATE:
-      const response: Parameters<BaseProvider["_initializeState"]>[0] =
-        await StorageUtil.getProviderState();
-      return response;
+  const tabId = req?.senderData?.tabId ?? 0;
+  const response = await browser.tabs.sendMessage(tabId, {
+    name: EXTENSION_MESSAGES.UNRESTRICTED_METHOD_CALLS,
+    data: req,
+  });
+
+  const method = req.method;
+  switch (method) {
     case UNRESTRICTED_METHODS.ZOND_GET_BLOCK_BY_NUMBER:
+      return response?.blockNumber;
+    case UNRESTRICTED_METHODS.ZOND_WEB3_WALLET_GET_PROVIDER_STATE:
     default:
-      throw new Error(`Implementation not available for ${req.method}`);
+      return response;
   }
 };
 
@@ -36,7 +41,7 @@ export const unrestrictedMethodsMiddleware: JsonRpcMiddleware<
       res.result = await getUnrestrictedMethodResult(req);
     } catch (error: any) {
       res.error = providerErrors.unsupportedMethod({
-        message: error?.message as string,
+        message: error?.message,
       });
     }
     end();

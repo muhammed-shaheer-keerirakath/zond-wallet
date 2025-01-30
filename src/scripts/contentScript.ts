@@ -1,12 +1,17 @@
-import PortStream from "extension-port-stream";
-import { pipeline } from "readable-stream";
-import browser from "webextension-polyfill";
-
+import { ZOND_PROVIDER } from "@/configuration/zondConfig";
+import StorageUtil from "@/utilities/storageUtil";
+import Web3 from "@theqrl/web3";
 import {
   ObjectMultiplex,
   Substream,
 } from "@theqrl/zond-wallet-provider/object-multiplex";
 import { WindowPostMessageStream } from "@theqrl/zond-wallet-provider/post-message-stream";
+import { BaseProvider } from "@theqrl/zond-wallet-provider/providers";
+import { JsonRpcRequest } from "@theqrl/zond-wallet-provider/utils";
+import PortStream from "extension-port-stream";
+import { pipeline } from "readable-stream";
+import browser from "webextension-polyfill";
+import { UNRESTRICTED_METHODS } from "./constants/requestConstants";
 import {
   EXTENSION_MESSAGES,
   ZOND_POST_MESSAGE_STREAM,
@@ -16,13 +21,7 @@ import { checkForLastError } from "./utils/scriptUtils";
 
 type MessageType = {
   name: string;
-  data: {
-    jsonrpc: string;
-    method: string;
-    params?: Record<string, unknown>[];
-    id: string;
-    origin?: string;
-  };
+  data: JsonRpcRequest<JsonRpcRequest>;
 };
 
 let pageMux: ObjectMultiplex;
@@ -35,6 +34,14 @@ let extensionChannel: Substream;
 
 // The field below is used to ensure that replay is done only once for each restart.
 let hasExtensionConnectSent = false;
+
+const getZondInstance = async () => {
+  const selectedBlockChain = await StorageUtil.getBlockChain();
+  const { url } = ZOND_PROVIDER[selectedBlockChain];
+  const zondHttpProvider = new Web3.providers.HttpProvider(url);
+  const { zond } = new Web3({ provider: zondHttpProvider });
+  return zond;
+};
 
 const setupPageStreams = () => {
   // the transport-specific streams for communication between inpage and background
@@ -176,15 +183,48 @@ const setupExtensionStreams = () => {
 
 const prepareListeners = () => {
   // listens to messages coming from the service worker(browser.tabs.sendMessage)
-  browser.runtime.onMessage.addListener((message: MessageType) => {
+  browser.runtime.onMessage.addListener(async (message: MessageType) => {
     if (message.name === EXTENSION_MESSAGES.READY) {
       if (!extensionStream) {
         setupExtensionStreams();
       }
-      return Promise.resolve(
-        "ZondWeb3Wallet: handled service worker ready message",
-      );
+      return "ZondWeb3Wallet: handled service worker ready message";
+    } else if (message.name === EXTENSION_MESSAGES.UNRESTRICTED_METHOD_CALLS) {
+      const zond = await getZondInstance();
+      const method = message.data.method;
+      switch (method) {
+        case UNRESTRICTED_METHODS.ZOND_GET_BLOCK_BY_NUMBER:
+          // @ts-ignore
+          const [block, hydrated] = message?.data?.params;
+          const blockNumber = await zond.getBlock(block, hydrated);
+          const bigIntKeys: string[] = [];
+          const serializableBlockNumber = JSON.parse(
+            JSON.stringify(blockNumber, (key, value) => {
+              if (typeof value === "bigint") {
+                bigIntKeys.push(key);
+                return "0x".concat(value.toString(16));
+              }
+              return value;
+            }),
+          );
+          return {
+            bigIntKeys,
+            blockNumber: serializableBlockNumber,
+          };
+        case UNRESTRICTED_METHODS.ZOND_WEB3_WALLET_GET_PROVIDER_STATE:
+          const chainId = (await zond?.getChainId())?.toString() ?? "";
+          const networkVersion = (await zond?.net.getId())?.toString() ?? "";
+          return {
+            chainId: `0x${chainId}`,
+            networkVersion,
+            isUnlocked: false,
+            accounts: [],
+          } as Parameters<BaseProvider["_initializeState"]>[0];
+        default:
+          return "";
+      }
     }
+    return "";
   });
 };
 
