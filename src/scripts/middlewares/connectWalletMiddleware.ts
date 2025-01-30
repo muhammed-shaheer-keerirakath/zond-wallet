@@ -48,7 +48,7 @@ export const connectWalletMiddleware: JsonRpcMiddleware<
       }
       end();
     } else {
-      let message: DAppResponseType = { action: "test", hasApproved: false };
+      let message: DAppResponseType = { action: "", hasApproved: false };
       try {
         isRequestPending = true;
         message = await requestAccountsFromZondWeb3Wallet(req);
