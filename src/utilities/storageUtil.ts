@@ -255,7 +255,7 @@ class StorageUtil {
 
   /**
    * A function for storing the connected accounts info temporarily, which will be read by method like 'zond_accounts'.
-   * Call the getConnectedAccountsData function to retrieve the stored value, and removeConnectedAccountsData for clearing the stored value.
+   * Call the getConnectedAccountsData function to retrieve the stored value, and clearConnectedAccountsData for clearing the stored value.
    */
   static async setConnectedAccountsData(data: ConnectedAccountsDataType) {
     const urlOrigin = data.urlOrigin;
@@ -279,6 +279,12 @@ class StorageUtil {
     return storedConnectedAccountsData[connectedAccountsDataIdentifier] as
       | ConnectedAccountsDataType
       | undefined;
+  }
+
+  static async clearConnectedAccountsData(urlOrigin: string) {
+    const blockChain = await this.getBlockChain();
+    const connectedAccountsDataIdentifier = `${blockChain}_${urlOrigin}_${CONNECTED_ACCOUNTS_DATA_IDENTIFIER}`;
+    await browser.storage.local.remove(connectedAccountsDataIdentifier);
   }
 }
 

@@ -3,6 +3,7 @@ export const UNRESTRICTED_METHODS = Object.freeze({
   ZOND_GET_BLOCK_BY_NUMBER: "zond_getBlockByNumber",
   NET_VERSION: "net_version",
   ZOND_ACCOUNTS: "zond_accounts",
+  WALLET_REVOKE_PERMISSIONS: "wallet_revokePermissions",
 });
 
 export const RESTRICTED_METHODS = Object.freeze({

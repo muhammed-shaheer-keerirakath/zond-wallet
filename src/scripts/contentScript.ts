@@ -218,11 +218,15 @@ const prepareListeners = () => {
           const networkId = await zond.net.getId();
           return "0x".concat(networkId.toString(16));
         case UNRESTRICTED_METHODS.ZOND_ACCOUNTS:
-          const urlOrigin = new URL(message?.data?.senderData?.url ?? "")
-            .origin;
           const connectedAccountsData =
-            await StorageUtil.getConnectedAccountsData(urlOrigin);
+            await StorageUtil.getConnectedAccountsData(
+              new URL(message?.data?.senderData?.url ?? "").origin,
+            );
           return connectedAccountsData?.accounts ?? [];
+        case UNRESTRICTED_METHODS.WALLET_REVOKE_PERMISSIONS:
+          await StorageUtil.clearConnectedAccountsData(
+            new URL(message?.data?.senderData?.url ?? "").origin,
+          );
         default:
           return "";
       }
