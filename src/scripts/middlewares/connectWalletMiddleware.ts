@@ -61,7 +61,9 @@ export const connectWalletMiddleware: JsonRpcMiddleware<
         isRequestPending = false;
         const hasApproved = message?.hasApproved;
         if (hasApproved) {
-          const accounts = message?.response?.accounts;
+          const urlOrigin = new URL(req?.senderData?.url ?? "").origin;
+          const accounts: string[] = message?.response?.accounts;
+          await StorageUtil.setConnectedAccountsData({ urlOrigin, accounts });
           res.result = accounts;
         } else {
           res.error = providerErrors.userRejectedRequest();

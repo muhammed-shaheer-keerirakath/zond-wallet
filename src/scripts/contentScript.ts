@@ -217,6 +217,12 @@ const prepareListeners = () => {
         case UNRESTRICTED_METHODS.NET_VERSION:
           const networkId = await zond.net.getId();
           return "0x".concat(networkId.toString(16));
+        case UNRESTRICTED_METHODS.ZOND_ACCOUNTS:
+          const urlOrigin = new URL(message?.data?.senderData?.url ?? "")
+            .origin;
+          const connectedAccountsData =
+            await StorageUtil.getConnectedAccountsData(urlOrigin);
+          return connectedAccountsData?.accounts ?? [];
         default:
           return "";
       }

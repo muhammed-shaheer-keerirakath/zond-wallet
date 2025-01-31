@@ -10,3 +10,8 @@ export type DAppResponseType = {
   hasApproved: boolean;
   response?: any;
 };
+
+export type ConnectedAccountsDataType = {
+  urlOrigin: string;
+  accounts: string[];
+};

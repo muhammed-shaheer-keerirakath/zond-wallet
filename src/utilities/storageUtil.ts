@@ -1,5 +1,8 @@
 import { ZOND_PROVIDER } from "@/configuration/zondConfig";
-import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
+import {
+  ConnectedAccountsDataType,
+  DAppRequestType,
+} from "@/scripts/middlewares/middlewareTypes";
 import browser from "webextension-polyfill";
 
 const ACTIVE_PAGE_IDENTIFIER = "ACTIVE_PAGE";
@@ -9,6 +12,7 @@ const ACCOUNT_LIST_IDENTIFIER = "ACCOUNT_LIST";
 const TRANSACTION_VALUES_IDENTIFIER = "TRANSACTION_VALUES";
 const TOKENS_LIST_IDENTIFIER = "TOKENS_LIST";
 const DAPP_REQUEST_DATA_IDENTIFIER = "DAPP_REQUEST_DATA";
+const CONNECTED_ACCOUNTS_DATA_IDENTIFIER = "CONNECTED_ACCOUNTS_DATA";
 
 type BlockchainType = keyof typeof ZOND_PROVIDER;
 type TransactionValuesType = {
@@ -247,6 +251,34 @@ class StorageUtil {
     const blockChain = await this.getBlockChain();
     const dAppRequestDataIdentifier = `${blockChain}_${DAPP_REQUEST_DATA_IDENTIFIER}`;
     await browser.storage.session.remove(dAppRequestDataIdentifier);
+  }
+
+  /**
+   * A function for storing the connected accounts info temporarily, which will be read by method like 'zond_accounts'.
+   * Call the getConnectedAccountsData function to retrieve the stored value, and removeConnectedAccountsData for clearing the stored value.
+   */
+  static async setConnectedAccountsData(data: ConnectedAccountsDataType) {
+    const urlOrigin = data.urlOrigin;
+    const blockChain = await this.getBlockChain();
+    const connectedAccountsDataIdentifier = `${blockChain}_${urlOrigin}_${CONNECTED_ACCOUNTS_DATA_IDENTIFIER}`;
+    const updatedConnectedAccountsData: ConnectedAccountsDataType = {
+      urlOrigin,
+      accounts: data.accounts,
+    };
+    await browser.storage.local.set({
+      [connectedAccountsDataIdentifier]: updatedConnectedAccountsData,
+    });
+  }
+
+  static async getConnectedAccountsData(urlOrigin: string) {
+    const blockChain = await this.getBlockChain();
+    const connectedAccountsDataIdentifier = `${blockChain}_${urlOrigin}_${CONNECTED_ACCOUNTS_DATA_IDENTIFIER}`;
+    const storedConnectedAccountsData = await browser.storage.local.get(
+      connectedAccountsDataIdentifier,
+    );
+    return storedConnectedAccountsData[connectedAccountsDataIdentifier] as
+      | ConnectedAccountsDataType
+      | undefined;
   }
 }
 
