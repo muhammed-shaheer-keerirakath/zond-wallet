@@ -235,6 +235,10 @@ const prepareListeners = () => {
             accountBlockNumber,
           );
           return "0x".concat(balance.toString(16));
+        case UNRESTRICTED_METHODS.ZOND_ESTIMATE_GAS:
+          const [estimateGasParam] = message.data.params;
+          const estimatedGas = await zond.estimateGas(estimateGasParam);
+          return "0x".concat(estimatedGas.toString(16));
         default:
           return "";
       }
