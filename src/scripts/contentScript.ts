@@ -227,6 +227,14 @@ const prepareListeners = () => {
           await StorageUtil.clearConnectedAccountsData(
             new URL(message?.data?.senderData?.url ?? "").origin,
           );
+          return "";
+        case UNRESTRICTED_METHODS.ZOND_GET_BALANCE:
+          const [accountAddress, accountBlockNumber] = message.data.params;
+          const balance = await zond?.getBalance(
+            accountAddress,
+            accountBlockNumber,
+          );
+          return "0x".concat(balance.toString(16));
         default:
           return "";
       }
