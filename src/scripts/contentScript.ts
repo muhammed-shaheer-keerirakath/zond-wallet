@@ -239,6 +239,9 @@ const prepareListeners = () => {
           const [estimateGasParam] = message.data.params;
           const estimatedGas = await zond.estimateGas(estimateGasParam);
           return "0x".concat(estimatedGas.toString(16));
+        case UNRESTRICTED_METHODS.ZOND_BLOCK_NUMBER:
+          const zondBlockNumber = await zond.getBlockNumber();
+          return "0x".concat(zondBlockNumber.toString(16));
         default:
           return "";
       }

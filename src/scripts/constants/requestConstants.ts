@@ -6,6 +6,7 @@ export const UNRESTRICTED_METHODS = Object.freeze({
   WALLET_REVOKE_PERMISSIONS: "wallet_revokePermissions",
   ZOND_GET_BALANCE: "zond_getBalance",
   ZOND_ESTIMATE_GAS: "zond_estimateGas",
+  ZOND_BLOCK_NUMBER: "zond_blockNumber",
 });
 
 export const RESTRICTED_METHODS = Object.freeze({
