@@ -49,9 +49,7 @@ describe("DAppRequest", () => {
     expect(
       screen.getByRole("button", { name: "Zond Local Node" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
-      "Your permission required",
-    );
+    expect(screen.getByText("Your permission required")).toBeInTheDocument()
     expect(
       screen.getByText(
         "Here is a request coming in. Go through the details and decide if it needs to be allowed.",

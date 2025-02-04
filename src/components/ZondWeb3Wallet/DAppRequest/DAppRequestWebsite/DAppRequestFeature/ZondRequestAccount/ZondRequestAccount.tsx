@@ -38,8 +38,8 @@ const ZondRequestAccount = observer(
 
     return (
       <div className="flex flex-col gap-4">
-        <div className="text-sm font-bold">
-          Connect your zond web3 wallet accounts
+        <div className="text-lg font-bold">
+          Connect with Zond Web3 Wallet
         </div>
         {!!availableAccounts.length ? (
           availableAccounts.map((account) => (
@@ -52,7 +52,7 @@ const ZondRequestAccount = observer(
               />
               <label
                 htmlFor={account}
-                className="cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="cursor-pointer text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 <AccountId account={account} />
               </label>

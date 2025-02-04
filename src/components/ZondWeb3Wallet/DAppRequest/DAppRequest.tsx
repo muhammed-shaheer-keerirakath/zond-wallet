@@ -3,10 +3,7 @@ import { Button } from "@/components/UI/Button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  CardFooter
 } from "@/components/UI/Card";
 import { EXTENSION_MESSAGES } from "@/scripts/constants/streamConstants";
 import {
@@ -68,16 +65,14 @@ const DAppRequest = () => {
         className="fixed z-0 h-96 w-96 -translate-x-8 animate-rotate-scale overflow-hidden opacity-30"
         src="tree.svg"
       />
-      <div className="relative z-10 flex flex-col items-center space-y-8 p-8">
+      <div className="relative z-10 flex flex-col items-center space-y-4 p-4">
         <ConnectionBadge isDisabled={true} />
         <Card className="w-full">
-          <CardHeader>
-            <CardTitle>Your permission required</CardTitle>
-            <CardDescription>
-              Here is a request coming in. Go through the details and decide if
-              it needs to be allowed.
-            </CardDescription>
-          </CardHeader>
+          <div className="p-6">
+            <div className="text-xs font-bold mb-1">Your permission required</div>
+            <div>Here is a request coming in. Go through the details and decide if
+              it needs to be allowed.</div>
+          </div>
           <CardContent className="space-y-8">
             <DAppRequestWebsite
               dAppRequestData={dAppRequestData}
@@ -87,7 +82,7 @@ const DAppRequest = () => {
             <Alert>
               <ShieldAlert className="h-4 w-4" />
               <AlertTitle>Careful!</AlertTitle>
-              <AlertDescription>
+              <AlertDescription className="text-xs">
                 There are token approval scams out there. Ensure you only
                 connect your wallet with the websites you trust.
               </AlertDescription>
