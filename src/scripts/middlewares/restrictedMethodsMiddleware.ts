@@ -84,6 +84,7 @@ export const restrictedMethodsMiddleware: JsonRpcMiddleware<
               res.result = accounts;
               break;
             case RESTRICTED_METHODS.ZOND_SEND_TRANSACTION:
+              break;
             default:
               res.error = providerErrors.unsupportedMethod();
               break;

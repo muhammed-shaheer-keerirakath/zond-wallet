@@ -5,9 +5,9 @@ import { act, cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ComponentProps } from "react";
 import { MemoryRouter } from "react-router-dom";
-import EthRequestAccount from "../EthRequestAccount";
+import ZondRequestAccount from "../ZondRequestAccount";
 
-describe("EthRequestAccount", () => {
+describe("ZondRequestAccount", () => {
   afterEach(cleanup);
 
   const mockedAddToResponseData = jest.fn();
@@ -15,7 +15,7 @@ describe("EthRequestAccount", () => {
 
   const renderComponent = (
     mockedStoreValues = mockedStore(),
-    mockedProps: ComponentProps<typeof EthRequestAccount> = {
+    mockedProps: ComponentProps<typeof ZondRequestAccount> = {
       addToResponseData: mockedAddToResponseData,
       decideCanProceed: mockedDecideCanProceed,
     },
@@ -23,7 +23,7 @@ describe("EthRequestAccount", () => {
     render(
       <StoreProvider value={mockedStoreValues}>
         <MemoryRouter>
-          <EthRequestAccount {...mockedProps} />
+          <ZondRequestAccount {...mockedProps} />
         </MemoryRouter>
       </StoreProvider>,
     );

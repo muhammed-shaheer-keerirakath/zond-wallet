@@ -6,8 +6,8 @@ import { ComponentProps } from "react";
 import { MemoryRouter } from "react-router-dom";
 import DAppRequestFeature from "../DAppRequestFeature";
 
-jest.mock("../EthRequestAccount/EthRequestAccount", () => () => (
-  <div>Mocked Eth Request Account</div>
+jest.mock("../ZondRequestAccount/ZondRequestAccount", () => () => (
+  <div>Mocked Zond Request Account</div>
 ));
 
 describe("DAppRequestFeature", () => {
@@ -16,7 +16,7 @@ describe("DAppRequestFeature", () => {
   const renderComponent = (
     mockedStoreValues = mockedStore(),
     mockedProps: ComponentProps<typeof DAppRequestFeature> = {
-      addToResponseData: () => {},
+      addToResponseData: () => { },
       dAppRequestData: {
         method: "zond_requestAccounts",
         requestData: {
@@ -28,7 +28,7 @@ describe("DAppRequestFeature", () => {
           },
         },
       },
-      decideCanProceed: () => {},
+      decideCanProceed: () => { },
     },
   ) =>
     render(
@@ -41,7 +41,7 @@ describe("DAppRequestFeature", () => {
 
   it("should render the dapp request feature component, for zond_requestAccounts", () => {
     renderComponent(undefined, {
-      addToResponseData: () => {},
+      addToResponseData: () => { },
       dAppRequestData: {
         method: "zond_requestAccounts",
         requestData: {
@@ -53,15 +53,15 @@ describe("DAppRequestFeature", () => {
           },
         },
       },
-      decideCanProceed: () => {},
+      decideCanProceed: () => { },
     });
 
-    expect(screen.getByText("Mocked Eth Request Account")).toBeInTheDocument();
+    expect(screen.getByText("Mocked Zond Request Account")).toBeInTheDocument();
   });
 
   it("should render the dapp request feature component, for some unknow method", () => {
     renderComponent(undefined, {
-      addToResponseData: () => {},
+      addToResponseData: () => { },
       dAppRequestData: {
         method: "zond_mocked_method",
         requestData: {
@@ -73,11 +73,11 @@ describe("DAppRequestFeature", () => {
           },
         },
       },
-      decideCanProceed: () => {},
+      decideCanProceed: () => { },
     });
 
     expect(
-      screen.queryByText("Mocked Eth Request Account"),
+      screen.queryByText("Mocked Zond Request Account"),
     ).not.toBeInTheDocument();
   });
 });

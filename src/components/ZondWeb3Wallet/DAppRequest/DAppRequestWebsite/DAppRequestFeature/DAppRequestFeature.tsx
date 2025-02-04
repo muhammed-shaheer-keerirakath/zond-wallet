@@ -1,6 +1,6 @@
 import { RESTRICTED_METHODS } from "@/scripts/constants/requestConstants";
 import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
-import EthRequestAccount from "./EthRequestAccount/EthRequestAccount";
+import ZondRequestAccount from "./ZondRequestAccount/ZondRequestAccount";
 
 type DAppRequestFeatureProps = {
   dAppRequestData: DAppRequestType;
@@ -18,11 +18,12 @@ const DAppRequestFeature = ({
   switch (dAppRequestData?.method) {
     case RESTRICTED_METHODS.ZOND_REQUEST_ACCOUNTS:
       return (
-        <EthRequestAccount
+        <ZondRequestAccount
           addToResponseData={addToResponseData}
           decideCanProceed={decideCanProceed}
         />
       );
+    case RESTRICTED_METHODS.ZOND_SEND_TRANSACTION:
     default:
       return <></>;
   }

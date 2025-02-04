@@ -4,13 +4,13 @@ import { useStore } from "@/stores/store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
-type EthRequestAccountProps = {
+type ZondRequestAccountProps = {
   addToResponseData: (data: any) => void;
   decideCanProceed: (decision: boolean) => void;
 };
 
-const EthRequestAccount = observer(
-  ({ addToResponseData, decideCanProceed }: EthRequestAccountProps) => {
+const ZondRequestAccount = observer(
+  ({ addToResponseData, decideCanProceed }: ZondRequestAccountProps) => {
     const { zondStore } = useStore();
     const { zondAccounts } = zondStore;
     const availableAccounts = zondAccounts.accounts.map(
@@ -66,4 +66,4 @@ const EthRequestAccount = observer(
   },
 );
 
-export default EthRequestAccount;
+export default ZondRequestAccount;
