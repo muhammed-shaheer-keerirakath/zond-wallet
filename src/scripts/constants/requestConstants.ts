@@ -11,6 +11,7 @@ export const UNRESTRICTED_METHODS = Object.freeze({
 
 export const RESTRICTED_METHODS = Object.freeze({
   ZOND_REQUEST_ACCOUNTS: "zond_requestAccounts",
+  ZOND_SEND_TRANSACTION: "zond_sendTransaction",
 });
 
 export const ALL_REQUEST_METHODS = Object.values({

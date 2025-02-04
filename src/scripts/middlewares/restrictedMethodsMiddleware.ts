@@ -7,7 +7,7 @@ import { RESTRICTED_METHODS } from "../constants/requestConstants";
 import { EXTENSION_MESSAGES } from "../constants/streamConstants";
 import { DAppRequestType, DAppResponseType } from "./middlewareTypes";
 
-const requestAccountsFromZondWeb3Wallet = async (
+const getRestrictedMethodResult = async (
   req: JsonRpcRequest<JsonRpcRequest>,
 ): Promise<DAppResponseType> => {
   return new Promise(async (resolve) => {
@@ -37,12 +37,19 @@ const requestAccountsFromZondWeb3Wallet = async (
 
 let isRequestPending = false;
 
-export const connectWalletMiddleware: JsonRpcMiddleware<
+type RestrictedMethodValue =
+  (typeof RESTRICTED_METHODS)[keyof typeof RESTRICTED_METHODS];
+
+export const restrictedMethodsMiddleware: JsonRpcMiddleware<
   JsonRpcRequest,
   Json
 > = async (req, res, next, end) => {
   const requestedMethod = req.method;
-  if (requestedMethod === RESTRICTED_METHODS.ZOND_REQUEST_ACCOUNTS) {
+  if (
+    Object.values(RESTRICTED_METHODS).includes(
+      requestedMethod as RestrictedMethodValue,
+    )
+  ) {
     if (isRequestPending) {
       try {
         await browser.action.openPopup();
@@ -53,18 +60,34 @@ export const connectWalletMiddleware: JsonRpcMiddleware<
       }
       end();
     } else {
-      let message: DAppResponseType = { action: "", hasApproved: false };
+      let restrictedMethodResult: DAppResponseType = {
+        method: "",
+        action: "",
+        hasApproved: false,
+      };
       try {
         isRequestPending = true;
-        message = await requestAccountsFromZondWeb3Wallet(req);
+        restrictedMethodResult = await getRestrictedMethodResult(req);
       } finally {
         isRequestPending = false;
-        const hasApproved = message?.hasApproved;
+        const hasApproved = restrictedMethodResult?.hasApproved;
         if (hasApproved) {
-          const urlOrigin = new URL(req?.senderData?.url ?? "").origin;
-          const accounts: string[] = message?.response?.accounts;
-          await StorageUtil.setConnectedAccountsData({ urlOrigin, accounts });
-          res.result = accounts;
+          switch (restrictedMethodResult?.method) {
+            case RESTRICTED_METHODS.ZOND_REQUEST_ACCOUNTS:
+              const urlOrigin = new URL(req?.senderData?.url ?? "").origin;
+              const accounts: string[] =
+                restrictedMethodResult?.response?.accounts;
+              await StorageUtil.setConnectedAccountsData({
+                urlOrigin,
+                accounts,
+              });
+              res.result = accounts;
+              break;
+            case RESTRICTED_METHODS.ZOND_SEND_TRANSACTION:
+            default:
+              res.error = providerErrors.unsupportedMethod();
+              break;
+          }
         } else {
           res.error = providerErrors.userRejectedRequest();
         }

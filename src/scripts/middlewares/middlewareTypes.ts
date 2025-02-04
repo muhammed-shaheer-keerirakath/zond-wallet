@@ -6,6 +6,7 @@ export type DAppRequestType = {
 };
 
 export type DAppResponseType = {
+  method: string;
   action: string;
   hasApproved: boolean;
   response?: any;

@@ -46,6 +46,7 @@ const DAppRequest = () => {
     try {
       await StorageUtil.clearDAppRequestData();
       const response: DAppResponseType = {
+        method: dAppRequestData?.method ?? "",
         action: EXTENSION_MESSAGES.DAPP_RESPONSE,
         hasApproved,
         response: responseData,
