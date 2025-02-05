@@ -72,7 +72,7 @@ const DAppRequest = () => {
               it needs to be allowed.
             </div>
           </div>
-          <CardContent className="space-y-8">
+          <CardContent className="space-y-6">
             <DAppRequestWebsite
               dAppRequestData={dAppRequestData}
               addToResponseData={addToResponseData}

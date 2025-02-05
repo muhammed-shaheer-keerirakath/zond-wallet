@@ -44,26 +44,28 @@ const ZondRequestAccount = observer(
           <div className="text-lg font-bold">Connect with Zond Web3 Wallet</div>
           <div>Select the accounts you want the app to connect with</div>
         </div>
-        {!!availableAccounts.length ? (
-          availableAccounts.map((account) => (
-            <div className="flex items-start space-x-3">
-              <Checkbox
-                id={account}
-                onCheckedChange={(checked) =>
-                  onAccountSelection(account, !!checked)
-                }
-              />
-              <label
-                htmlFor={account}
-                className="cursor-pointer text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                <AccountId account={account} />
-              </label>
-            </div>
-          ))
-        ) : (
-          <div>No accounts available to connect</div>
-        )}
+        <div className="flex flex-col gap-4">
+          {!!availableAccounts.length ? (
+            availableAccounts.map((account) => (
+              <div className="flex items-start space-x-3">
+                <Checkbox
+                  id={account}
+                  onCheckedChange={(checked) =>
+                    onAccountSelection(account, !!checked)
+                  }
+                />
+                <label
+                  htmlFor={account}
+                  className="cursor-pointer text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  <AccountId account={account} />
+                </label>
+              </div>
+            ))
+          ) : (
+            <div>No accounts available to connect</div>
+          )}
+        </div>
         <Alert className="mt-2">
           <ShieldAlert className="h-4 w-4" />
           <AlertTitle>Careful!</AlertTitle>
