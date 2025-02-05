@@ -61,8 +61,10 @@ const DAppRequest = () => {
         src="tree.svg"
       />
       <div className="relative z-10 flex flex-col items-center space-y-4 p-4">
-        <ConnectionBadge isDisabled={true} />
         <Card className="w-full">
+          <div className="flex justify-center pt-6">
+            <ConnectionBadge isDisabled={true} />
+          </div>
           <div className="p-6">
             <div className="mb-1 text-xs font-bold">
               Your permission required
