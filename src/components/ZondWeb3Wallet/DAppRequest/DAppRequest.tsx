@@ -8,7 +8,7 @@ import {
 } from "@/scripts/middlewares/middlewareTypes";
 import StorageUtil from "@/utilities/storageUtil";
 import { Check, Loader, ShieldAlert, X } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 import ConnectionBadge from "../Body/Home/ConnectionBadge/ConnectionBadge";
 import DAppRequestWebsite from "./DAppRequestWebsite/DAppRequestWebsite";
@@ -27,15 +27,15 @@ const DAppRequest = () => {
     })();
   }, []);
 
-  const addToResponseData = useCallback((data: any) => {
+  const addToResponseData = (data: any) => {
     setResponseData({ ...responseData, ...data });
-  }, []);
+  };
 
-  const decideCanProceed = useCallback((decision: boolean) => {
+  const decideCanProceed = (decision: boolean) => {
     setCanProceed(decision);
-  }, []);
+  };
 
-  const onPermission = useCallback(async (hasApproved: boolean) => {
+  const onPermission = async (hasApproved: boolean) => {
     try {
       await StorageUtil.clearDAppRequestData();
       const response: DAppResponseType = {
@@ -53,7 +53,7 @@ const DAppRequest = () => {
     } finally {
       window.close();
     }
-  }, []);
+  };
 
   return dAppRequestData ? (
     <>
