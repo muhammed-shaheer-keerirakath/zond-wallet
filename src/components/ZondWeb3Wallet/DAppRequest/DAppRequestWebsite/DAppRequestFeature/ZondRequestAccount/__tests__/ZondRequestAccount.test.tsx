@@ -45,9 +45,7 @@ describe("ZondRequestAccount", () => {
       }),
     );
 
-    expect(
-      screen.getByText("Connect with Zond Web3 Wallet"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Connect with Wallet")).toBeInTheDocument();
     const checkBox = screen.getByRole("checkbox", {
       name: "0x 2090E 9F387 71876 FB6Fc 51a6b 46412 1d3cC 093A1",
     });
@@ -108,9 +106,7 @@ describe("ZondRequestAccount", () => {
       }),
     );
 
-    expect(
-      screen.getByText("Connect with Zond Web3 Wallet"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Connect with Wallet")).toBeInTheDocument();
     expect(
       screen.getByText(
         "Select the accounts you want this site to connect with",

@@ -41,7 +41,7 @@ const ZondRequestAccount = observer(
     return (
       <div className="flex flex-col gap-4">
         <div>
-          <div className="text-lg font-bold">Connect with Zond Web3 Wallet</div>
+          <div className="text-2xl font-bold">Connect with Wallet</div>
           <div>Select the accounts you want this site to connect with</div>
         </div>
         <div className="flex flex-col gap-4">
