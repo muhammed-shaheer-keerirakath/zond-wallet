@@ -13,6 +13,7 @@ const getRestrictedMethodResult = async (
   return new Promise(async (resolve) => {
     const request: DAppRequestType = {
       method: req.method,
+      params: req.params,
       requestData: { senderData: req.senderData },
     };
 
