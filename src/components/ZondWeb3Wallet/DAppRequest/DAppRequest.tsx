@@ -1,10 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/UI/Alert";
 import { Button } from "@/components/UI/Button";
-import {
-  Card,
-  CardContent,
-  CardFooter
-} from "@/components/UI/Card";
+import { Card, CardContent, CardFooter } from "@/components/UI/Card";
 import { EXTENSION_MESSAGES } from "@/scripts/constants/streamConstants";
 import {
   DAppRequestType,
@@ -12,7 +8,7 @@ import {
 } from "@/scripts/middlewares/middlewareTypes";
 import StorageUtil from "@/utilities/storageUtil";
 import { Check, Loader, ShieldAlert, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 import ConnectionBadge from "../Body/Home/ConnectionBadge/ConnectionBadge";
 import DAppRequestWebsite from "./DAppRequestWebsite/DAppRequestWebsite";
@@ -31,15 +27,15 @@ const DAppRequest = () => {
     })();
   }, []);
 
-  const addToResponseData = (data: any) => {
+  const addToResponseData = useCallback((data: any) => {
     setResponseData({ ...responseData, ...data });
-  };
+  }, []);
 
-  const decideCanProceed = (decision: boolean) => {
+  const decideCanProceed = useCallback((decision: boolean) => {
     setCanProceed(decision);
-  };
+  }, []);
 
-  const onPermission = async (hasApproved: boolean) => {
+  const onPermission = useCallback(async (hasApproved: boolean) => {
     try {
       await StorageUtil.clearDAppRequestData();
       const response: DAppResponseType = {
@@ -57,7 +53,7 @@ const DAppRequest = () => {
     } finally {
       window.close();
     }
-  };
+  }, []);
 
   return dAppRequestData ? (
     <>
@@ -69,9 +65,13 @@ const DAppRequest = () => {
         <ConnectionBadge isDisabled={true} />
         <Card className="w-full">
           <div className="p-6">
-            <div className="text-xs font-bold mb-1">Your permission required</div>
-            <div>Here is a request coming in. Go through the details and decide if
-              it needs to be allowed.</div>
+            <div className="mb-1 text-xs font-bold">
+              Your permission required
+            </div>
+            <div>
+              Here is a request coming in. Go through the details and decide if
+              it needs to be allowed.
+            </div>
           </div>
           <CardContent className="space-y-8">
             <DAppRequestWebsite
@@ -87,7 +87,9 @@ const DAppRequest = () => {
                 connect your wallet with the websites you trust.
               </AlertDescription>
             </Alert>
-            <div className="font-bold">Do you trust and want to allow this?</div>
+            <div className="font-bold">
+              Do you trust and want to allow this?
+            </div>
           </CardContent>
           <CardFooter className="grid grid-cols-2 gap-4">
             <Button
