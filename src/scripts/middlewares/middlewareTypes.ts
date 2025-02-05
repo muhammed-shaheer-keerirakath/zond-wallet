@@ -2,6 +2,7 @@ import { AdditionalJsonRpcRequestKeys } from "@theqrl/zond-wallet-provider/utils
 
 export type DAppRequestType = {
   method: string;
+  params?: any;
   requestData?: AdditionalJsonRpcRequestKeys;
 };
 

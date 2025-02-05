@@ -1,4 +1,3 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/UI/Alert";
 import { Button } from "@/components/UI/Button";
 import { Card, CardContent, CardFooter } from "@/components/UI/Card";
 import { EXTENSION_MESSAGES } from "@/scripts/constants/streamConstants";
@@ -7,7 +6,7 @@ import {
   DAppResponseType,
 } from "@/scripts/middlewares/middlewareTypes";
 import StorageUtil from "@/utilities/storageUtil";
-import { Check, Loader, ShieldAlert, X } from "lucide-react";
+import { Check, Loader, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 import ConnectionBadge from "../Body/Home/ConnectionBadge/ConnectionBadge";
@@ -79,14 +78,6 @@ const DAppRequest = () => {
               addToResponseData={addToResponseData}
               decideCanProceed={decideCanProceed}
             />
-            <Alert>
-              <ShieldAlert className="h-4 w-4" />
-              <AlertTitle>Careful!</AlertTitle>
-              <AlertDescription className="text-xs">
-                There are token approval scams out there. Ensure you only
-                connect your wallet with the websites you trust.
-              </AlertDescription>
-            </Alert>
             <div className="font-bold">
               Do you trust and want to allow this?
             </div>

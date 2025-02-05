@@ -51,6 +51,14 @@ describe("ZondRequestAccount", () => {
     const checkBox = screen.getByRole("checkbox", {
       name: "0x 2090E 9F387 71876 FB6Fc 51a6b 46412 1d3cC 093A1",
     });
+    expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
+      "Careful!",
+    );
+    expect(
+      screen.getByText(
+        "There are token approval scams out there. Ensure you only connect your wallet with the websites you trust.",
+      ),
+    ).toBeInTheDocument();
     expect(checkBox).toBeInTheDocument();
     expect(checkBox).toBeEnabled();
     expect(screen.getByText("0x")).toBeInTheDocument();

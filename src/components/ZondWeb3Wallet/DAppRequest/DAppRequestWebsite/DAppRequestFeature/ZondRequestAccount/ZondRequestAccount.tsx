@@ -1,6 +1,8 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/UI/Alert";
 import { Checkbox } from "@/components/UI/Checkbox";
 import AccountId from "@/components/ZondWeb3Wallet/Body/AccountList/AccountId/AccountId";
 import { useStore } from "@/stores/store";
+import { ShieldAlert } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
@@ -62,6 +64,14 @@ const ZondRequestAccount = observer(
         ) : (
           <div>No accounts available to connect</div>
         )}
+        <Alert className="mt-2">
+          <ShieldAlert className="h-4 w-4" />
+          <AlertTitle>Careful!</AlertTitle>
+          <AlertDescription className="text-xs">
+            There are token approval scams out there. Ensure you only connect
+            your wallet with the websites you trust.
+          </AlertDescription>
+        </Alert>
       </div>
     );
   },

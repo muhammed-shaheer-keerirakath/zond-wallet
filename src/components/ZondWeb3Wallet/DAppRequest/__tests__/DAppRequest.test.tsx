@@ -49,22 +49,16 @@ describe("DAppRequest", () => {
     expect(
       screen.getByRole("button", { name: "Zond Local Node" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Your permission required")).toBeInTheDocument()
+    expect(screen.getByText("Your permission required")).toBeInTheDocument();
     expect(
       screen.getByText(
         "Here is a request coming in. Go through the details and decide if it needs to be allowed.",
       ),
     ).toBeInTheDocument();
     expect(screen.getByText("Mocked DApp Request Website")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
-      "Careful!",
-    );
     expect(
-      screen.getByText(
-        "There are token approval scams out there. Ensure you only connect your wallet with the websites you trust.",
-      ),
+      screen.getByText("Do you trust and want to allow this?"),
     ).toBeInTheDocument();
-    expect(screen.getByText("Do you trust and want to allow this?")).toBeInTheDocument();
     const noButton = screen.getByRole("button", { name: "No" });
     const yesButton = screen.getByRole("button", { name: "Yes" });
     expect(noButton).toBeInTheDocument();
