@@ -23,13 +23,7 @@ const DAppRequestFeature = ({
         />
       );
     case RESTRICTED_METHODS.ZOND_SEND_TRANSACTION:
-      return (
-        <ZondSendTransaction
-          dAppRequestData={dAppRequestData}
-          addToResponseData={addToResponseData}
-          decideCanProceed={decideCanProceed}
-        />
-      );
+      return <ZondSendTransaction dAppRequestData={dAppRequestData} />;
     default:
       return <></>;
   }
