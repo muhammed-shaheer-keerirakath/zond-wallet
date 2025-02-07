@@ -9,8 +9,16 @@ import DAppRequestWebsite from "./DAppRequestWebsite/DAppRequestWebsite";
 
 const DAppRequest = observer(() => {
   const { dAppRequestStore } = useStore();
-  const { dAppRequestData, readDAppRequestData, onPermission, canProceed } =
-    dAppRequestStore;
+  const {
+    dAppRequestData,
+    readDAppRequestData,
+    onPermission,
+    canProceed,
+    approvalProcessingStatus,
+  } = dAppRequestStore;
+  const { isProcessing, hasApproved } = approvalProcessingStatus;
+  const isRejectionProcessing = isProcessing && !hasApproved;
+  const isApprovalProcessing = isProcessing && hasApproved;
 
   useEffect(() => {
     readDAppRequestData();
@@ -47,18 +55,27 @@ const DAppRequest = observer(() => {
               className="w-full"
               variant="outline"
               type="button"
+              disabled={isProcessing}
               onClick={() => onPermission(false)}
             >
-              <X className="mr-2 h-4 w-4" />
+              {isRejectionProcessing ? (
+                <Loader className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <X className="mr-2 h-4 w-4" />
+              )}
               No
             </Button>
             <Button
               className="w-full"
               type="button"
-              disabled={!canProceed}
+              disabled={!canProceed || isProcessing}
               onClick={() => onPermission(true)}
             >
-              <Check className="mr-2 h-4 w-4" />
+              {isApprovalProcessing ? (
+                <Loader className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Check className="mr-2 h-4 w-4" />
+              )}
               Yes
             </Button>
           </CardFooter>

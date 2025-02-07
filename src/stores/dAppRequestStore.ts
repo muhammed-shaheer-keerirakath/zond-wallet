@@ -11,6 +11,9 @@ class DAppRequestStore {
   dAppRequestData?: DAppRequestType;
   responseData: any = {};
   canProceed: boolean = false;
+  onPermissionCallBack: (hasApproved: boolean) => Promise<void> = async () =>
+    undefined;
+  approvalProcessingStatus = { isProcessing: false, hasApproved: false };
 
   constructor() {
     makeAutoObservable(this, {
@@ -18,8 +21,10 @@ class DAppRequestStore {
       responseData: observable.struct,
       readDAppRequestData: action.bound,
       addToResponseData: action.bound,
-      decideCanProceed: action.bound,
+      setCanProceed: action.bound,
+      setOnPermissionCallBack: action.bound,
       onPermission: action.bound,
+      approvalProcessingStatus: observable.struct,
     });
   }
 
@@ -32,12 +37,18 @@ class DAppRequestStore {
     this.responseData = { ...this.responseData, ...data };
   }
 
-  decideCanProceed(decision: boolean) {
+  setCanProceed(decision: boolean) {
     this.canProceed = decision;
+  }
+
+  setOnPermissionCallBack(callBack: (hasApproved: boolean) => Promise<void>) {
+    this.onPermissionCallBack = callBack;
   }
 
   async onPermission(hasApproved: boolean) {
     try {
+      this.approvalProcessingStatus = { isProcessing: true, hasApproved };
+      await this.onPermissionCallBack(hasApproved);
       await StorageUtil.clearDAppRequestData();
       const response: DAppResponseType = {
         method: this.dAppRequestData?.method ?? "",
@@ -52,6 +63,10 @@ class DAppRequestStore {
         error,
       );
     } finally {
+      this.approvalProcessingStatus = {
+        isProcessing: false,
+        hasApproved: false,
+      };
       window.close();
     }
   }

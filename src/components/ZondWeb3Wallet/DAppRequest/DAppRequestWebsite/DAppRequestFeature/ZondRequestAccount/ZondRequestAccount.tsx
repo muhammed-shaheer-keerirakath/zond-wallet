@@ -12,7 +12,7 @@ const ZondRequestAccount = observer(() => {
   const availableAccounts = zondAccounts.accounts.map(
     (account) => account.accountAddress,
   );
-  const { addToResponseData, decideCanProceed } = dAppRequestStore;
+  const { addToResponseData, setCanProceed } = dAppRequestStore;
 
   const [response, setResponse] = useState<{ accounts: string[] }>({
     accounts: [],
@@ -29,7 +29,7 @@ const ZondRequestAccount = observer(() => {
     } else {
       accounts = accounts.filter((account) => account !== selectedAccount);
     }
-    decideCanProceed(accounts.length > 0);
+    setCanProceed(accounts.length > 0);
     setResponse({ accounts: [...accounts] });
   };
 
