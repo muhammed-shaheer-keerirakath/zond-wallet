@@ -9,9 +9,8 @@ import { useEffect, useState } from "react";
 const ZondRequestAccount = observer(() => {
   const { zondStore, dAppRequestStore } = useStore();
   const { zondAccounts } = zondStore;
-  const availableAccounts = zondAccounts.accounts.map(
-    (account) => account.accountAddress,
-  );
+  const { accounts, isLoading } = zondAccounts;
+  const availableAccounts = accounts.map((account) => account.accountAddress);
   const { addToResponseData, setCanProceed } = dAppRequestStore;
 
   const [response, setResponse] = useState<{ accounts: string[] }>({
@@ -40,7 +39,11 @@ const ZondRequestAccount = observer(() => {
         <div>Select the accounts you want this site to connect with</div>
       </div>
       <div className="flex flex-col gap-4">
-        {!!availableAccounts.length ? (
+        {isLoading ? (
+          <div className="flex h-12 w-full animate-pulse items-center justify-between">
+            <div className="h-full w-full rounded-md bg-accent" />
+          </div>
+        ) : !!availableAccounts.length ? (
           availableAccounts.map((account) => (
             <div className="flex items-start space-x-3">
               <Checkbox
