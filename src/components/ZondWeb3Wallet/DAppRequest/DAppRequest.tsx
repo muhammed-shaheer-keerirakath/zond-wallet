@@ -9,15 +9,11 @@ import DAppRequestWebsite from "./DAppRequestWebsite/DAppRequestWebsite";
 
 const DAppRequest = observer(() => {
   const { dAppRequestStore } = useStore();
-  const {
-    dAppRequestData,
-    readDAppRequestData: setDAppRequestData,
-    onPermission,
-    canProceed,
-  } = dAppRequestStore;
+  const { dAppRequestData, readDAppRequestData, onPermission, canProceed } =
+    dAppRequestStore;
 
   useEffect(() => {
-    setDAppRequestData();
+    readDAppRequestData();
   }, []);
 
   return dAppRequestData ? (

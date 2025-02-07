@@ -21,10 +21,7 @@ class DAppRequestStore {
       decideCanProceed: action.bound,
       onPermission: action.bound,
     });
-    this.initializeDAppRequestData();
   }
-
-  initializeDAppRequestData() {}
 
   async readDAppRequestData() {
     const storedDAppRequestData = await StorageUtil.getDAppRequestData();
