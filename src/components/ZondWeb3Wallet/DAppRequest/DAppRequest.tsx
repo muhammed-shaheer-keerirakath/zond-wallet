@@ -15,9 +15,8 @@ const DAppRequest = observer(() => {
   return dAppRequestData ? (
     <DAppRequestContent />
   ) : (
-    <div className="flex flex-col items-center justify-center gap-4 pt-48">
+    <div className="flex justify-center pt-48">
       <Loader className="animate-spin" size={86} />
-      Checking for pending requests...
     </div>
   );
 });
