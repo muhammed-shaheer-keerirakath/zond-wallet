@@ -4,7 +4,7 @@ import { useStore } from "@/stores/store";
 import { Check, Loader, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import ConnectionBadge from "../../Body/Home/ConnectionBadge/ConnectionBadge";
-import DAppRequestWebsite from "../DAppRequestWebsite/DAppRequestWebsite";
+import DAppRequestWebsite from "./DAppRequestWebsite/DAppRequestWebsite";
 
 const DAppRequestContent = observer(() => {
   const { zondStore, dAppRequestStore } = useStore();
