@@ -1,58 +1,24 @@
 import { Button } from "@/components/UI/Button";
 import { Card, CardContent, CardFooter } from "@/components/UI/Card";
-import { EXTENSION_MESSAGES } from "@/scripts/constants/streamConstants";
-import {
-  DAppRequestType,
-  DAppResponseType,
-} from "@/scripts/middlewares/middlewareTypes";
-import StorageUtil from "@/utilities/storageUtil";
+import { useStore } from "@/stores/store";
 import { Check, Loader, X } from "lucide-react";
-import { useEffect, useState } from "react";
-import browser from "webextension-polyfill";
+import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
 import ConnectionBadge from "../Body/Home/ConnectionBadge/ConnectionBadge";
 import DAppRequestWebsite from "./DAppRequestWebsite/DAppRequestWebsite";
 
-const DAppRequest = () => {
-  const [dAppRequestData, setDAppRequestData] = useState<
-    DAppRequestType | undefined
-  >();
-  const [responseData, setResponseData] = useState<any>({});
-  const [canProceed, setCanProceed] = useState(false);
+const DAppRequest = observer(() => {
+  const { dAppRequestStore } = useStore();
+  const {
+    dAppRequestData,
+    readDAppRequestData: setDAppRequestData,
+    onPermission,
+    canProceed,
+  } = dAppRequestStore;
 
   useEffect(() => {
-    (async () => {
-      const storedDAppRequestData = await StorageUtil.getDAppRequestData();
-      setDAppRequestData(storedDAppRequestData);
-    })();
+    setDAppRequestData();
   }, []);
-
-  const addToResponseData = (data: any) => {
-    setResponseData({ ...responseData, ...data });
-  };
-
-  const decideCanProceed = (decision: boolean) => {
-    setCanProceed(decision);
-  };
-
-  const onPermission = async (hasApproved: boolean) => {
-    try {
-      await StorageUtil.clearDAppRequestData();
-      const response: DAppResponseType = {
-        method: dAppRequestData?.method ?? "",
-        action: EXTENSION_MESSAGES.DAPP_RESPONSE,
-        hasApproved,
-        response: responseData,
-      };
-      await browser.runtime.sendMessage(response);
-    } catch (error) {
-      console.warn(
-        "ZondWeb3Wallet: Error while resolving the permission request\n",
-        error,
-      );
-    } finally {
-      window.close();
-    }
-  };
 
   return dAppRequestData ? (
     <>
@@ -75,11 +41,7 @@ const DAppRequest = () => {
             </div>
           </div>
           <CardContent className="space-y-6">
-            <DAppRequestWebsite
-              dAppRequestData={dAppRequestData}
-              addToResponseData={addToResponseData}
-              decideCanProceed={decideCanProceed}
-            />
+            <DAppRequestWebsite />
             <div className="font-bold">
               Do you trust and want to allow this?
             </div>
@@ -113,6 +75,6 @@ const DAppRequest = () => {
       Checking for pending requests
     </div>
   );
-};
+});
 
 export default DAppRequest;

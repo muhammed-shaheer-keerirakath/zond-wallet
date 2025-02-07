@@ -1,32 +1,21 @@
 import { RESTRICTED_METHODS } from "@/scripts/constants/requestConstants";
-import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
+import { useStore } from "@/stores/store";
+import { observer } from "mobx-react-lite";
 import ZondRequestAccount from "./ZondRequestAccount/ZondRequestAccount";
 import ZondSendTransaction from "./ZondSendTransaction/ZondSendTransaction";
 
-type DAppRequestFeatureProps = {
-  dAppRequestData: DAppRequestType;
-  addToResponseData: (data: any) => void;
-  decideCanProceed: (decision: boolean) => void;
-};
+const DAppRequestFeature = observer(() => {
+  const { dAppRequestStore } = useStore();
+  const { dAppRequestData } = dAppRequestStore;
 
-const DAppRequestFeature = ({
-  dAppRequestData,
-  addToResponseData,
-  decideCanProceed,
-}: DAppRequestFeatureProps) => {
   switch (dAppRequestData?.method) {
     case RESTRICTED_METHODS.ZOND_REQUEST_ACCOUNTS:
-      return (
-        <ZondRequestAccount
-          addToResponseData={addToResponseData}
-          decideCanProceed={decideCanProceed}
-        />
-      );
+      return <ZondRequestAccount />;
     case RESTRICTED_METHODS.ZOND_SEND_TRANSACTION:
-      return <ZondSendTransaction dAppRequestData={dAppRequestData} />;
+      return <ZondSendTransaction />;
     default:
       return <></>;
   }
-};
+});
 
 export default DAppRequestFeature;

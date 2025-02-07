@@ -7,17 +7,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/UI/Tooltip";
-import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
+import { useStore } from "@/stores/store";
 import { Copy } from "lucide-react";
+import { observer } from "mobx-react-lite";
 
-type ZondSendTransactionContractDeploymentProps = {
-  dAppRequestData: DAppRequestType;
-};
+const ZondSendTransactionContractDeployment = observer(() => {
+  const { dAppRequestStore } = useStore();
+  const { dAppRequestData } = dAppRequestStore;
 
-const ZondSendTransactionContractDeployment = ({
-  dAppRequestData,
-}: ZondSendTransactionContractDeploymentProps) => {
-  const params = dAppRequestData.params[0];
+  const params = dAppRequestData?.params[0];
   const accountAddress = params?.from;
   const prefix = accountAddress.substring(0, 2);
   const addressSplit: string[] = [];
@@ -80,6 +78,6 @@ const ZondSendTransactionContractDeployment = ({
       </TabsContent>
     </Tabs>
   );
-};
+});
 
 export default ZondSendTransactionContractDeployment;

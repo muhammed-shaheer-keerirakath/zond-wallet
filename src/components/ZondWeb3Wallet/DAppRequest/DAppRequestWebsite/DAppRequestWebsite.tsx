@@ -1,19 +1,13 @@
 import { Card } from "@/components/UI/Card";
 import { Separator } from "@/components/UI/Separator";
-import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
+import { useStore } from "@/stores/store";
+import { observer } from "mobx-react-lite";
 import DAppRequestFeature from "./DAppRequestFeature/DAppRequestFeature";
 
-type DAppRequestWebsiteProps = {
-  dAppRequestData: DAppRequestType;
-  addToResponseData: (data: any) => void;
-  decideCanProceed: (decision: boolean) => void;
-};
+const DAppRequestWebsite = observer(() => {
+  const { dAppRequestStore } = useStore();
+  const { dAppRequestData } = dAppRequestStore;
 
-const DAppRequestWebsite = ({
-  dAppRequestData,
-  addToResponseData,
-  decideCanProceed,
-}: DAppRequestWebsiteProps) => {
   const parsedUrl = new URL(
     dAppRequestData?.requestData?.senderData?.url ?? "",
   );
@@ -35,13 +29,9 @@ const DAppRequestWebsite = ({
         </div>
       </div>
       <Separator />
-      <DAppRequestFeature
-        dAppRequestData={dAppRequestData}
-        addToResponseData={addToResponseData}
-        decideCanProceed={decideCanProceed}
-      />
+      <DAppRequestFeature />
     </Card>
   );
-};
+});
 
 export default DAppRequestWebsite;

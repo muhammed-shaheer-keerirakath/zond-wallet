@@ -1,4 +1,5 @@
-import { DAppRequestType } from "@/scripts/middlewares/middlewareTypes";
+import { useStore } from "@/stores/store";
+import { observer } from "mobx-react-lite";
 import ZondSendTransactionContent from "./ZondSendTransactionContent/ZondSendTransactionContent";
 
 export const SEND_TRANSACTION_TYPES = {
@@ -8,11 +9,10 @@ export const SEND_TRANSACTION_TYPES = {
   UNKNOWN: "UNKNOWN",
 } as const;
 
-type ZondSendTransactionProps = {
-  dAppRequestData: DAppRequestType;
-};
+const ZondSendTransaction = observer(() => {
+  const { dAppRequestStore } = useStore();
+  const { dAppRequestData } = dAppRequestStore;
 
-const ZondSendTransaction = ({ dAppRequestData }: ZondSendTransactionProps) => {
   let transactionHeading = "";
   let transactionSubHeading = "";
   const transactionType = getTransactionType(dAppRequestData?.params[0]);
@@ -45,13 +45,10 @@ const ZondSendTransaction = ({ dAppRequestData }: ZondSendTransactionProps) => {
         <div>{transactionSubHeading}</div>
       </div>
       <div className="flex flex-col gap-4">
-        <ZondSendTransactionContent
-          transactionType={transactionType}
-          dAppRequestData={dAppRequestData}
-        />
+        <ZondSendTransactionContent transactionType={transactionType} />
       </div>
     </div>
   );
-};
+});
 
 export default ZondSendTransaction;
