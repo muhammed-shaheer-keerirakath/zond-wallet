@@ -49,6 +49,7 @@ class ZondStore {
       setActiveAccount: action.bound,
       fetchZondConnection: action.bound,
       fetchAccounts: action.bound,
+      getGasFeeData: action.bound,
       getAccountBalance: action.bound,
       getNativeTokenGas: action.bound,
       signAndSendNativeToken: action.bound,
