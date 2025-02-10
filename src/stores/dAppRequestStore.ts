@@ -45,9 +45,16 @@ class DAppRequestStore {
     this.onPermissionCallBack = callBack;
   }
 
+  async setApprovalProcessingStatus(status: {
+    isProcessing: boolean;
+    hasApproved: boolean;
+  }) {
+    this.approvalProcessingStatus = status;
+  }
+
   async onPermission(hasApproved: boolean) {
     try {
-      this.approvalProcessingStatus = { isProcessing: true, hasApproved };
+      this.setApprovalProcessingStatus({ isProcessing: true, hasApproved });
       await this.onPermissionCallBack(hasApproved);
       await StorageUtil.clearDAppRequestData();
       const response: DAppResponseType = {
@@ -63,10 +70,10 @@ class DAppRequestStore {
         error,
       );
     } finally {
-      this.approvalProcessingStatus = {
+      this.setApprovalProcessingStatus({
         isProcessing: false,
         hasApproved: false,
-      };
+      });
       window.close();
     }
   }
