@@ -85,7 +85,13 @@ export const restrictedMethodsMiddleware: JsonRpcMiddleware<
               res.result = accounts;
               break;
             case RESTRICTED_METHODS.ZOND_SEND_TRANSACTION:
-              res.result = restrictedMethodResult?.response?.transactionReceipt;
+              const transactionReceipt =
+                restrictedMethodResult?.response?.transactionReceipt;
+              if (transactionReceipt) {
+                res.result = transactionReceipt;
+              } else {
+                res.error = restrictedMethodResult?.response?.error;
+              }
               break;
             default:
               res.error = providerErrors.unsupportedMethod();

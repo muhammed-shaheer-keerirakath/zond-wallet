@@ -101,6 +101,7 @@ const ZondSendTransactionContractDeployment = observer(() => {
         throw new Error("Transaction could not be signed");
       }
     } catch (error) {
+      addToResponseData({ error });
       console.error("Contract deployment failed:", error);
     }
   };
