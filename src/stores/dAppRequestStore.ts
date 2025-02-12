@@ -34,7 +34,15 @@ class DAppRequestStore {
   }
 
   addToResponseData(data: any) {
-    this.responseData = { ...this.responseData, ...data };
+    const serializableData = JSON.parse(
+      JSON.stringify(data, (_, value) => {
+        if (typeof value === "bigint") {
+          return "0x".concat(value.toString(16));
+        }
+        return value;
+      }),
+    );
+    this.responseData = { ...this.responseData, ...serializableData };
   }
 
   setCanProceed(decision: boolean) {
