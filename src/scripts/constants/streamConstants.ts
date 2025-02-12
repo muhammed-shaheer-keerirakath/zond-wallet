@@ -10,6 +10,7 @@ export const EXTENSION_MESSAGES = {
 export const ZOND_POST_MESSAGE_STREAM = {
   INPAGE: "zond-wallet-in-page",
   CONTENT_SCRIPT: "zond-wallet-content-script",
+  CONTENT_SCRIPT_KEEP_ALIVE: "zond-wallet-content-script-keep-alive",
 } as const;
 
 export const ZOND_WEB3_WALLET_PROVIDER_INFO = {
