@@ -1,3 +1,10 @@
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/UI/AlertDialog";
 import { Button } from "@/components/UI/Button";
 import { Card, CardContent, CardFooter } from "@/components/UI/Card";
 import { useStore } from "@/stores/store";
@@ -86,6 +93,21 @@ const DAppRequestContent = observer(() => {
             </Button>
           </CardFooter>
         </Card>
+        <AlertDialog open={isProcessing}>
+          <AlertDialogContent className="w-80 rounded-md">
+            <AlertDialogHeader className="text-left">
+              <AlertDialogTitle>
+                <div className="flex items-center gap-2">
+                  <Loader className="animate-spin text-foreground" size="18" />
+                  Transaction running
+                </div>
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Please wait. This may take a while.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </>
   );

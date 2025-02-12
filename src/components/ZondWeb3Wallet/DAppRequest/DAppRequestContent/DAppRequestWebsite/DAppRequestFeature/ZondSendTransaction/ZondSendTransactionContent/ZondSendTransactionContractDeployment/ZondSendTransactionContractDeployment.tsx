@@ -38,7 +38,9 @@ const ZondSendTransactionContractDeployment = observer(() => {
     setOnPermissionCallBack,
     setCanProceed,
     addToResponseData,
+    approvalProcessingStatus,
   } = dAppRequestStore;
+  const { isProcessing } = approvalProcessingStatus;
 
   const params = dAppRequestData?.params[0];
   const accountAddress = params?.from;
@@ -114,7 +116,7 @@ const ZondSendTransactionContractDeployment = observer(() => {
   const {
     watch,
     control,
-    formState: { isSubmitting, isValid },
+    formState: { isValid },
   } = form;
 
   useEffect(() => {
@@ -187,7 +189,7 @@ const ZondSendTransactionContractDeployment = observer(() => {
                     {...field}
                     aria-label={field.name}
                     autoComplete="off"
-                    disabled={isSubmitting}
+                    disabled={isProcessing}
                     placeholder="Mnemonic Phrases"
                   />
                 </FormControl>
