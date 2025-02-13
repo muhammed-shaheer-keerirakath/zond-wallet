@@ -1,6 +1,12 @@
 import { Button } from "@/components/UI/Button";
-import { Card, CardContent, CardFooter } from "@/components/UI/Card";
-import ConnectionBadge from "@/components/ZondWeb3Wallet/Body/Home/ConnectionBadge/ConnectionBadge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/UI/Card";
 import { useStore } from "@/stores/store";
 import { Check, CircleCheck, CircleX } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -18,17 +24,19 @@ const DAppRequestCompleted = observer(() => {
   return (
     <>
       <Card className="w-full">
-        <div className="flex justify-center pt-6">
-          <ConnectionBadge isDisabled={true} />
-        </div>
-        <CardContent className="flex flex-col items-center space-y-2 pt-6">
-          {hasApproved ? (
-            <CircleCheck className="h-16 w-16 text-secondary" />
-          ) : (
-            <CircleX className="h-16 w-16 text-secondary" />
-          )}
-          <div className="font-bold">
+        <CardHeader>
+          <CardTitle>That's all!</CardTitle>
+          <CardDescription>
             The request has been {hasApproved ? "approved" : "rejected"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-center">
+            {hasApproved ? (
+              <CircleCheck className="h-16 w-16" />
+            ) : (
+              <CircleX className="h-16 w-16" />
+            )}
           </div>
         </CardContent>
         <CardFooter className="grid grid-cols-2 gap-4">
