@@ -25,7 +25,7 @@ const DAppRequestCompleted = observer(() => {
     <>
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Your response was sent</CardTitle>
+          <CardTitle>That's it!</CardTitle>
           <CardDescription>
             The request has been {hasApproved ? "approved" : "rejected"}
           </CardDescription>
