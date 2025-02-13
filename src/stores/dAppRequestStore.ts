@@ -13,7 +13,11 @@ class DAppRequestStore {
   canProceed: boolean = false;
   onPermissionCallBack: (hasApproved: boolean) => Promise<void> = async () =>
     undefined;
-  approvalProcessingStatus = { isProcessing: false, hasApproved: false };
+  approvalProcessingStatus = {
+    isProcessing: false,
+    hasApproved: false,
+    hasCompleted: false,
+  };
 
   constructor() {
     makeAutoObservable(this, {
@@ -54,17 +58,23 @@ class DAppRequestStore {
   }
 
   async setApprovalProcessingStatus(status: {
-    isProcessing: boolean;
-    hasApproved: boolean;
+    isProcessing?: boolean;
+    hasApproved?: boolean;
+    hasCompleted?: boolean;
   }) {
-    this.approvalProcessingStatus = status;
+    this.approvalProcessingStatus = {
+      ...this.approvalProcessingStatus,
+      ...status,
+    };
   }
 
   async onPermission(hasApproved: boolean) {
     try {
-      this.setApprovalProcessingStatus({ isProcessing: true, hasApproved });
+      this.setApprovalProcessingStatus({
+        isProcessing: true,
+        hasApproved,
+      });
       await this.onPermissionCallBack(hasApproved);
-      await StorageUtil.clearDAppRequestData();
       const response: DAppResponseType = {
         method: this.dAppRequestData?.method ?? "",
         action: EXTENSION_MESSAGES.DAPP_RESPONSE,
@@ -78,11 +88,11 @@ class DAppRequestStore {
         error,
       );
     } finally {
+      await StorageUtil.clearDAppRequestData();
       this.setApprovalProcessingStatus({
         isProcessing: false,
-        hasApproved: false,
+        hasCompleted: true,
       });
-      window.close();
     }
   }
 }
