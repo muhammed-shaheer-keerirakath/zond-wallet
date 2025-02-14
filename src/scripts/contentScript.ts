@@ -192,67 +192,68 @@ const prepareListeners = () => {
     } else if (message.name === EXTENSION_MESSAGES.UNRESTRICTED_METHOD_CALLS) {
       const zond = await getZondInstance();
       const method = message.data.method;
-      switch (method) {
-        case UNRESTRICTED_METHODS.ZOND_GET_BLOCK_BY_NUMBER:
-          // @ts-ignore
-          const [block, hydrated] = message?.data?.params;
-          const blockNumber = await zond.getBlock(block, hydrated);
-          return getSerializableObject(blockNumber);
-        case UNRESTRICTED_METHODS.ZOND_WEB3_WALLET_GET_PROVIDER_STATE:
-          const chainId = (await zond?.getChainId())?.toString() ?? "";
-          const networkVersion = (await zond?.net.getId())?.toString() ?? "";
-          return {
-            chainId: `0x${chainId}`,
-            networkVersion,
-            isUnlocked: false,
-            accounts: [],
-          } as Parameters<BaseProvider["_initializeState"]>[0];
-        case UNRESTRICTED_METHODS.NET_VERSION:
-          const networkId = await zond.net.getId();
-          return "0x".concat(networkId.toString(16));
-        case UNRESTRICTED_METHODS.ZOND_ACCOUNTS:
-          const connectedAccountsData =
-            await StorageUtil.getConnectedAccountsData(
-              new URL(message?.data?.senderData?.url ?? "").origin,
-            );
-          return connectedAccountsData?.accounts ?? [];
-        case UNRESTRICTED_METHODS.WALLET_REVOKE_PERMISSIONS:
-          await StorageUtil.clearConnectedAccountsData(
+      if (method === UNRESTRICTED_METHODS.ZOND_GET_BLOCK_BY_NUMBER) {
+        // @ts-ignore
+        const [block, hydrated] = message?.data?.params;
+        const blockNumber = await zond.getBlock(block, hydrated);
+        return getSerializableObject(blockNumber);
+      } else if (
+        method === UNRESTRICTED_METHODS.ZOND_WEB3_WALLET_GET_PROVIDER_STATE
+      ) {
+        const chainId = (await zond?.getChainId())?.toString() ?? "";
+        const networkVersion = (await zond?.net.getId())?.toString() ?? "";
+        return {
+          chainId: `0x${chainId}`,
+          networkVersion,
+          isUnlocked: false,
+          accounts: [],
+        } as Parameters<BaseProvider["_initializeState"]>[0];
+      } else if (method === UNRESTRICTED_METHODS.NET_VERSION) {
+        const networkId = await zond.net.getId();
+        return "0x".concat(networkId.toString(16));
+      } else if (method === UNRESTRICTED_METHODS.ZOND_ACCOUNTS) {
+        const connectedAccountsData =
+          await StorageUtil.getConnectedAccountsData(
             new URL(message?.data?.senderData?.url ?? "").origin,
           );
-          return "";
-        case UNRESTRICTED_METHODS.ZOND_GET_BALANCE:
-          const [accountAddress, accountBlockNumber] = message.data.params;
-          const balance = await zond?.getBalance(
-            accountAddress,
-            accountBlockNumber,
-          );
-          return "0x".concat(balance.toString(16));
-        case UNRESTRICTED_METHODS.ZOND_ESTIMATE_GAS:
-          const [estimateGasParam] = message.data.params;
-          const estimatedGas = await zond.estimateGas(estimateGasParam);
-          return "0x".concat(estimatedGas.toString(16));
-        case UNRESTRICTED_METHODS.ZOND_BLOCK_NUMBER:
-          const zondBlockNumber = await zond.getBlockNumber();
-          return "0x".concat(zondBlockNumber.toString(16));
-        case UNRESTRICTED_METHODS.ZOND_GET_TRANSACTION_RECEIPT:
-          const [txHashForTransactionReceipt] = message.data.params;
-          const transactionReceipt = await zond.getTransactionReceipt(
-            txHashForTransactionReceipt,
-          );
-          return getSerializableObject(transactionReceipt);
-        case UNRESTRICTED_METHODS.ZOND_GET_TRANSACTION_BY_HASH:
-          const [txHashForTransactionByHash] = message.data.params;
-          const transactionDetails = await zond.getTransaction(
-            txHashForTransactionByHash,
-          );
-          return getSerializableObject(transactionDetails);
-        case UNRESTRICTED_METHODS.ZOND_CALL:
-          const [transactionObj, blockParam] = message.data.params;
-          const zondCallResponse = await zond.call(transactionObj, blockParam);
-          return zondCallResponse;
-        default:
-          return "";
+        return connectedAccountsData?.accounts ?? [];
+      } else if (method === UNRESTRICTED_METHODS.WALLET_REVOKE_PERMISSIONS) {
+        await StorageUtil.clearConnectedAccountsData(
+          new URL(message?.data?.senderData?.url ?? "").origin,
+        );
+        return "";
+      } else if (method === UNRESTRICTED_METHODS.ZOND_GET_BALANCE) {
+        const [accountAddress, accountBlockNumber] = message.data.params;
+        const balance = await zond?.getBalance(
+          accountAddress,
+          accountBlockNumber,
+        );
+        return "0x".concat(balance.toString(16));
+      } else if (method === UNRESTRICTED_METHODS.ZOND_ESTIMATE_GAS) {
+        const [estimateGasParam] = message.data.params;
+        const estimatedGas = await zond.estimateGas(estimateGasParam);
+        return "0x".concat(estimatedGas.toString(16));
+      } else if (method === UNRESTRICTED_METHODS.ZOND_BLOCK_NUMBER) {
+        const zondBlockNumber = await zond.getBlockNumber();
+        return "0x".concat(zondBlockNumber.toString(16));
+      } else if (method === UNRESTRICTED_METHODS.ZOND_GET_TRANSACTION_RECEIPT) {
+        const [txHashForTransactionReceipt] = message.data.params;
+        const transactionReceipt = await zond.getTransactionReceipt(
+          txHashForTransactionReceipt,
+        );
+        return getSerializableObject(transactionReceipt);
+      } else if (method === UNRESTRICTED_METHODS.ZOND_GET_TRANSACTION_BY_HASH) {
+        const [txHashForTransactionByHash] = message.data.params;
+        const transactionDetails = await zond.getTransaction(
+          txHashForTransactionByHash,
+        );
+        return getSerializableObject(transactionDetails);
+      } else if (method === UNRESTRICTED_METHODS.ZOND_CALL) {
+        const [transactionObj, blockParam] = message.data.params;
+        const zondCallResponse = await zond.call(transactionObj, blockParam);
+        return zondCallResponse;
+      } else {
+        return "";
       }
     }
     return "";
