@@ -236,10 +236,17 @@ const prepareListeners = () => {
           const zondBlockNumber = await zond.getBlockNumber();
           return "0x".concat(zondBlockNumber.toString(16));
         case UNRESTRICTED_METHODS.ZOND_GET_TRANSACTION_RECEIPT:
-          const [transactionHash] = message.data.params;
-          const transactionReceipt =
-            await zond.getTransactionReceipt(transactionHash);
+          const [txHashForTransactionReceipt] = message.data.params;
+          const transactionReceipt = await zond.getTransactionReceipt(
+            txHashForTransactionReceipt,
+          );
           return getSerializableObject(transactionReceipt);
+        case UNRESTRICTED_METHODS.ZOND_GET_TRANSACTION_BY_HASH:
+          const [txHashForTransactionByHash] = message.data.params;
+          const transactionDetails = await zond.getTransaction(
+            txHashForTransactionByHash,
+          );
+          return getSerializableObject(transactionDetails);
         default:
           return "";
       }
