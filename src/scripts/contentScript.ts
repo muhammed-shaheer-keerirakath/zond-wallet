@@ -251,11 +251,12 @@ const prepareListeners = () => {
 };
 
 const keepServiceWorkerActive = () => {
-  const port = browser.runtime.connect({
-    name: ZOND_POST_MESSAGE_STREAM.CONTENT_SCRIPT_KEEP_ALIVE,
-  });
   setInterval(() => {
-    port.postMessage(ZOND_POST_MESSAGE_STREAM.CONTENT_SCRIPT_KEEP_ALIVE);
+    browser.runtime
+      .connect({
+        name: ZOND_POST_MESSAGE_STREAM.CONTENT_SCRIPT_KEEP_ALIVE,
+      })
+      .postMessage(ZOND_POST_MESSAGE_STREAM.CONTENT_SCRIPT_KEEP_ALIVE);
   }, 3000);
 };
 
