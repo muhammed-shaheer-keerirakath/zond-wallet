@@ -1,6 +1,6 @@
 import { useStore } from "@/stores/store";
 import { observer } from "mobx-react-lite";
-import ZondSendTransactionContent from "./ZondSendTransactionContent/ZondSendTransactionContent";
+import ZondSendTransactionForContent from "./ZondSendTransactionForContent/ZondSendTransactionForContent";
 
 export const SEND_TRANSACTION_TYPES = {
   CONTRACT_DEPLOYMENT: "CONTRACT_DEPLOYMENT",
@@ -45,7 +45,7 @@ const ZondSendTransaction = observer(() => {
         <div>{transactionSubHeading}</div>
       </div>
       <div className="flex flex-col gap-4">
-        <ZondSendTransactionContent transactionType={transactionType} />
+        <ZondSendTransactionForContent transactionType={transactionType} />
       </div>
     </div>
   );

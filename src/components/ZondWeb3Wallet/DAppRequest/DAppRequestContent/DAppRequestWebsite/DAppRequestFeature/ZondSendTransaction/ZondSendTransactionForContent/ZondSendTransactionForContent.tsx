@@ -25,18 +25,18 @@ import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { SEND_TRANSACTION_TYPES } from "../../ZondSendTransaction";
+import { SEND_TRANSACTION_TYPES } from "../ZondSendTransaction";
 
 const FormSchema = z.object({
   mnemonicPhrases: z.string().min(1, "Mnemonic phrases are required"),
 });
 
-type ZondSendTransactionForContractProps = {
+type ZondSendTransactionForContentProps = {
   transactionType: keyof typeof SEND_TRANSACTION_TYPES;
 };
 
-const ZondSendTransactionForContract = observer(
-  ({ transactionType }: ZondSendTransactionForContractProps) => {
+const ZondSendTransactionForContent = observer(
+  ({ transactionType }: ZondSendTransactionForContentProps) => {
     const { zondStore, dAppRequestStore } = useStore();
     const { zondInstance, getGasFeeData, zondConnection } = zondStore;
     const { isConnected } = zondConnection;
@@ -54,8 +54,9 @@ const ZondSendTransactionForContract = observer(
     const { prefix: prefixFrom, addressSplit: addressSplitFrom } =
       getSplitAddress(accountFromAddress);
     const accountToAddress = params?.to;
-    const { prefix: prefixContract, addressSplit: addressSplitContract } =
+    const { prefix: prefixTo, addressSplit: addressSplitTo } =
       getSplitAddress(accountToAddress);
+    const value = BigInt(params?.value);
     const gasLimit = BigInt(params?.gas);
     const data = params?.data;
 
@@ -138,7 +139,9 @@ const ZondSendTransactionForContract = observer(
         <Tabs defaultValue="details" className="w-full">
           <TabsList>
             <TabsTrigger value="details">Details</TabsTrigger>
-            <TabsTrigger value="data">Data</TabsTrigger>
+            {transactionType !== SEND_TRANSACTION_TYPES.ZND_TRANSFER && (
+              <TabsTrigger value="data">Data</TabsTrigger>
+            )}
           </TabsList>
           <TabsContent value="details" className="rounded-md bg-muted p-2">
             <div className="flex flex-col gap-2">
@@ -146,11 +149,26 @@ const ZondSendTransactionForContract = observer(
                 <div>From address</div>
                 <div className="w-64 font-bold text-secondary">{`${prefixFrom} ${addressSplitFrom.join(" ")}`}</div>
               </div>
-              {transactionType ===
-                SEND_TRANSACTION_TYPES.CONTRACT_INTERACTION && (
+              {(transactionType ===
+                SEND_TRANSACTION_TYPES.CONTRACT_INTERACTION ||
+                transactionType === SEND_TRANSACTION_TYPES.ZND_TRANSFER) && (
                 <div className="flex flex-col gap-1">
-                  <div>Contract address</div>
-                  <div className="w-64 font-bold text-secondary">{`${prefixContract} ${addressSplitContract.join(" ")}`}</div>
+                  <div>
+                    {transactionType ===
+                    SEND_TRANSACTION_TYPES.CONTRACT_INTERACTION
+                      ? "Contract "
+                      : "To "}
+                    address
+                  </div>
+                  <div className="w-64 font-bold text-secondary">{`${prefixTo} ${addressSplitTo.join(" ")}`}</div>
+                </div>
+              )}
+              {transactionType === SEND_TRANSACTION_TYPES.ZND_TRANSFER && (
+                <div className="flex flex-col gap-1">
+                  <div>Value</div>
+                  <div className="font-bold text-secondary">
+                    {value.toString()}
+                  </div>
                 </div>
               )}
               <div className="flex flex-col gap-1">
@@ -161,33 +179,35 @@ const ZondSendTransactionForContract = observer(
               </div>
             </div>
           </TabsContent>
-          <TabsContent value="data" className="rounded-md bg-muted p-2">
-            <div className="flex flex-col gap-1">
-              <div>Data</div>
-              <div className="flex gap-2">
-                <div className="h-[8rem] w-full overflow-hidden break-words font-bold text-secondary">
-                  {data}
+          {transactionType !== SEND_TRANSACTION_TYPES.ZND_TRANSFER && (
+            <TabsContent value="data" className="rounded-md bg-muted p-2">
+              <div className="flex flex-col gap-1">
+                <div>Data</div>
+                <div className="flex gap-2">
+                  <div className="h-[8rem] w-full overflow-hidden break-words font-bold text-secondary">
+                    {data}
+                  </div>
+                  <TooltipProvider>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          className="w-12 hover:text-secondary"
+                          variant="outline"
+                          size="icon"
+                          onClick={copyData}
+                        >
+                          <Copy size="18" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        <Label>Copy Data</Label>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        className="w-12 hover:text-secondary"
-                        variant="outline"
-                        size="icon"
-                        onClick={copyData}
-                      >
-                        <Copy size="18" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <Label>Copy Data</Label>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
               </div>
-            </div>
-          </TabsContent>
+            </TabsContent>
+          )}
         </Tabs>
         <Form {...form}>
           <form
@@ -222,4 +242,4 @@ const ZondSendTransactionForContract = observer(
   },
 );
 
-export default ZondSendTransactionForContract;
+export default ZondSendTransactionForContent;
