@@ -17,6 +17,7 @@ import {
   TooltipTrigger,
 } from "@/components/UI/Tooltip";
 import { getHexSeedFromMnemonic } from "@/functions/getHexSeedFromMnemonic";
+import { getSplitAddress } from "@/functions/getSplitAddress";
 import { useStore } from "@/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Copy } from "lucide-react";
@@ -50,12 +51,12 @@ const ZondSendTransactionForContract = observer(
 
     const params = dAppRequestData?.params[0];
     const accountFromAddress = params?.from;
-    const prefix = accountFromAddress.substring(0, 2);
-    const addressSplit: string[] = [];
-    for (let i = 2; i < accountFromAddress.length; i += 5) {
-      addressSplit.push(accountFromAddress.substring(i, i + 5));
-    }
-    const totalGas = BigInt(params?.gas);
+    const { prefix: prefixFrom, addressSplit: addressSplitFrom } =
+      getSplitAddress(accountFromAddress);
+    const accountToAddress = params?.to;
+    const { prefix: prefixContract, addressSplit: addressSplitContract } =
+      getSplitAddress(accountToAddress);
+    const gasLimit = BigInt(params?.gas);
     const data = params?.data;
 
     useEffect(() => {
@@ -143,19 +144,19 @@ const ZondSendTransactionForContract = observer(
             <div className="flex flex-col gap-2">
               <div className="flex flex-col gap-1">
                 <div>From address</div>
-                <div className="w-64 font-bold text-secondary">{`${prefix} ${addressSplit.join(" ")}`}</div>
+                <div className="w-64 font-bold text-secondary">{`${prefixFrom} ${addressSplitFrom.join(" ")}`}</div>
               </div>
               {transactionType ===
                 SEND_TRANSACTION_TYPES.CONTRACT_INTERACTION && (
                 <div className="flex flex-col gap-1">
-                  <div>To address</div>
-                  <div className="w-64 font-bold text-secondary">{`${prefix} ${addressSplit.join(" ")}`}</div>
+                  <div>Contract address</div>
+                  <div className="w-64 font-bold text-secondary">{`${prefixContract} ${addressSplitContract.join(" ")}`}</div>
                 </div>
               )}
               <div className="flex flex-col gap-1">
                 <div>Gas Limit</div>
                 <div className="font-bold text-secondary">
-                  {totalGas.toString()}
+                  {gasLimit.toString()}
                 </div>
               </div>
             </div>
