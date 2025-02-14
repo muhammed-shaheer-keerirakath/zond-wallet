@@ -247,6 +247,10 @@ const prepareListeners = () => {
             txHashForTransactionByHash,
           );
           return getSerializableObject(transactionDetails);
+        case UNRESTRICTED_METHODS.ZOND_CALL:
+          const [transactionObj, blockParam] = message.data.params;
+          const zondCallResponse = await zond.call(transactionObj, blockParam);
+          return zondCallResponse;
         default:
           return "";
       }
