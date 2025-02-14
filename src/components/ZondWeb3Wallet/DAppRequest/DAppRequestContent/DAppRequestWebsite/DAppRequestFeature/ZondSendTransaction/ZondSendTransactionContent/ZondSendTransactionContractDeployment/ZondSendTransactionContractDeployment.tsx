@@ -96,7 +96,9 @@ const ZondSendTransactionContractDeployment = observer(() => {
         const transactionReceipt = await zondInstance?.sendSignedTransaction(
           signedTransaction?.rawTransaction,
         );
-        addToResponseData({ transactionReceipt });
+        addToResponseData({
+          transactionHash: transactionReceipt?.transactionHash,
+        });
       } else {
         throw new Error("Transaction could not be signed");
       }
