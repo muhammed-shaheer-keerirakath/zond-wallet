@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/UI/Card";
+import { getSplitAddress } from "@/functions/getSplitAddress";
 import { ROUTES } from "@/router/router";
 import { Web3BaseWalletAccount } from "@theqrl/web3";
 import { Check, Copy } from "lucide-react";
@@ -18,11 +19,8 @@ type AccountImportSuccessProps = {
 
 const AccountImportSuccess = ({ account }: AccountImportSuccessProps) => {
   const accountAddress = account?.address ?? "";
-  const accountAddressSplit = [];
-  for (let i = 2; i < accountAddress.length; i += 4) {
-    accountAddressSplit.push(accountAddress.substring(i, i + 4));
-  }
-  const spacedAccountAddress = accountAddressSplit.join(" ");
+  const { prefix, addressSplit } = getSplitAddress(accountAddress);
+  const spacedAccountAddress = addressSplit.join(" ");
 
   const [hasJustCopied, setHasJustCopied] = useState(false);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
@@ -52,7 +50,7 @@ const AccountImportSuccess = ({ account }: AccountImportSuccessProps) => {
       <CardContent className="space-y-8">
         <div className="flex flex-col gap-2">
           <div>Account public address:</div>
-          <div className="font-bold text-secondary">{`0x ${spacedAccountAddress}`}</div>
+          <div className="font-bold text-secondary">{`${prefix} ${spacedAccountAddress}`}</div>
           <div>Your account is successfully imported.</div>
         </div>
       </CardContent>
