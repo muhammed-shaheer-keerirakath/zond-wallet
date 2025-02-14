@@ -7,6 +7,7 @@ export const UNRESTRICTED_METHODS = Object.freeze({
   ZOND_GET_BALANCE: "zond_getBalance",
   ZOND_ESTIMATE_GAS: "zond_estimateGas",
   ZOND_BLOCK_NUMBER: "zond_blockNumber",
+  ZOND_GET_TRANSACTION_RECEIPT: "zond_getTransactionReceipt",
 });
 
 export const RESTRICTED_METHODS = Object.freeze({

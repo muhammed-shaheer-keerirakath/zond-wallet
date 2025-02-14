@@ -3,6 +3,7 @@ import {
   DAppRequestType,
   DAppResponseType,
 } from "@/scripts/middlewares/middlewareTypes";
+import { getSerializableObject } from "@/scripts/utils/scriptUtils";
 import StorageUtil from "@/utilities/storageUtil";
 import { action, makeAutoObservable, observable } from "mobx";
 import browser from "webextension-polyfill";
@@ -38,14 +39,7 @@ class DAppRequestStore {
   }
 
   addToResponseData(data: any) {
-    const serializableData = JSON.parse(
-      JSON.stringify(data, (_, value) => {
-        if (typeof value === "bigint") {
-          return "0x".concat(value.toString(16));
-        }
-        return value;
-      }),
-    );
+    const serializableData = getSerializableObject(data);
     this.responseData = { ...this.responseData, ...serializableData };
   }
 

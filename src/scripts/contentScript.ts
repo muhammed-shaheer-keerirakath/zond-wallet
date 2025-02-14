@@ -17,7 +17,7 @@ import {
   ZOND_POST_MESSAGE_STREAM,
   ZOND_WALLET_PROVIDER_NAME,
 } from "./constants/streamConstants";
-import { checkForLastError } from "./utils/scriptUtils";
+import { checkForLastError, getSerializableObject } from "./utils/scriptUtils";
 
 type MessageType = {
   name: string;
@@ -197,14 +197,7 @@ const prepareListeners = () => {
           // @ts-ignore
           const [block, hydrated] = message?.data?.params;
           const blockNumber = await zond.getBlock(block, hydrated);
-          return JSON.parse(
-            JSON.stringify(blockNumber, (_, value) => {
-              if (typeof value === "bigint") {
-                return "0x".concat(value.toString(16));
-              }
-              return value;
-            }),
-          );
+          return getSerializableObject(blockNumber);
         case UNRESTRICTED_METHODS.ZOND_WEB3_WALLET_GET_PROVIDER_STATE:
           const chainId = (await zond?.getChainId())?.toString() ?? "";
           const networkVersion = (await zond?.net.getId())?.toString() ?? "";
@@ -242,6 +235,11 @@ const prepareListeners = () => {
         case UNRESTRICTED_METHODS.ZOND_BLOCK_NUMBER:
           const zondBlockNumber = await zond.getBlockNumber();
           return "0x".concat(zondBlockNumber.toString(16));
+        case UNRESTRICTED_METHODS.ZOND_GET_TRANSACTION_RECEIPT:
+          const [transactionHash] = message.data.params;
+          const transactionReceipt =
+            await zond.getTransactionReceipt(transactionHash);
+          return getSerializableObject(transactionReceipt);
         default:
           return "";
       }
