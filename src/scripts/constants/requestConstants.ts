@@ -10,6 +10,7 @@ export const UNRESTRICTED_METHODS = Object.freeze({
   ZOND_GET_TRANSACTION_RECEIPT: "zond_getTransactionReceipt",
   ZOND_GET_TRANSACTION_BY_HASH: "zond_getTransactionByHash",
   ZOND_CALL: "zond_call",
+  ZOND_GET_CODE: "zond_getCode",
 });
 
 export const RESTRICTED_METHODS = Object.freeze({

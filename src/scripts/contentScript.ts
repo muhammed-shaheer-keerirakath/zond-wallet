@@ -252,6 +252,10 @@ const prepareListeners = () => {
         const [transactionObj, blockParam] = message.data.params;
         const zondCallResponse = await zond.call(transactionObj, blockParam);
         return zondCallResponse;
+      } else if (method === UNRESTRICTED_METHODS.ZOND_GET_CODE) {
+        const [address, blockNumber] = message.data.params;
+        const byteCode = await zond.getCode(address, blockNumber);
+        return byteCode;
       } else {
         return "";
       }
