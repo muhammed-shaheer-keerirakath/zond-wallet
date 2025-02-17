@@ -184,7 +184,7 @@ const ZondSendTransactionForContent = observer(
               <div className="flex flex-col gap-1">
                 <div>Data</div>
                 <div className="flex gap-2">
-                  <div className="h-[8rem] w-full overflow-hidden break-words font-bold text-secondary">
+                  <div className="max-h-[8rem] w-full overflow-hidden break-words font-bold text-secondary">
                     {data}
                   </div>
                   <TooltipProvider>
