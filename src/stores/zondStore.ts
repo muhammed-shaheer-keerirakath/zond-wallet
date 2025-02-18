@@ -167,7 +167,7 @@ class ZondStore {
           ...this.zondAccounts,
           accounts: storedAccountsList.map((account) => ({
             accountAddress: account,
-            accountBalance: "0",
+            accountBalance: "0 ZND",
           })),
         };
       });
