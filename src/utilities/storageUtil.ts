@@ -1,4 +1,4 @@
-import { ZOND_PROVIDER } from "@/configuration/zondConfig";
+import { BlockchainType, ZOND_PROVIDER } from "@/configuration/zondConfig";
 import {
   ConnectedAccountsDataType,
   DAppRequestType,
@@ -14,7 +14,6 @@ const TOKENS_LIST_IDENTIFIER = "TOKENS_LIST";
 const DAPP_REQUEST_DATA_IDENTIFIER = "DAPP_REQUEST_DATA";
 const CONNECTED_ACCOUNTS_DATA_IDENTIFIER = "CONNECTED_ACCOUNTS_DATA";
 
-type BlockchainType = keyof typeof ZOND_PROVIDER;
 type TransactionValuesType = {
   receiverAddress?: string;
   amount?: number;
