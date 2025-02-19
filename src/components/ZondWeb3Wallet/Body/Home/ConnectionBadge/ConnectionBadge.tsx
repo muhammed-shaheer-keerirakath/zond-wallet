@@ -15,6 +15,7 @@ import { useStore } from "@/stores/store";
 import { cva } from "class-variance-authority";
 import { HardDrive, Network, PlugZap, Workflow, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { useState } from "react";
 
 const networkStatusClasses = cva("h-2 w-2 rounded-full", {
   variants: {
@@ -49,6 +50,8 @@ const ConnectionBadge = observer(
     const { zondConnection, selectBlockchain } = zondStore;
     const { isConnected, blockchain } = zondConnection;
 
+    const [selectedBlockchain, setSelectedBlockchain] = useState(blockchain);
+
     return (
       <Dialog>
         <DialogTrigger asChild disabled={isDisabled}>
@@ -61,7 +64,7 @@ const ConnectionBadge = observer(
                 networkStatus: isConnected,
               })}
             />
-            {ZOND_PROVIDER[blockchain as BlockchainType].name}
+            {ZOND_PROVIDER[blockchain].name}
           </Button>
         </DialogTrigger>
         <DialogContent className="w-80 rounded-md">
@@ -70,8 +73,10 @@ const ConnectionBadge = observer(
           </DialogHeader>
           <div>
             <Tabs
-              defaultValue={ZOND_PROVIDER.LOCAL.id}
-              onValueChange={(value) => {}}
+              defaultValue={blockchain}
+              onValueChange={(value) => {
+                setSelectedBlockchain(value as BlockchainType);
+              }}
             >
               <TabsList className="grid w-full grid-cols-3">
                 {Object.values(ZOND_PROVIDER).map((provider) => {
@@ -106,7 +111,13 @@ const ConnectionBadge = observer(
                 Cancel
               </Button>
             </DialogClose>
-            <Button className="w-full" type="button" onClick={() => {}}>
+            <Button
+              className="w-full"
+              type="button"
+              onClick={() => {
+                selectBlockchain(selectedBlockchain);
+              }}
+            >
               <PlugZap className="mr-2 h-4 w-4" />
               Connect
             </Button>
