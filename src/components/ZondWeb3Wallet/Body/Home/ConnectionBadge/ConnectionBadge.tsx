@@ -81,7 +81,11 @@ const ConnectionBadge = observer(
               <TabsList className="grid w-full grid-cols-3">
                 {Object.values(ZOND_PROVIDER).map((provider) => {
                   return (
-                    <TabsTrigger key={provider.id} value={provider.id}>
+                    <TabsTrigger
+                      key={provider.id}
+                      value={provider.id}
+                      className="data-[state=active]:text-secondary"
+                    >
                       {getConnectionTypeIcon(provider.id)}
                       <span className="text-xs">{provider.name}</span>
                     </TabsTrigger>
