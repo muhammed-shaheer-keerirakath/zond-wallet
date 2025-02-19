@@ -138,9 +138,19 @@ const ZondSendTransactionForContent = observer(
       <div className="flex flex-col gap-6">
         <Tabs defaultValue="details" className="w-full">
           <TabsList>
-            <TabsTrigger value="details">Details</TabsTrigger>
+            <TabsTrigger
+              value="details"
+              className="data-[state=active]:text-secondary"
+            >
+              Details
+            </TabsTrigger>
             {transactionType !== SEND_TRANSACTION_TYPES.ZND_TRANSFER && (
-              <TabsTrigger value="data">Data</TabsTrigger>
+              <TabsTrigger
+                value="data"
+                className="data-[state=active]:text-secondary"
+              >
+                Data
+              </TabsTrigger>
             )}
           </TabsList>
           <TabsContent value="details" className="rounded-md bg-muted p-2">
