@@ -33,8 +33,7 @@ class ZondStore {
   zondConnection = {
     isConnected: false,
     isLoading: false,
-    zondNetworkName: "",
-    blockchain: "",
+    blockchain: ZOND_PROVIDER.LOCAL.id,
   };
   zondAccounts: ZondAccountsType = { accounts: [], isLoading: false };
   activeAccount: ActiveAccountType = { accountAddress: "" };
@@ -62,10 +61,9 @@ class ZondStore {
 
   async initializeBlockchain() {
     const selectedBlockChain = await StorageUtil.getBlockChain();
-    const { name, url } = ZOND_PROVIDER[selectedBlockChain];
+    const { url } = ZOND_PROVIDER[selectedBlockChain];
     this.zondConnection = {
       ...this.zondConnection,
-      zondNetworkName: name,
       blockchain: selectedBlockChain,
     };
     const zondHttpProvider = new Web3.providers.HttpProvider(url);
