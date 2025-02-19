@@ -1,4 +1,7 @@
-import { BlockchainType, ZOND_PROVIDER } from "@/configuration/zondConfig";
+import {
+  BlockchainType,
+  ZOND_PROVIDER,
+} from "@/configuration/zondBlockchainConfig";
 import { NATIVE_TOKEN_UNITS_OF_GAS } from "@/constants/nativeToken";
 import {
   ZRC_20_CONTRACT_ABI,

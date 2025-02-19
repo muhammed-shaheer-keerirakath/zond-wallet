@@ -1,4 +1,7 @@
-import { BlockchainType, ZOND_PROVIDER } from "@/configuration/zondConfig";
+import {
+  BlockchainType,
+  ZOND_PROVIDER,
+} from "@/configuration/zondBlockchainConfig";
 import {
   ConnectedAccountsDataType,
   DAppRequestType,

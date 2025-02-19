@@ -1,5 +1,5 @@
 import { mockedStore } from "@/__mocks__/mockedStore";
-import { ZOND_PROVIDER } from "@/configuration/zondConfig";
+import { ZOND_PROVIDER } from "@/configuration/zondBlockchainConfig";
 import { StoreProvider } from "@/stores/store";
 import { afterEach, describe, expect, it } from "@jest/globals";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";

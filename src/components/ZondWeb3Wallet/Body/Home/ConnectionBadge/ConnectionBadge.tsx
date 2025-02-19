@@ -19,7 +19,10 @@ import {
 } from "@/components/UI/Form";
 import { Input } from "@/components/UI/Input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/UI/tabs";
-import { BlockchainType, ZOND_PROVIDER } from "@/configuration/zondConfig";
+import {
+  BlockchainType,
+  ZOND_PROVIDER,
+} from "@/configuration/zondBlockchainConfig";
 import { useStore } from "@/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cva } from "class-variance-authority";

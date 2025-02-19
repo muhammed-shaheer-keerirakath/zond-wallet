@@ -1,4 +1,4 @@
-import { ZOND_PROVIDER } from "@/configuration/zondConfig";
+import { ZOND_PROVIDER } from "@/configuration/zondBlockchainConfig";
 import StorageUtil from "@/utilities/storageUtil";
 import Web3 from "@theqrl/web3";
 import {
