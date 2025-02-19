@@ -24,7 +24,7 @@ describe("ConnectionBadge", () => {
       mockedStore({
         zondStore: {
           zondConnection: {
-            zondNetworkName: ZOND_PROVIDER.DEV.name,
+            zondNetworkName: ZOND_PROVIDER.LOCAL.name,
           },
         },
       }),
