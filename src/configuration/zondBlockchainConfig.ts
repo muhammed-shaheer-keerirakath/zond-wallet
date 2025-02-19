@@ -1,4 +1,4 @@
-export const ZOND_PROVIDER = {
+export const ZOND_BLOCKCHAIN = {
   LOCAL: {
     id: "LOCAL",
     isConfigurationRequired: true,
@@ -25,4 +25,4 @@ export const ZOND_PROVIDER = {
   },
 };
 
-export type BlockchainType = keyof typeof ZOND_PROVIDER;
+export type BlockchainType = keyof typeof ZOND_BLOCKCHAIN;

@@ -1,4 +1,4 @@
-import { ZOND_PROVIDER } from "@/configuration/zondBlockchainConfig";
+import { ZOND_BLOCKCHAIN } from "@/configuration/zondBlockchainConfig";
 import StorageUtil from "@/utilities/storageUtil";
 import Web3 from "@theqrl/web3";
 import {
@@ -37,7 +37,7 @@ let hasExtensionConnectSent = false;
 
 const getZondInstance = async () => {
   const selectedBlockChain = await StorageUtil.getBlockChain();
-  const { url } = ZOND_PROVIDER[selectedBlockChain];
+  const { url } = ZOND_BLOCKCHAIN[selectedBlockChain];
   const zondHttpProvider = new Web3.providers.HttpProvider(url);
   const { zond } = new Web3({ provider: zondHttpProvider });
   return zond;

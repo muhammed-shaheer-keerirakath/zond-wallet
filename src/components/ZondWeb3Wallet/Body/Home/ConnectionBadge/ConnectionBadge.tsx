@@ -21,7 +21,7 @@ import { Input } from "@/components/UI/Input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/UI/tabs";
 import {
   BlockchainType,
-  ZOND_PROVIDER,
+  ZOND_BLOCKCHAIN,
 } from "@/configuration/zondBlockchainConfig";
 import { useStore } from "@/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,9 +46,9 @@ const networkStatusClasses = cva("h-2 w-2 rounded-full", {
 
 const getConnectionTypeIcon = (blockchain: string) => {
   switch (blockchain) {
-    case ZOND_PROVIDER.TEST_NET.id:
+    case ZOND_BLOCKCHAIN.TEST_NET.id:
       return <Workflow className="mr-1 h-3 w-3" />;
-    case ZOND_PROVIDER.MAIN_NET.id:
+    case ZOND_BLOCKCHAIN.MAIN_NET.id:
       return <Network className="mr-1 h-3 w-3" />;
     default:
       return <HardDrive className="mr-1 h-3 w-3" />;
@@ -81,12 +81,12 @@ const ConnectionBadge = observer(
 
     const [selectedBlockchain, setSelectedBlockchain] = useState(blockchain);
     const [isValidationRequired, setIsValidationRequired] = useState(
-      ZOND_PROVIDER[selectedBlockchain].isConfigurationRequired,
+      ZOND_BLOCKCHAIN[selectedBlockchain].isConfigurationRequired,
     );
 
     useEffect(() => {
       setIsValidationRequired(
-        ZOND_PROVIDER[selectedBlockchain].isConfigurationRequired,
+        ZOND_BLOCKCHAIN[selectedBlockchain].isConfigurationRequired,
       );
     }, [selectedBlockchain]);
 
@@ -129,7 +129,7 @@ const ConnectionBadge = observer(
                     networkStatus: isConnected,
                   })}
                 />
-                {ZOND_PROVIDER[blockchain].name}
+                {ZOND_BLOCKCHAIN[blockchain].name}
               </Button>
             </DialogTrigger>
             <DialogContent className="w-80 rounded-md">
@@ -144,7 +144,7 @@ const ConnectionBadge = observer(
                   }}
                 >
                   <TabsList className="grid w-full grid-cols-3">
-                    {Object.values(ZOND_PROVIDER).map((provider) => {
+                    {Object.values(ZOND_BLOCKCHAIN).map((provider) => {
                       return (
                         <TabsTrigger
                           key={provider.id}
@@ -157,7 +157,7 @@ const ConnectionBadge = observer(
                       );
                     })}
                   </TabsList>
-                  {Object.values(ZOND_PROVIDER).map((provider) => {
+                  {Object.values(ZOND_BLOCKCHAIN).map((provider) => {
                     return (
                       <TabsContent key={provider.id} value={provider.id}>
                         <Card className="p-2">

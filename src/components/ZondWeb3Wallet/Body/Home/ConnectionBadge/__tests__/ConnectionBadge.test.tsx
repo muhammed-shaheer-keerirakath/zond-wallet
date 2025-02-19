@@ -1,5 +1,5 @@
 import { mockedStore } from "@/__mocks__/mockedStore";
-import { ZOND_PROVIDER } from "@/configuration/zondBlockchainConfig";
+import { ZOND_BLOCKCHAIN } from "@/configuration/zondBlockchainConfig";
 import { StoreProvider } from "@/stores/store";
 import { afterEach, describe, expect, it } from "@jest/globals";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
@@ -24,7 +24,7 @@ describe("ConnectionBadge", () => {
       mockedStore({
         zondStore: {
           zondConnection: {
-            zondNetworkName: ZOND_PROVIDER.LOCAL.name,
+            zondNetworkName: ZOND_BLOCKCHAIN.LOCAL.name,
           },
         },
       }),
@@ -40,7 +40,7 @@ describe("ConnectionBadge", () => {
       mockedStore({
         zondStore: {
           zondConnection: {
-            zondNetworkName: ZOND_PROVIDER.TEST_NET.name,
+            zondNetworkName: ZOND_BLOCKCHAIN.TEST_NET.name,
           },
         },
       }),
@@ -56,7 +56,7 @@ describe("ConnectionBadge", () => {
       mockedStore({
         zondStore: {
           zondConnection: {
-            zondNetworkName: ZOND_PROVIDER.MAIN_NET.name,
+            zondNetworkName: ZOND_BLOCKCHAIN.MAIN_NET.name,
           },
         },
       }),

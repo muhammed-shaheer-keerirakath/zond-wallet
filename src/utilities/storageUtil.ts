@@ -1,6 +1,6 @@
 import {
   BlockchainType,
-  ZOND_PROVIDER,
+  ZOND_BLOCKCHAIN,
 } from "@/configuration/zondBlockchainConfig";
 import {
   ConnectedAccountsDataType,
@@ -142,7 +142,7 @@ class StorageUtil {
   }
 
   static async getBlockChain() {
-    const DEFAULT_BLOCKCHAIN = ZOND_PROVIDER.MAIN_NET.id;
+    const DEFAULT_BLOCKCHAIN = ZOND_BLOCKCHAIN.MAIN_NET.id;
     const storedBlockchain = await browser.storage.local.get(
       BLOCKCHAIN_SELECTION_IDENTIFIER,
     );
