@@ -9,7 +9,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/UI/Dialog";
-import { Form } from "@/components/UI/Form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/UI/Form";
+import { Input } from "@/components/UI/Input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/UI/tabs";
 import { BlockchainType, ZOND_PROVIDER } from "@/configuration/zondConfig";
 import { useStore } from "@/stores/store";
@@ -99,6 +107,7 @@ const ConnectionBadge = observer(
     });
     const {
       handleSubmit,
+      control,
       reset,
       formState: { isSubmitting, isValid },
     } = form;
@@ -149,10 +158,53 @@ const ConnectionBadge = observer(
                     return (
                       <TabsContent key={provider.id} value={provider.id}>
                         <Card className="p-2">
-                          <div className="space-y-2">
+                          <div className="space-y-4">
                             <div>{provider.description}</div>
                             {provider.isConfigurationRequired && (
-                              <div>the form for ip and port</div>
+                              <div className="space-y-4">
+                                <FormField
+                                  control={control}
+                                  name="ipAddress"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormControl>
+                                        <Input
+                                          {...field}
+                                          aria-label={field.name}
+                                          disabled={isSubmitting}
+                                          placeholder="http://127.0.0.1"
+                                          type="text"
+                                        />
+                                      </FormControl>
+                                      <FormDescription>
+                                        Enter the IP address
+                                      </FormDescription>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                                <FormField
+                                  control={control}
+                                  name="port"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormControl>
+                                        <Input
+                                          {...field}
+                                          aria-label={field.name}
+                                          disabled={isSubmitting}
+                                          placeholder="8545"
+                                          type="text"
+                                        />
+                                      </FormControl>
+                                      <FormDescription>
+                                        Enter the port number
+                                      </FormDescription>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                              </div>
                             )}
                           </div>
                         </Card>
