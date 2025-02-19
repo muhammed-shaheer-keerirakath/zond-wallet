@@ -9,10 +9,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/UI/Dialog";
-import { ZOND_PROVIDER } from "@/configuration/zondConfig";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/UI/tabs";
+import { BlockchainType, ZOND_PROVIDER } from "@/configuration/zondConfig";
 import { useStore } from "@/stores/store";
 import { cva } from "class-variance-authority";
-import { PlugZap, X } from "lucide-react";
+import { HardDrive, Network, PlugZap, Workflow, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
 const networkStatusClasses = cva("h-2 w-2 rounded-full", {
@@ -27,16 +28,16 @@ const networkStatusClasses = cva("h-2 w-2 rounded-full", {
   },
 });
 
-const blockchainSelectionClasses = cva("cursor-pointer ", {
-  variants: {
-    isSelected: {
-      true: ["text-constructive focus:text-constructive"],
-    },
-  },
-  defaultVariants: {
-    isSelected: false,
-  },
-});
+const getConnectionTypeIcon = (blockchain: string) => {
+  switch (blockchain) {
+    case ZOND_PROVIDER.TEST_NET.id:
+      return <Workflow className="mr-1 h-3 w-3" />;
+    case ZOND_PROVIDER.MAIN_NET.id:
+      return <Network className="mr-1 h-3 w-3" />;
+    default:
+      return <HardDrive className="mr-1 h-3 w-3" />;
+  }
+};
 
 type ConnectionBadgeProps = {
   isDisabled?: boolean;
@@ -46,36 +47,58 @@ const ConnectionBadge = observer(
   ({ isDisabled = false }: ConnectionBadgeProps) => {
     const { zondStore } = useStore();
     const { zondConnection, selectBlockchain } = zondStore;
-    const { isConnected, zondNetworkName } = zondConnection;
-
-    const { DEV, TEST_NET, MAIN_NET } = ZOND_PROVIDER;
-    const [isDevNetwork, isTestNetwork, isMainNetwork] = [
-      DEV.name === zondNetworkName,
-      TEST_NET.name === zondNetworkName,
-      MAIN_NET.name === zondNetworkName,
-    ];
+    const { isConnected, blockchain } = zondConnection;
 
     return (
       <Dialog>
-        <DialogTrigger asChild>
+        <DialogTrigger asChild disabled={isDisabled}>
           <Button
             variant="outline"
             className="flex items-center gap-2 rounded-full px-4 py-2 text-foreground"
-            disabled={isDisabled}
           >
             <Card
               className={networkStatusClasses({
                 networkStatus: isConnected,
               })}
             />
-            {zondNetworkName}
+            {ZOND_PROVIDER[blockchain as BlockchainType].name}
           </Button>
         </DialogTrigger>
         <DialogContent className="w-80 rounded-md">
           <DialogHeader className="text-left">
             <DialogTitle>Select Blockchain</DialogTitle>
           </DialogHeader>
-          <div>content</div>
+          <div>
+            <Tabs
+              defaultValue={ZOND_PROVIDER.LOCAL.id}
+              onValueChange={(value) => {}}
+            >
+              <TabsList className="grid w-full grid-cols-3">
+                {Object.values(ZOND_PROVIDER).map((provider) => {
+                  return (
+                    <TabsTrigger key={provider.id} value={provider.id}>
+                      {getConnectionTypeIcon(provider.id)}
+                      <span className="text-xs">{provider.name}</span>
+                    </TabsTrigger>
+                  );
+                })}
+              </TabsList>
+              {Object.values(ZOND_PROVIDER).map((provider) => {
+                return (
+                  <TabsContent key={provider.id} value={provider.id}>
+                    <Card className="p-2">
+                      <div className="space-y-2">
+                        <div>{provider.description}</div>
+                        {provider.isConfigurationRequired && (
+                          <div>the form for ip and port</div>
+                        )}
+                      </div>
+                    </Card>
+                  </TabsContent>
+                );
+              })}
+            </Tabs>
+          </div>
           <DialogFooter className="flex flex-row gap-4">
             <DialogClose asChild>
               <Button className="w-full" type="button" variant="outline">
