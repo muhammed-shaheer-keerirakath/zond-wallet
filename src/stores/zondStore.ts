@@ -1,4 +1,4 @@
-import { ZOND_PROVIDER } from "@/configuration/zondConfig";
+import { BlockchainType, ZOND_PROVIDER } from "@/configuration/zondConfig";
 import { NATIVE_TOKEN_UNITS_OF_GAS } from "@/constants/nativeToken";
 import {
   ZRC_20_CONTRACT_ABI,
@@ -33,7 +33,7 @@ class ZondStore {
   zondConnection = {
     isConnected: false,
     isLoading: false,
-    blockchain: ZOND_PROVIDER.LOCAL.id,
+    blockchain: ZOND_PROVIDER.LOCAL.id as BlockchainType,
   };
   zondAccounts: ZondAccountsType = { accounts: [], isLoading: false };
   activeAccount: ActiveAccountType = { accountAddress: "" };
@@ -75,7 +75,7 @@ class ZondStore {
     await this.validateActiveAccount();
   }
 
-  async selectBlockchain(selectedBlockchain: string) {
+  async selectBlockchain(selectedBlockchain: BlockchainType) {
     await StorageUtil.setBlockChain(selectedBlockchain);
     await this.initializeBlockchain();
   }

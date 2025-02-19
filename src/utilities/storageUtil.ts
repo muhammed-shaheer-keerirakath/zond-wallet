@@ -132,7 +132,7 @@ class StorageUtil {
    * A function for storing the blockchain selection.
    * Call the getBlockChain function to retrieve the stored value.
    */
-  static async setBlockChain(selectedBlockchain: string) {
+  static async setBlockChain(selectedBlockchain: BlockchainType) {
     await browser.storage.local.set({
       [BLOCKCHAIN_SELECTION_IDENTIFIER]: selectedBlockchain,
     });
