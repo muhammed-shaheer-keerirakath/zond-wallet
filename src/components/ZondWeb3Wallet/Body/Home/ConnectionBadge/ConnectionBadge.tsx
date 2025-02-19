@@ -174,6 +174,7 @@ const ConnectionBadge = observer(
                                           disabled={isSubmitting}
                                           placeholder="http://127.0.0.1"
                                           type="text"
+                                          autoComplete="off"
                                         />
                                       </FormControl>
                                       <FormDescription>
@@ -195,6 +196,7 @@ const ConnectionBadge = observer(
                                           disabled={isSubmitting}
                                           placeholder="8545"
                                           type="text"
+                                          autoComplete="off"
                                         />
                                       </FormControl>
                                       <FormDescription>
