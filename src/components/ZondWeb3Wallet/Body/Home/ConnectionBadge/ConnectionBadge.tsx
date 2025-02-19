@@ -1,19 +1,18 @@
 import { Button } from "@/components/UI/Button";
 import { Card } from "@/components/UI/Card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/UI/DropdownMenu";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/UI/Dialog";
 import { ZOND_PROVIDER } from "@/configuration/zondConfig";
 import { useStore } from "@/stores/store";
 import { cva } from "class-variance-authority";
-import { Check, ChevronDown, HardDrive, Network, Workflow } from "lucide-react";
+import { PlugZap, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
 const networkStatusClasses = cva("h-2 w-2 rounded-full", {
@@ -57,12 +56,12 @@ const ConnectionBadge = observer(
     ];
 
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <Dialog>
+        <DialogTrigger asChild>
           <Button
             variant="outline"
+            className="flex items-center gap-2 rounded-full px-4 py-2 text-foreground"
             disabled={isDisabled}
-            className="flex w-min gap-2 rounded-full"
           >
             <Card
               className={networkStatusClasses({
@@ -70,58 +69,27 @@ const ConnectionBadge = observer(
               })}
             />
             {zondNetworkName}
-            {!isDisabled && <ChevronDown className="h-4 w-4" />}
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>Blockchain network</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem
-              className={blockchainSelectionClasses({
-                isSelected: isDevNetwork,
-              })}
-              onClick={() => selectBlockchain(DEV.id)}
-            >
-              <HardDrive className="mr-2 h-4 w-4" />
-              <span>{DEV.name}</span>
-              {isDevNetwork && (
-                <DropdownMenuShortcut>
-                  <Check className="h-4 w-4" />
-                </DropdownMenuShortcut>
-              )}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className={blockchainSelectionClasses({
-                isSelected: isTestNetwork,
-              })}
-              onClick={() => selectBlockchain(TEST_NET.id)}
-            >
-              <Workflow className="mr-2 h-4 w-4" />
-              <span>{TEST_NET.name}</span>
-              {isTestNetwork && (
-                <DropdownMenuShortcut>
-                  <Check className="h-4 w-4" />
-                </DropdownMenuShortcut>
-              )}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className={blockchainSelectionClasses({
-                isSelected: isMainNetwork,
-              })}
-              onClick={() => selectBlockchain(MAIN_NET.id)}
-            >
-              <Network className="mr-2 h-4 w-4" />
-              <span>{MAIN_NET.name}</span>
-              {isMainNetwork && (
-                <DropdownMenuShortcut>
-                  <Check className="h-4 w-4" />
-                </DropdownMenuShortcut>
-              )}
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        </DialogTrigger>
+        <DialogContent className="w-80 rounded-md">
+          <DialogHeader className="text-left">
+            <DialogTitle>Select Blockchain</DialogTitle>
+          </DialogHeader>
+          <div>content</div>
+          <DialogFooter className="flex flex-row gap-4">
+            <DialogClose asChild>
+              <Button className="w-full" type="button" variant="outline">
+                <X className="mr-2 h-4 w-4" />
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button className="w-full" type="button" onClick={() => {}}>
+              <PlugZap className="mr-2 h-4 w-4" />
+              Connect
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     );
   },
 );
