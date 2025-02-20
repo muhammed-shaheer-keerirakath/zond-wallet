@@ -64,22 +64,22 @@ const FormSchema = z.object({
   port: z.string().min(1, "Port is required"),
 });
 
-const getFormSchema = (isValidationRequired: boolean) => {
-  return isValidationRequired
-    ? z.object({
-        ipAddress: z.string().min(1, "IP address is required"),
-        port: z.string().min(1, "Port is required"),
-      })
-    : z.object({});
-};
-
 const ConnectionBadge = observer(
   ({ isDisabled = false }: ConnectionBadgeProps) => {
     const { zondStore } = useStore();
     const { zondConnection, selectBlockchain } = zondStore;
-    const { isConnected, blockchain, ipAddress, port } = zondConnection;
+    const {
+      isConnected,
+      blockchain,
+      ipAddress: ipAddressFromStorage,
+      port: portFromStorage,
+    } = zondConnection;
 
     const [selectedBlockchain, setSelectedBlockchain] = useState(blockchain);
+    const [ipAddress, setIpAddress] = useState(
+      ZOND_BLOCKCHAIN[blockchain].ipAddress,
+    );
+    const [port, setPort] = useState(ZOND_BLOCKCHAIN[blockchain].port);
     const [isValidationRequired, setIsValidationRequired] = useState(
       ZOND_BLOCKCHAIN[blockchain].isConfigurationRequired,
     );
@@ -88,41 +88,56 @@ const ConnectionBadge = observer(
       setIsValidationRequired(
         ZOND_BLOCKCHAIN[selectedBlockchain].isConfigurationRequired,
       );
+      setIpAddress(ZOND_BLOCKCHAIN[selectedBlockchain].ipAddress);
+      setPort(ZOND_BLOCKCHAIN[selectedBlockchain].port);
     }, [selectedBlockchain]);
 
     useEffect(() => {
-      reset({});
-    }, [isValidationRequired]);
+      setValue("ipAddress", ipAddress);
+      setValue("port", port);
+    }, [ipAddress, port]);
 
     async function onSubmit(formData: z.infer<typeof FormSchema>) {
       await selectBlockchain({
         blockchain: selectedBlockchain,
-        ipAddress:
-          formData?.ipAddress ?? ZOND_BLOCKCHAIN[selectedBlockchain].ipAddress,
-        port: formData?.port ?? ZOND_BLOCKCHAIN[selectedBlockchain].port,
+        ipAddress: formData?.ipAddress ?? ipAddress,
+        port: formData?.port ?? port,
       });
     }
 
     const form = useForm<z.infer<typeof FormSchema>>({
-      resolver: zodResolver(getFormSchema(isValidationRequired)),
+      resolver: zodResolver(
+        z.object({
+          ipAddress: z.string().min(1, "IP address is required"),
+          port: z.string().min(1, "Port is required"),
+        }),
+      ),
       mode: "onChange",
       reValidateMode: "onSubmit",
       defaultValues: {
-        ipAddress: isValidationRequired ? ipAddress : "",
-        port: isValidationRequired ? port : "",
+        ipAddress,
+        port,
       },
     });
+
     const {
       handleSubmit,
       control,
-      reset,
       formState: { isSubmitting, isValid },
+      setValue,
     } = form;
 
     return (
       <Form {...form}>
         <form name="connectionBadgeForm" aria-label="connectionBadgeForm">
-          <Dialog>
+          <Dialog
+            onOpenChange={(open) => {
+              if (open && isValidationRequired) {
+                setIpAddress(ipAddressFromStorage);
+                setPort(portFromStorage);
+              }
+            }}
+          >
             <DialogTrigger asChild disabled={isDisabled}>
               <Button
                 variant="outline"
