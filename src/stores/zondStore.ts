@@ -1,4 +1,5 @@
 import {
+  BlockchainDetailsType,
   BlockchainType,
   ZOND_BLOCKCHAIN,
 } from "@/configuration/zondBlockchainConfig";
@@ -36,7 +37,9 @@ class ZondStore {
   zondConnection = {
     isConnected: false,
     isLoading: false,
-    blockchain: ZOND_BLOCKCHAIN.LOCAL.id as BlockchainType,
+    blockchain: ZOND_BLOCKCHAIN.MAIN_NET.id as BlockchainType,
+    ipAddress: ZOND_BLOCKCHAIN.MAIN_NET.ipAddress,
+    port: ZOND_BLOCKCHAIN.MAIN_NET.port,
   };
   zondAccounts: ZondAccountsType = { accounts: [], isLoading: false };
   activeAccount: ActiveAccountType = { accountAddress: "" };
@@ -63,13 +66,16 @@ class ZondStore {
   }
 
   async initializeBlockchain() {
-    const selectedBlockChain = await StorageUtil.getBlockChain();
-    const { url } = ZOND_BLOCKCHAIN[selectedBlockChain];
+    const { blockchain, ipAddress, port } = await StorageUtil.getBlockChain();
     this.zondConnection = {
       ...this.zondConnection,
-      blockchain: selectedBlockChain,
+      blockchain,
+      ipAddress,
+      port,
     };
-    const zondHttpProvider = new Web3.providers.HttpProvider(url);
+    const zondHttpProvider = new Web3.providers.HttpProvider(
+      `${ipAddress}:${port}`,
+    );
     const { zond } = new Web3({ provider: zondHttpProvider });
     this.zondInstance = zond;
 
@@ -78,8 +84,8 @@ class ZondStore {
     await this.validateActiveAccount();
   }
 
-  async selectBlockchain(selectedBlockchain: BlockchainType) {
-    await StorageUtil.setBlockChain(selectedBlockchain);
+  async selectBlockchain(selectedBlockchainDetails: BlockchainDetailsType) {
+    await StorageUtil.setBlockChain(selectedBlockchainDetails);
     await this.initializeBlockchain();
   }
 

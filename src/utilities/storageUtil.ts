@@ -1,4 +1,5 @@
 import {
+  BlockchainDetailsType,
   BlockchainType,
   ZOND_BLOCKCHAIN,
 } from "@/configuration/zondBlockchainConfig";
@@ -135,20 +136,24 @@ class StorageUtil {
    * A function for storing the blockchain selection.
    * Call the getBlockChain function to retrieve the stored value.
    */
-  static async setBlockChain(selectedBlockchain: BlockchainType) {
+  static async setBlockChain(selectedBlockchainDeails: BlockchainDetailsType) {
     await browser.storage.local.set({
-      [BLOCKCHAIN_SELECTION_IDENTIFIER]: selectedBlockchain,
+      [BLOCKCHAIN_SELECTION_IDENTIFIER]: selectedBlockchainDeails,
     });
   }
 
   static async getBlockChain() {
-    const DEFAULT_BLOCKCHAIN = ZOND_BLOCKCHAIN.MAIN_NET.id;
-    const storedBlockchain = await browser.storage.local.get(
+    const DEFAULT_BLOCKCHAIN: BlockchainDetailsType = {
+      blockchain: ZOND_BLOCKCHAIN.MAIN_NET.id as BlockchainType,
+      ipAddress: ZOND_BLOCKCHAIN.MAIN_NET.ipAddress,
+      port: ZOND_BLOCKCHAIN.MAIN_NET.port,
+    };
+    const storedBlockchainDetails = await browser.storage.local.get(
       BLOCKCHAIN_SELECTION_IDENTIFIER,
     );
 
-    return (storedBlockchain?.[BLOCKCHAIN_SELECTION_IDENTIFIER] ??
-      DEFAULT_BLOCKCHAIN) as BlockchainType;
+    return (storedBlockchainDetails?.[BLOCKCHAIN_SELECTION_IDENTIFIER] ??
+      DEFAULT_BLOCKCHAIN) as BlockchainDetailsType;
   }
 
   /**
