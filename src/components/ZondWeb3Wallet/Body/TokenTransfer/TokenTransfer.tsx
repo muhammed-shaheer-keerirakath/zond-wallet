@@ -282,7 +282,7 @@ const TokenTransfer = observer(() => {
                       />
                     </FormControl>
                     <FormDescription>
-                      Receiver&apos;s public address (0x)
+                      Receiver&apos;s public address
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

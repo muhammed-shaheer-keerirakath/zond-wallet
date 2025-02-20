@@ -17,8 +17,8 @@ import {
   TooltipTrigger,
 } from "@/components/UI/Tooltip";
 import { getHexSeedFromMnemonic } from "@/functions/getHexSeedFromMnemonic";
-import { getSplitAddress } from "@/functions/getSplitAddress";
 import { useStore } from "@/stores/store";
+import StringUtil from "@/utilities/stringUtil";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Copy } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -52,10 +52,10 @@ const ZondSendTransactionForContent = observer(
     const params = dAppRequestData?.params[0];
     const accountFromAddress = params?.from;
     const { prefix: prefixFrom, addressSplit: addressSplitFrom } =
-      getSplitAddress(accountFromAddress);
+      StringUtil.getSplitAddress(accountFromAddress);
     const accountToAddress = params?.to;
     const { prefix: prefixTo, addressSplit: addressSplitTo } =
-      getSplitAddress(accountToAddress);
+      StringUtil.getSplitAddress(accountToAddress);
     const value = BigInt(params?.value);
     const gasLimit = BigInt(params?.gas);
     const data = params?.data;

@@ -6,8 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/UI/Card";
-import { getSplitAddress } from "@/functions/getSplitAddress";
 import { ROUTES } from "@/router/router";
+import StringUtil from "@/utilities/stringUtil";
 import { Web3BaseWalletAccount } from "@theqrl/web3";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ type AccountCreationSuccessProps = {
 
 const AccountCreationSuccess = ({ account }: AccountCreationSuccessProps) => {
   const accountAddress = account?.address ?? "";
-  const { prefix, addressSplit } = getSplitAddress(accountAddress);
+  const { prefix, addressSplit } = StringUtil.getSplitAddress(accountAddress);
   const spacedAccountAddress = addressSplit.join(" ");
 
   const [hasJustCopied, setHasJustCopied] = useState(false);

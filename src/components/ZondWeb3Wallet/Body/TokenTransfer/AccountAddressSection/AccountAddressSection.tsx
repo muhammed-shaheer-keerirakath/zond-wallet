@@ -1,6 +1,6 @@
 import { Separator } from "@/components/UI/Separator";
-import { getSplitAddress } from "@/functions/getSplitAddress";
 import { useStore } from "@/stores/store";
+import StringUtil from "@/utilities/stringUtil";
 import { observer } from "mobx-react-lite";
 
 type AccountAddressSectionProps = {
@@ -13,7 +13,7 @@ const AccountAddressSection = observer(
     const { activeAccount, getAccountBalance } = zondStore;
     const { accountAddress } = activeAccount;
 
-    const { prefix, addressSplit } = getSplitAddress(accountAddress);
+    const { prefix, addressSplit } = StringUtil.getSplitAddress(accountAddress);
     const tokenAccountBalance = tokenBalance
       ? tokenBalance
       : getAccountBalance(accountAddress);

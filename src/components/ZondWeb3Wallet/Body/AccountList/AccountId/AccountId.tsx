@@ -1,3 +1,4 @@
+import StringUtil from "@/utilities/stringUtil";
 import { observer } from "mobx-react-lite";
 
 type AccountIdType = {
@@ -5,18 +6,13 @@ type AccountIdType = {
 };
 
 const AccountId = observer(({ account }: AccountIdType) => {
-  const splitLength = 5;
-  const prefix = account.substring(0, 2);
-  const idSplit: string[] = [];
-  for (let i = 2; i < account.length; i += splitLength) {
-    idSplit.push(account.substring(i, i + splitLength));
-  }
+  const { prefix, addressSplit } = StringUtil.getSplitAddress(account);
 
   return (
     <div className="flex gap-2">
       <div>{prefix}</div>
       <div className="flex flex-wrap gap-1">
-        {idSplit.map((part) => (
+        {addressSplit.map((part) => (
           <div key={part}>{part}</div>
         ))}
       </div>

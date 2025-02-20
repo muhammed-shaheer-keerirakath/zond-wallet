@@ -3,7 +3,7 @@ export const ZOND_BLOCKCHAIN = {
     id: "LOCAL",
     isConfigurationRequired: true,
     ipAddress: "http://127.0.0.1",
-    port: "32774",
+    port: "32822",
     name: "Local",
     description:
       "Connect to a locally running zond blockchain node. You should have a blockchain running in your machine.",
