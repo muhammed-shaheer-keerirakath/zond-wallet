@@ -81,7 +81,7 @@ const ConnectionBadge = observer(
 
     const [selectedBlockchain, setSelectedBlockchain] = useState(blockchain);
     const [isValidationRequired, setIsValidationRequired] = useState(
-      ZOND_BLOCKCHAIN[selectedBlockchain].isConfigurationRequired,
+      ZOND_BLOCKCHAIN[blockchain].isConfigurationRequired,
     );
 
     useEffect(() => {
@@ -95,8 +95,12 @@ const ConnectionBadge = observer(
     }, [isValidationRequired]);
 
     async function onSubmit(formData: z.infer<typeof FormSchema>) {
-      console.log(">>>formData", formData);
-      selectBlockchain(selectedBlockchain);
+      selectBlockchain({
+        blockchain: selectedBlockchain,
+        ipAddress:
+          formData?.ipAddress ?? ZOND_BLOCKCHAIN[selectedBlockchain].ipAddress,
+        port: formData?.port ?? ZOND_BLOCKCHAIN[selectedBlockchain].port,
+      });
     }
 
     const form = useForm<z.infer<typeof FormSchema>>({
