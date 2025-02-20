@@ -47,7 +47,7 @@ const FormSchema = z
     amount: z.coerce.number().gt(0, "Amount should be more than 0"),
     mnemonicPhrases: z.string().min(1, "Menmonic phrases are required"),
   })
-  .refine((fields) => validator.isAddress(fields.receiverAddress), {
+  .refine((fields) => validator.isAddressString(fields.receiverAddress), {
     message: "Address is invalid",
     path: ["receiverAddress"],
   });
