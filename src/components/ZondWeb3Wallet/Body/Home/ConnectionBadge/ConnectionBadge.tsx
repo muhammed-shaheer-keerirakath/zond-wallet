@@ -77,7 +77,7 @@ const ConnectionBadge = observer(
   ({ isDisabled = false }: ConnectionBadgeProps) => {
     const { zondStore } = useStore();
     const { zondConnection, selectBlockchain } = zondStore;
-    const { isConnected, blockchain } = zondConnection;
+    const { isConnected, blockchain, ipAddress, port } = zondConnection;
 
     const [selectedBlockchain, setSelectedBlockchain] = useState(blockchain);
     const [isValidationRequired, setIsValidationRequired] = useState(
@@ -95,7 +95,7 @@ const ConnectionBadge = observer(
     }, [isValidationRequired]);
 
     async function onSubmit(formData: z.infer<typeof FormSchema>) {
-      selectBlockchain({
+      await selectBlockchain({
         blockchain: selectedBlockchain,
         ipAddress:
           formData?.ipAddress ?? ZOND_BLOCKCHAIN[selectedBlockchain].ipAddress,
@@ -108,8 +108,8 @@ const ConnectionBadge = observer(
       mode: "onChange",
       reValidateMode: "onSubmit",
       defaultValues: {
-        ipAddress: "",
-        port: "",
+        ipAddress: isValidationRequired ? ipAddress : "",
+        port: isValidationRequired ? port : "",
       },
     });
     const {

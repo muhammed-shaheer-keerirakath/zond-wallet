@@ -21,7 +21,7 @@ export const ZOND_BLOCKCHAIN = {
     id: "MAIN_NET",
     isConfigurationRequired: false,
     ipAddress: "https://mainnet.zond.com",
-    port: "0",
+    port: "0000",
     name: "Mainnet",
     description:
       "Connect to the zond mainnet. The real zond blockchain network.",
