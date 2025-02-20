@@ -9,11 +9,13 @@ const AccountId = observer(({ account }: AccountIdType) => {
   const { prefix, addressSplit } = StringUtil.getSplitAddress(account);
 
   return (
-    <div className="flex gap-2">
-      <div>{prefix}</div>
+    <div className="flex gap-1">
+      <div className="text-xs">{prefix}</div>
       <div className="flex flex-wrap gap-1">
         {addressSplit.map((part) => (
-          <div key={part}>{part}</div>
+          <div className="text-xs" key={part}>
+            {part}
+          </div>
         ))}
       </div>
     </div>

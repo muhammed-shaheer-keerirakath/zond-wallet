@@ -69,7 +69,7 @@ const AccountCreationSuccess = ({ account }: AccountCreationSuccessProps) => {
         </Button>
         <Link
           className="w-full"
-          to={ROUTES.TOKEN_TRANSFER}
+          to={ROUTES.HOME}
           state={{ shouldStartFresh: true }}
         >
           <Button className="w-full" type="button">

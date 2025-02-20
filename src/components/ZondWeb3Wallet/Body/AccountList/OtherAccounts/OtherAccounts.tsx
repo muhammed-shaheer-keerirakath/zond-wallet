@@ -39,7 +39,7 @@ const OtherAccounts = observer(() => {
           <Card
             key={accountAddress}
             id={accountAddress}
-            className="flex gap-2 p-4 font-bold text-foreground hover:bg-accent"
+            className="flex gap-3 p-3 font-bold text-foreground hover:bg-accent"
           >
             <AccountId account={accountAddress} />
             <span>

@@ -30,8 +30,8 @@ const ActiveAccount = observer(() => {
     !!accountAddress && (
       <>
         <Label className="text-secondary">{activeAccountLabel}</Label>
-        <Card className="flex w-full flex-col gap-4 p-4 font-bold text-foreground hover:bg-accent">
-          <div className="flex gap-2">
+        <Card className="flex w-full flex-col gap-3 p-3 font-bold text-foreground hover:bg-accent">
+          <div className="flex gap-3">
             <AccountId account={accountAddress} />
             <span>
               <TooltipProvider>
