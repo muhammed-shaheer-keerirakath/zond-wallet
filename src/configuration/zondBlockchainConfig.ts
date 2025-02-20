@@ -12,7 +12,7 @@ export const ZOND_BLOCKCHAIN = {
     id: "TEST_NET",
     isConfigurationRequired: true,
     ipAddress: "http://209.250.255.226",
-    port: "8545",
+    port: "4585",
     name: "Testnet",
     description:
       "Connect to the zond testnet. Specify the IP address and port number of the testnet.",
