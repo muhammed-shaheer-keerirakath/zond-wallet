@@ -10,7 +10,8 @@ A wallet for creating accounts, importing accounts and sending transactions over
 - Run `npm install` for installing all dependencies of this project.
 - Run `npm run build` to generate a production build of the extension to the `Extension` folder.
 - The production build output folder is named `Extension` (not `dist`) and this folder alone is enough to run the extension.
-- Load the [Extension](Extension) folder as an extension package from the settings page of the browser (see [install_instructions.pdf](misc/install_instructions.pdf)).
+- Load the [Extension](Extension) folder as an extension package from the settings page of the browser.
+- See [install_instructions.pdf](misc/install_instructions.pdf) for further details.
 
 ## :dna: Features list
 
