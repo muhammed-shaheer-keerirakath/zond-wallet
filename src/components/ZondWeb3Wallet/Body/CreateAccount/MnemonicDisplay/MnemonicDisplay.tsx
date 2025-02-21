@@ -53,7 +53,7 @@ const MnemonicDisplay = ({
       },
       "Private Key": {
         key: mnemonicPhrases,
-        note: "This is your secret private key, and should be kept safe somewhere. This is required to recover your account and to send ZND from your account to others account. If lost, you will lose access to your account and funds.",
+        note: "This is your secret private key(mnemomic phrases, a 32 words combination), and should be kept safe somewhere. This is required to recover your account and to send ZND from your account to others account. If lost, you will lose access to your account and funds.",
       },
     };
     const blobData = JSON.stringify(mnemonicObject, null, 2);

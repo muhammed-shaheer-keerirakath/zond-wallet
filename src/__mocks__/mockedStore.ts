@@ -91,6 +91,51 @@ const mockedStoreValues: StoreType = {
       return { transactionReceipt: undefined, error: "" };
     },
   },
+  dAppRequestStore: {
+    dAppRequestData: {
+      method: "zond_requestAccounts",
+      requestData: {
+        senderData: {
+          tabId: 1,
+          title: "Mocked Page Title",
+          url: "http://localhost/",
+          favIconUrl: "http://localhost/mocked-fav-icon.svg",
+        },
+      },
+    },
+    responseData: undefined,
+    canProceed: false,
+    onPermissionCallBack: async (hasApproved: boolean) => {
+      hasApproved;
+    },
+    approvalProcessingStatus: {
+      hasApproved: false,
+      isProcessing: false,
+      hasCompleted: false,
+    },
+    readDAppRequestData: async () => {},
+    addToResponseData: (data: any) => {
+      data;
+    },
+    setCanProceed: (decision: boolean) => {
+      decision;
+    },
+    setOnPermissionCallBack: (
+      callBack: (hasApproved: boolean) => Promise<void>,
+    ) => {
+      callBack;
+    },
+    setApprovalProcessingStatus: async (status: {
+      isProcessing?: boolean;
+      hasApproved?: boolean;
+      hasCompleted?: boolean;
+    }) => {
+      status;
+    },
+    onPermission: async (hasApproved: boolean) => {
+      hasApproved;
+    },
+  },
 };
 
 export const mockedStore = (

@@ -2,7 +2,6 @@ import { mockedStore } from "@/__mocks__/mockedStore";
 import { StoreProvider } from "@/stores/store";
 import { describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
-import { ComponentProps } from "react";
 import { MemoryRouter } from "react-router-dom";
 import DAppRequestWebsite from "../DAppRequestWebsite";
 
@@ -11,28 +10,11 @@ jest.mock("../DAppRequestFeature/DAppRequestFeature", () => () => (
 ));
 
 describe("DAppRequestWebsite", () => {
-  const renderComponent = (
-    mockedStoreValues = mockedStore(),
-    mockedProps: ComponentProps<typeof DAppRequestWebsite> = {
-      addToResponseData: () => { },
-      dAppRequestData: {
-        method: "zond_requestAccounts",
-        requestData: {
-          senderData: {
-            tabId: 1,
-            title: "Mocked Page Title",
-            url: "http://localhost/",
-            favIconUrl: "http://localhost/mocked-fav-icon.svg",
-          },
-        },
-      },
-      decideCanProceed: () => { },
-    },
-  ) =>
+  const renderComponent = (mockedStoreValues = mockedStore()) =>
     render(
       <StoreProvider value={mockedStoreValues}>
         <MemoryRouter>
-          <DAppRequestWebsite {...mockedProps} />
+          <DAppRequestWebsite />
         </MemoryRouter>
       </StoreProvider>,
     );

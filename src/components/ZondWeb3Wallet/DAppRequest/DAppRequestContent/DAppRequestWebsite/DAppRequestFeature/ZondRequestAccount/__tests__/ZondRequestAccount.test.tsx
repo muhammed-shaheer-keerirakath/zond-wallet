@@ -3,7 +3,6 @@ import { StoreProvider } from "@/stores/store";
 import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ComponentProps } from "react";
 import { MemoryRouter } from "react-router-dom";
 import ZondRequestAccount from "../ZondRequestAccount";
 
@@ -11,24 +10,18 @@ describe("ZondRequestAccount", () => {
   afterEach(cleanup);
 
   const mockedAddToResponseData = jest.fn();
-  const mockedDecideCanProceed = jest.fn();
+  const mockedSetCanProceed = jest.fn();
 
-  const renderComponent = (
-    mockedStoreValues = mockedStore(),
-    mockedProps: ComponentProps<typeof ZondRequestAccount> = {
-      addToResponseData: mockedAddToResponseData,
-      decideCanProceed: mockedDecideCanProceed,
-    },
-  ) =>
+  const renderComponent = (mockedStoreValues = mockedStore()) =>
     render(
       <StoreProvider value={mockedStoreValues}>
         <MemoryRouter>
-          <ZondRequestAccount {...mockedProps} />
+          <ZondRequestAccount />
         </MemoryRouter>
       </StoreProvider>,
     );
 
-  it("should render the eth request account component, with an account in zond store", () => {
+  it("should render the zond request account component, with an account in zond store", () => {
     renderComponent(
       mockedStore({
         zondStore: {
@@ -36,18 +29,19 @@ describe("ZondRequestAccount", () => {
             isLoading: false,
             accounts: [
               {
-                accountAddress: "0x2090E9F38771876FB6Fc51a6b464121d3cC093A1",
-                accountBalance: "10",
+                accountAddress: "Z20915094FEDE91EFAC68fD43D82e9Fff4daC7482",
+                accountBalance: "10 ZND",
               },
             ],
           },
+          getAccountBalance: () => "10.0 ZND",
         },
       }),
     );
 
     expect(screen.getByText("Connect with Wallet")).toBeInTheDocument();
     const checkBox = screen.getByRole("checkbox", {
-      name: "0x 2090E 9F387 71876 FB6Fc 51a6b 46412 1d3cC 093A1",
+      name: "Z 20915 094FE DE91E FAC68 fD43D 82e9F ff4da C7482 10.0 ZND",
     });
     expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
       "Careful!",
@@ -59,21 +53,21 @@ describe("ZondRequestAccount", () => {
     ).toBeInTheDocument();
     expect(checkBox).toBeInTheDocument();
     expect(checkBox).toBeEnabled();
-    expect(screen.getByText("0x")).toBeInTheDocument();
-    expect(screen.getByText("2090E")).toBeInTheDocument();
-    expect(screen.getByText("9F387")).toBeInTheDocument();
-    expect(screen.getByText("71876")).toBeInTheDocument();
-    expect(screen.getByText("FB6Fc")).toBeInTheDocument();
-    expect(screen.getByText("51a6b")).toBeInTheDocument();
-    expect(screen.getByText("46412")).toBeInTheDocument();
-    expect(screen.getByText("1d3cC")).toBeInTheDocument();
-    expect(screen.getByText("093A1")).toBeInTheDocument();
+    expect(screen.getByText("Z")).toBeInTheDocument();
+    expect(screen.getByText("20915")).toBeInTheDocument();
+    expect(screen.getByText("094FE")).toBeInTheDocument();
+    expect(screen.getByText("DE91E")).toBeInTheDocument();
+    expect(screen.getByText("FAC68")).toBeInTheDocument();
+    expect(screen.getByText("fD43D")).toBeInTheDocument();
+    expect(screen.getByText("82e9F")).toBeInTheDocument();
+    expect(screen.getByText("ff4da")).toBeInTheDocument();
+    expect(screen.getByText("C7482")).toBeInTheDocument();
     expect(
       screen.queryByText("Account not available to connect"),
     ).not.toBeInTheDocument();
   });
 
-  it("should render the eth request account component, without an account in zond store", () => {
+  it("should render the zond request account component, without an account in zond store", () => {
     renderComponent(
       mockedStore({
         zondStore: { zondAccounts: { isLoading: false, accounts: [] } },
@@ -81,7 +75,7 @@ describe("ZondRequestAccount", () => {
     );
 
     const checkBox = screen.queryByRole("checkbox", {
-      name: "0x 2090E 9F387 71876 FB6Fc 51a6b 46412 1d3cC 093A1",
+      name: "Z 2090E 9F387 71876 FB6Fc 51a6b 46412 1d3cC 093A1",
     });
     expect(checkBox).not.toBeInTheDocument();
     expect(
@@ -97,11 +91,16 @@ describe("ZondRequestAccount", () => {
             isLoading: false,
             accounts: [
               {
-                accountAddress: "0x2090E9F38771876FB6Fc51a6b464121d3cC093A1",
-                accountBalance: "10",
+                accountAddress: "Z2090E9F38771876FB6Fc51a6b464121d3cC093A1",
+                accountBalance: "10 ZND",
               },
             ],
           },
+          getAccountBalance: () => "10.0 ZND",
+        },
+        dAppRequestStore: {
+          addToResponseData: mockedAddToResponseData,
+          setCanProceed: mockedSetCanProceed,
         },
       }),
     );
@@ -113,12 +112,12 @@ describe("ZondRequestAccount", () => {
       ),
     ).toBeInTheDocument();
     const checkBox = screen.getByRole("checkbox", {
-      name: "0x 2090E 9F387 71876 FB6Fc 51a6b 46412 1d3cC 093A1",
+      name: "Z 2090E 9F387 71876 FB6Fc 51a6b 46412 1d3cC 093A1 10.0 ZND",
     });
     await act(async () => {
       await userEvent.click(checkBox);
     });
     expect(mockedAddToResponseData).toHaveBeenCalledTimes(2);
-    expect(mockedDecideCanProceed).toHaveBeenCalledTimes(1);
+    expect(mockedSetCanProceed).toHaveBeenCalledTimes(1);
   });
 });

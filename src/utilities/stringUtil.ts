@@ -8,14 +8,13 @@ class StringUtil {
   static getSplitAddress(
     accountAddress: string,
     splitLength: number = 5,
-    prefixLength = 1,
+    prefixLength = accountAddress?.startsWith("Z") ? 1 : 2,
   ) {
-    const prefix = accountAddress.substring(0, prefixLength);
+    const prefix = accountAddress?.substring(0, prefixLength);
     const addressSplit: string[] = [];
-    for (let i = prefixLength; i < accountAddress.length; i += splitLength) {
-      addressSplit.push(accountAddress.substring(i, i + splitLength));
+    for (let i = prefixLength; i < accountAddress?.length; i += splitLength) {
+      addressSplit.push(accountAddress?.substring(i, i + splitLength));
     }
-
     return { prefix, addressSplit };
   }
 }

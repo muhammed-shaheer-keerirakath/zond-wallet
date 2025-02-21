@@ -29,9 +29,9 @@ export const TransactionSuccessful = ({
   } = transactionReceipt;
 
   const { prefix: prefixTxHash, addressSplit: addressSplitTxHash } =
-    StringUtil.getSplitAddress(transactionHash.toString(), undefined, 2);
+    StringUtil.getSplitAddress(transactionHash.toString());
   const { prefix: prefixBlockHash, addressSplit: addressSplitBlockHash } =
-    StringUtil.getSplitAddress(blockHash.toString(), undefined, 2);
+    StringUtil.getSplitAddress(blockHash.toString());
 
   return (
     <div className="w-full">
