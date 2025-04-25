@@ -132,8 +132,17 @@ const ZondSendTransactionForContent = observer(
       try {
         const { from, to, gas, type, value } = request;
 
+        if (!from) {
+          throw new Error("Sender address ('from') is missing for ZND transfer.");
+        }
         if (!to) {
           throw new Error("Recipient address ('to') is missing for ZND transfer.");
+        }
+        if (!gas) {
+          throw new Error("Gas limit ('gas') is missing for ZND transfer.");
+        }
+        if (value === undefined || value === null) {
+          throw new Error("Transfer amount ('value') is missing for ZND transfer.");
         }
 
         const gasPrice = await zondInstance?.getGasPrice();
