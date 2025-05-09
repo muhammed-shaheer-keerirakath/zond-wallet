@@ -64,25 +64,30 @@ const ZondSendTransactionForContent = observer(
       if (isConnected) {
         const onPermissionCallBack = async (hasApproved: boolean) => {
           if (hasApproved) {
-            await deployContract();
+            if (transactionType === SEND_TRANSACTION_TYPES.ZND_TRANSFER) {
+              await sendZndTransfer();
+            } else {
+              await deployContractOrInteract();
+            }
           }
         };
         setOnPermissionCallBack(onPermissionCallBack);
       }
-    }, [isConnected]);
+    }, [isConnected, transactionType]);
 
     const copyData = () => {
       navigator.clipboard.writeText(data);
     };
 
-    const deployContract = async () => {
+    const deployContractOrInteract = async () => {
       const request = dAppRequestData?.params?.[0];
       const mnemonicPhrases = watch().mnemonicPhrases.trim();
       try {
-        const { from, data, gas, type, value } = request;
+        const { from, to, data, gas, type, value } = request;
         const gasPrice = await zondInstance?.getGasPrice();
         let transactionObject: any = {
           from,
+          ...(to && { to }),
           data,
           gas,
           value,
@@ -112,7 +117,70 @@ const ZondSendTransactionForContent = observer(
         }
       } catch (error) {
         addToResponseData({ error });
-        console.error("Contract deployment failed:", error);
+        console.error(
+          transactionType === SEND_TRANSACTION_TYPES.CONTRACT_DEPLOYMENT
+            ? "Contract deployment failed:"
+            : "Contract interaction failed:",
+          error,
+        );
+      }
+    };
+
+    const sendZndTransfer = async () => {
+      const request = dAppRequestData?.params?.[0];
+      const mnemonicPhrases = watch().mnemonicPhrases.trim();
+      try {
+        const { from, to, gas, type, value } = request;
+
+        if (!from) {
+          throw new Error("Sender address ('from') is missing for ZND transfer.");
+        }
+        if (!to) {
+          throw new Error("Recipient address ('to') is missing for ZND transfer.");
+        }
+        if (!gas) {
+          throw new Error("Gas limit ('gas') is missing for ZND transfer.");
+        }
+        if (value === undefined || value === null) {
+          throw new Error("Transfer amount ('value') is missing for ZND transfer.");
+        }
+
+        const gasPrice = await zondInstance?.getGasPrice();
+        let transactionObject: any = {
+          from,
+          to,
+          gas,
+          value,
+          nonce: await zondInstance?.getTransactionCount(from),
+        };
+
+        if (type === "0x2") {
+          const { maxFeePerGas, maxPriorityFeePerGas } = await getGasFeeData();
+          transactionObject.type = "0x2";
+          transactionObject.maxPriorityFeePerGas = maxPriorityFeePerGas;
+          transactionObject.maxFeePerGas = `0x${maxFeePerGas.toString(16)}`;
+        } else {
+          transactionObject.gasPrice = gasPrice;
+        }
+
+        const signedTransaction = await zondInstance?.accounts.signTransaction(
+          transactionObject,
+          getHexSeedFromMnemonic(mnemonicPhrases),
+        );
+
+        if (signedTransaction) {
+          const transactionReceipt = await zondInstance?.sendSignedTransaction(
+            signedTransaction?.rawTransaction,
+          );
+          addToResponseData({
+            transactionHash: transactionReceipt?.transactionHash,
+          });
+        } else {
+          throw new Error("ZND Transfer transaction could not be signed");
+        }
+      } catch (error) {
+        addToResponseData({ error });
+        console.error("ZND Transfer failed:", error);
       }
     };
 
