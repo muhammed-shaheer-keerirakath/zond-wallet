@@ -88,7 +88,7 @@ const ZondSendTransactionForContent = observer(
         let transactionObject: any = {
           from,
           ...(to && { to }),
-          ...(data && { data }),
+          data,
           gas,
           value,
           nonce: await zondInstance?.getTransactionCount(from),
@@ -97,7 +97,7 @@ const ZondSendTransactionForContent = observer(
           const { maxFeePerGas, maxPriorityFeePerGas } = await getGasFeeData();
           transactionObject.type = "0x2";
           transactionObject.maxPriorityFeePerGas = maxPriorityFeePerGas;
-          transactionObject.maxFeePerGas = `0x${BigInt(maxFeePerGas).toString(16)}`;
+          transactionObject.maxFeePerGas = `0x${maxFeePerGas.toString(16)}`;
         } else {
           transactionObject.gasPrice = gasPrice;
         }
@@ -158,7 +158,7 @@ const ZondSendTransactionForContent = observer(
           const { maxFeePerGas, maxPriorityFeePerGas } = await getGasFeeData();
           transactionObject.type = "0x2";
           transactionObject.maxPriorityFeePerGas = maxPriorityFeePerGas;
-          transactionObject.maxFeePerGas = `0x${BigInt(maxFeePerGas).toString(16)}`;
+          transactionObject.maxFeePerGas = `0x${maxFeePerGas.toString(16)}`;
         } else {
           transactionObject.gasPrice = gasPrice;
         }
