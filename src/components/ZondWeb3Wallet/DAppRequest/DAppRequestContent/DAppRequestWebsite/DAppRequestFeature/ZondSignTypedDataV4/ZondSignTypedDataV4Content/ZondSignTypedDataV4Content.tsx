@@ -45,7 +45,7 @@ const ZondSignTypedDataV4Content = observer(() => {
     dAppRequestData,
     setOnPermissionCallBack,
     setCanProceed,
-    // addToResponseData,
+    addToResponseData,
     approvalProcessingStatus,
   } = dAppRequestStore;
   const { isProcessing } = approvalProcessingStatus;
@@ -83,7 +83,7 @@ const ZondSignTypedDataV4Content = observer(() => {
       );
       const onPermissionCallBack = async (hasApproved: boolean) => {
         if (hasApproved) {
-          // approved
+          signTypedDataV4();
         }
       };
       setOnPermissionCallBack(onPermissionCallBack);
@@ -94,10 +94,26 @@ const ZondSignTypedDataV4Content = observer(() => {
     navigator.clipboard.writeText(JSON.stringify(typedData));
   };
 
-  // const signTypedDataV4 = async () => {
-  //   const request = dAppRequestData?.params?.[0];
-  //   const mnemonicPhrases = watch().mnemonicPhrases.trim();
-  // };
+  const signTypedDataV4 = async () => {
+    const mnemonicPhrases = watch().mnemonicPhrases.trim();
+    console.log(">>>>mnemonicPhrases", mnemonicPhrases);
+    try {
+      // const signature = await zondInstance?.accounts.signTransaction(
+      //   transactionObject,
+      //   getHexSeedFromMnemonic(mnemonicPhrases),
+      // );
+      const signature = null;
+      if (signature) {
+        addToResponseData({
+          signature,
+        });
+      } else {
+        throw new Error("Message data could not be signed");
+      }
+    } catch (error) {
+      addToResponseData({ error });
+    }
+  };
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -108,7 +124,7 @@ const ZondSignTypedDataV4Content = observer(() => {
     },
   });
   const {
-    // watch,
+    watch,
     control,
     formState: { isValid },
   } = form;
