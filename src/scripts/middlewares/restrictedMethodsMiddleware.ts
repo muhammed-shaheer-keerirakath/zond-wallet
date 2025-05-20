@@ -93,6 +93,14 @@ export const restrictedMethodsMiddleware: JsonRpcMiddleware<
                 res.error = restrictedMethodResult?.response?.error;
               }
               break;
+            case RESTRICTED_METHODS.ZOND_SIGN_TYPED_DATA_V4:
+              const signature = restrictedMethodResult?.response?.signature;
+              if (signature) {
+                res.result = signature;
+              } else {
+                res.error = restrictedMethodResult?.response?.error;
+              }
+              break;
             default:
               res.error = providerErrors.unsupportedMethod();
               break;
