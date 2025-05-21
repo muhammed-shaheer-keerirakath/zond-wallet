@@ -17,6 +17,7 @@ export const RESTRICTED_METHODS = Object.freeze({
   ZOND_REQUEST_ACCOUNTS: "zond_requestAccounts",
   ZOND_SEND_TRANSACTION: "zond_sendTransaction",
   ZOND_SIGN_TYPED_DATA_V4: "zond_signTypedData_v4",
+  PERSONAL_SIGN: "personal_sign",
 });
 
 export const ALL_REQUEST_METHODS = Object.values({
