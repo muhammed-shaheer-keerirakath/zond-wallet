@@ -90,7 +90,10 @@ export const restrictedMethodsMiddleware: JsonRpcMiddleware<
               if (transactionHash) {
                 res.result = transactionHash;
               } else {
-                res.error = restrictedMethodResult?.response?.error;
+                res.error = providerErrors.unsupportedMethod({
+                  message: restrictedMethodResult?.response?.error?.message,
+                  data: restrictedMethodResult?.response?.error,
+                });
               }
               break;
             case RESTRICTED_METHODS.ZOND_SIGN_TYPED_DATA_V4:
@@ -99,7 +102,10 @@ export const restrictedMethodsMiddleware: JsonRpcMiddleware<
               if (signature) {
                 res.result = signature;
               } else {
-                res.error = restrictedMethodResult?.response?.error;
+                res.error = providerErrors.unsupportedMethod({
+                  message: restrictedMethodResult?.response?.error?.message,
+                  data: restrictedMethodResult?.response?.error,
+                });
               }
               break;
             default:

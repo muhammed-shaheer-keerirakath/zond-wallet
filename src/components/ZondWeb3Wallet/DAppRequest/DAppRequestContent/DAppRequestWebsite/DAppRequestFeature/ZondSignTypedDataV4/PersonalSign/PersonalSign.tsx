@@ -64,13 +64,13 @@ const PersonalSign = observer(() => {
   };
 
   const personalSign = async () => {
-    const mnemonicPhrases = watch().mnemonicPhrases.trim();
-    const addressFromMnemonic = zondInstance?.accounts.seedToAccount(
-      getHexSeedFromMnemonic(mnemonicPhrases),
-    )?.address;
     try {
+      const mnemonicPhrases = watch().mnemonicPhrases.trim();
+      const addressFromMnemonic = zondInstance?.accounts.seedToAccount(
+        getHexSeedFromMnemonic(mnemonicPhrases),
+      )?.address;
       if (fromAddress !== addressFromMnemonic) {
-        throw new Error("Mnemonic phrases do not match the address");
+        throw new Error("Mnemonic phrases did not match with the address");
       }
       const signature = zondInstance?.accounts.sign(
         params?.[0],
